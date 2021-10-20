@@ -36,15 +36,11 @@ export default function Profile() {
     }
 
     formData.append('image', imagefile)
-    const response = await axios.post(
-      '/upload',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    )
+    const response = await axios.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     if (!response.data?.url) {
       window.alert('upload not successfuly :((')
       return

@@ -515,7 +515,6 @@ export default class FormQuestion extends Component {
                   required
                   name="question_number"
                   min={1}
-                  // defaultValue={1}
                   step="any"
                   className="cel-2-2"
                 />
