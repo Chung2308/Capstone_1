@@ -1,0 +1,29 @@
+/* Exam Bank Details */
+.exam-details{
+    margin: 3% 10%;
+}
+.header-details{
+    display: flex;
+}
+.header-details button{
+    outline: none;
+    border: 1px solid rgb(168, 168, 168);
+    margin-right: 10px;
+    width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(168, 28, 28);
+    font-family: cursive;
+    transition: 0.5s;   
+    color: white;
+}
+.header-details button:hover{
+    transition: 0.5s;
+    background-color: rgba(171, 210, 223, 0.829);
+    font-size: 110%;
+    color: black;
+}
+.content-exam-details{
+    font-family: cursive;
+}

@@ -1,0 +1,51 @@
+.waiting-room{
+    margin: 3% 7%;
+}
+.waiting-room .infor-room{
+    width: 150px;
+    font-family: cursive;
+}
+
+/* @import url(https://fonts.googleapis.com/css?family=Covered+By+Your+Grace); */
+
+.countdown #timer {
+    display: flex;
+    line-height: 1;
+    padding: 20px;
+    font-size: 20px;
+    font-family: cursive;
+    margin-top: 7%;
+    margin-left: -30px;
+  }
+  
+#days {
+  font-size:50px;
+  color: #db4844;
+  font-family: cursive;
+  padding-right: 6%;
+}
+#hours {
+  font-size: 40px;
+  color: #f07c22;
+  font-family: cursive;
+  padding-right: 6%;
+}
+#minutes {
+  font-size: 30px;
+  color: #f6da74;
+  font-family: cursive;
+  padding-right: 6%;
+}
+#seconds {
+  font-size: 20px;
+  color: #abcd58;
+  font-family: cursive;
+  padding-right: 6%;
+}
+span {
+  display: block;
+  font-size: 15px;
+  color: #222;
+  font-family: cursive;
+}
+

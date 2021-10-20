@@ -1,0 +1,9 @@
+.exam {
+  margin: 4% 17%;
+  font-family: cursive;
+}
+.exam .infor-exam {
+  border: 1px solid rgb(201, 201, 201);
+  padding: 2% 10%;
+  border-radius: 10px;
+}
