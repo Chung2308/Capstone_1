@@ -5,8 +5,8 @@
 /* .exam-details .ques{
     margin-left: 2%;
 } */
-.normal .ans{
-    margin-left: 4%;
+.normal .ans {
+  margin-left: 4%;
 }
 .header-details {
   display: flex;
@@ -33,24 +33,23 @@
 .content-exam-details {
   font-family: cursive;
 }
-.edit .ans{
-    margin-bottom: 20px;
+.edit .ans {
+  margin-bottom: 20px;
 }
 .edit .question-exam-details input {
-  border-bottom: 1px solid rgb(214, 214, 214);
+  border-bottom: 1px solid rgb(228, 228, 228);
   outline: none;
   /* border-radius: 5px; */
   border-top: white;
   border-left: white;
   border-right: white;
 }
-.edit .question-exam-details .question_content{
-    width: 80%;
+.edit .question-exam-details .question_content {
+  width: 80%;
 }
-.edit .question-exam-details .point_question{
-    width: 7%;
+.edit .question-exam-details .point_question {
+  width: 7%;
 }
-.edit .question-exam-details .answer_content{
-    width: 60.1%;
+.edit .question-exam-details .answer_content {
+  width: 60.1%;
 }
-

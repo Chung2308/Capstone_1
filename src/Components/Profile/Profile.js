@@ -7,7 +7,7 @@ import { axios } from '@/instances/axios'
 
 export default function Profile() {
   const [user, setUser] = useState({
-    // username: "",
+    username: "",
     fullname: '',
     phone: '',
     birthday: '',
@@ -60,7 +60,7 @@ export default function Profile() {
         `/user/${id}`,
         {
           //   params: {
-          // username: user.username,
+          username: user.username,
           fullname: user.fullname,
           phone: user.phone,
           birthday: user.birthday,
@@ -74,6 +74,9 @@ export default function Profile() {
     }
   }
 
+  const onUsernameChange = (e) => {
+    setUser({ ...user, username: e.target.value })
+  }
   const onFullnameChange = (e) => {
     setUser({ ...user, fullname: e.target.value })
   }
@@ -122,6 +125,10 @@ export default function Profile() {
               className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
               style={{ marginTop: '1%' }}
             >
+              <div className="inf">
+                <label className="lable-1">Username: </label>
+                <label className="label-db">{user.username}</label>
+              </div>
               <div className="inf">
                 <label className="lable-1">Fullname: </label>
                 <label className="label-db">{user.fullname}</label>
@@ -190,6 +197,18 @@ export default function Profile() {
               className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
               style={{ marginTop: '1%' }}
             >
+              <div className="inf-update">
+                <label htmlFor className="lable-1">
+                  Username:{' '}
+                </label>
+                <input
+                  // onChange={(e) => onUsernameChange(e)}
+                  type="text"
+                  name=""
+                  id=""
+                  value={user.username}
+                ></input>
+              </div>
               <div className="inf-update">
                 <label htmlFor className="lable-1">
                   Fullname:{' '}

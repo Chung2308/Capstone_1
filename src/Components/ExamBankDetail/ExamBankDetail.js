@@ -40,6 +40,7 @@ export default function ExamBankDetail() {
   const submitEdit = async () => {
     const response = await axios.patch(`/quiz/question/${location.state}`, {
       quiz: quizs,
+      // alternatives: [],
     })
     setQuizs(response?.data?.updateQuestion.quiz)
     console.log('hello', response)
@@ -77,6 +78,22 @@ export default function ExamBankDetail() {
     )
     setQuizs(newQuiz)
   }
+
+  // const onChangeAnswer = (e, index) => {
+  //   // const newAlternative = quizs.alternative.map(
+  //   //   (alternative, indexalternative) =>
+  //   //     indexalternative == index
+  //   //       ? { ...alternative, [e.target.name]: e.target.value }
+  //   //       : { ...alternative }
+  //   // )
+  //   const newQuiz = quizs.map((quiz, indexQuiz) =>
+  //     indexQuiz == index
+  //       ? { ...quiz, [e.target.name]: e.target.value }
+  //       : { ...quiz }
+  //   )
+  //   setQuizs(newQuiz.alternative)
+  // }
+
   const showInformation = () => {
     return (
       <div className="exam-details normal">
@@ -278,7 +295,12 @@ export default function ExamBankDetail() {
                   </div>
                   <div className="ans">
                     {quiz.alternatives.map((alternative, index) => (
-                      <div key={index}>
+                      <div
+                        key={index}
+                        style={{
+                          color: alternative.answer_correct ? 'red' : 'black',
+                        }}
+                      >
                         {(index == 0
                           ? 'A'
                           : index == 1
