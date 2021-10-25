@@ -11,6 +11,7 @@
 .save{
   text-align: center;
   margin-bottom: 3%;
+  background-color: rgba(214, 207, 207, 0);
 }
 .save button{
   outline: none;
@@ -49,3 +50,4 @@
 .exam-time select option{
   font-family: 'Times New Roman', Times, serif;
 }
+

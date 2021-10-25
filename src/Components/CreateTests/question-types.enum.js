@@ -6,7 +6,7 @@ export const QUESTION_TYPE = {
 }
 export const QUESTION_TYPE_DESCRIPTION = {
   YES_NO: 'Yes/No',
-  ONE_CORRECT: 'One Correct',
-  MANY_CORRECT: 'Many Correct',
+  ONE_CORRECT: 'One Choice',
+  MANY_CORRECT: 'Multiple Choice',
   CONTENT_RESULT: 'Enter Results',
 }

@@ -18,13 +18,24 @@
 }
 
 .answers-container li {
-  list-style: none ;
+  list-style: none;
 }
 
-.answers-group{
+.answers-group {
   font-family: cursive;
 }
 
-.action{
+.action {
   cursor: pointer;
+}
+
+.edit-content,
+.edit-name,
+.edit-score {
+  outline: none;
+  border-bottom: rgba(0, 0, 0, 0);
+  border-top: rgba(0, 0, 0, 0);
+  border-left: rgba(0, 0, 0, 0);
+  border-right: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 }

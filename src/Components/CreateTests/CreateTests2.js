@@ -54,7 +54,8 @@ export default class CreateTests2 extends Component {
       // totalQuestionDb,
       quiz,
     } = data
-    // const id = localStorage.getItem('id');
+    
+    const id = localStorage.getItem('id');
     const submitInfor = await axios.post(`/quiz/question/`, {
       id_exam,
       exam_date_db,
@@ -73,7 +74,6 @@ export default class CreateTests2 extends Component {
       // localStorage.setItem(username, loginData.data.jwt);
       localStorage.setItem('idExam', submitInfor.data.question.id_exam)
     }
-    
   }
   render() {
     return (
@@ -122,4 +122,3 @@ export default class CreateTests2 extends Component {
 //     </div>
 //   )
 // }
-

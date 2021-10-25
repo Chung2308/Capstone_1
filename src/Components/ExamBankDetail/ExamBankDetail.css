@@ -53,3 +53,15 @@
 .edit .question-exam-details .answer_content {
   width: 60.1%;
 }
+.exam-details .title-infor{
+  width: 16%;
+}
+.exam-details .edit-time input{
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid rgb(197, 197, 197);
+  width: 168%;
+}
+.exam-details .edit-topic{
+  width: 75%;
+}

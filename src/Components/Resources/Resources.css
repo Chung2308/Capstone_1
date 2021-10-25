@@ -138,3 +138,26 @@
   border: 1px solid rgb(189, 189, 189);
   transition: 0.5s;
 }
+
+
+
+/* ---------------- TOPICS ---------------- */
+.resources .topics label{
+  font-family: cursive;
+  margin-right: 6px;
+  font-size: 110%;
+}
+.resources .topics select{
+  outline: none;
+  font-family: cursive;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 5px;
+}
+.resources .topics option{
+  font-family: Arial, Helvetica, sans-serif;
+  color: #525252;
+}
+.resources .content-file .title-file{
+  font-size: 115%;
+  text-decoration: underline;
+}

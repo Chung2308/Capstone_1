@@ -4,46 +4,68 @@ import { useEffect, useState } from 'react'
 import { axios } from '@/instances/axios'
 import moment from 'moment'
 import { useHistory } from 'react-router'
+import { TOPICS } from '../CreateTests/topics.mock'
+import { HOUROPEN } from '../CreateTests/hourOpen.mock'
+import { MINUTEOPEN } from '../CreateTests/minuteOpen.mock'
+import { SECONDOPEN } from '../CreateTests/secondOpen.mock'
+import { HOURDUE } from '../CreateTests/hourDue.mock'
+import { MINUTEDUE } from '../CreateTests/minuteDue.mock'
+import { SECONDDUE } from '../CreateTests/secondDue.mock'
 export default function ExamBankDetail() {
   const { location } = useHistory()
   const [status, setStatus] = useState(true)
+  const [topics, setTopics] = useState([TOPICS])
+  const [hourOpen, setHourOpen] = useState([HOUROPEN])
+  const [minuteOpen, setMinuteOpen] = useState([MINUTEOPEN])
+  const [secondOpen, setSecondOpen] = useState([SECONDOPEN])
+  const [hourDue, setHourDue] = useState([HOURDUE])
+  const [minuteDue, setMinuteDue] = useState([MINUTEDUE])
+  const [secondDue, setSecondDue] = useState([SECONDDUE])
   const [question, setQuestion] = useState({
-    exam_date_db: '',
-    exam_topic_db: '',
-    hourOpenDb: '',
-    minuteOpenDb: '',
-    secondOpenDb: '',
-    hourDueDb: '',
-    minuteDueDb: '',
-    secondDueDb: '',
+    // exam_date_db: '',
+    // exam_topic_db: '',
+    // hourOpenDb: '',
+    // minuteOpenDb: '',
+    // secondOpenDb: '',
+    // hourDueDb: '',
+    // minuteDueDb: '',
+    // secondDueDb: '',
+    // totalScoreDb: '',
   })
-  useEffect(() => {
-    async function fetchUser() {
-      // const id_exam = localStorage.getItem('id_exam');
-      const response = await axios.get(`/quiz/question/${location.state}`)
-      setQuestion(response?.data?.question)
-      console.log('infor: ', response?.data?.question)
-    }
-    fetchUser()
-  }, [])
-
+  // useEffect(() => {
+  //   async function fetchUser() {
+  //     const response = await axios.get(`/quiz/question/${location.state}`)
+  //     setQuestion(response?.data?.question)
+  //     console.log('infor: ', response?.data?.question)
+  //   }
+  //   fetchUser()
+  // }, [])
   const [quizs, setQuizs] = useState([])
+
+  async function fetchUser() {
+    const response = await axios.get(`/quiz/question/${location.state}`)
+    setQuizs(response?.data.question.quiz)
+    setQuestion(response?.data?.question)
+  }
   useEffect(() => {
-    async function fetchUser() {
-      const response = await axios.get(`/quiz/question/${location.state}`)
-      setQuizs(response?.data.question.quiz)
-      console.log('infor: ', response?.data)
-    }
     fetchUser()
   }, [])
 
   const submitEdit = async () => {
     const response = await axios.patch(`/quiz/question/${location.state}`, {
       quiz: quizs,
-      // alternatives: [],
+      exam_date_db: question.exam_date_db,
+      exam_topic_db: question.exam_topic_db,
+      hourOpenDb: question.hourOpenDb,
+      minuteOpenDb: question.minuteOpenDb,
+      secondOpenDb: question.secondOpenDb,
+      hourDueDb: question.hourDueDb,
+      minuteDueDb: question.minuteDueDb,
+      secondDueDb: question.secondDueDb,
+      totalScoreDb: question.totalScoreDb
     })
     setQuizs(response?.data?.updateQuestion.quiz)
-    console.log('hello', response)
+    console.log('update', response)
   }
   const checkInformation = () => {
     if (status == true) {
@@ -70,30 +92,38 @@ export default function ExamBankDetail() {
     }
   }
 
+  const onChangeQuestionInformation = (e) => {
+    setQuestion({ ...question, [e.target.name]: e.target.value })
+  }
+
   const onChangeQuestion = (e, index) => {
     const newQuiz = quizs.map((quiz, indexQuiz) =>
       indexQuiz == index
         ? { ...quiz, [e.target.name]: e.target.value }
         : { ...quiz }
     )
+    if (e.target.name == 'point_question') {
+      var newTotal = 0
+      newQuiz.forEach((value) => {
+        newTotal += parseFloat(value.point_question)
+      })
+    
+      setQuestion({
+        ...question,
+        totalScoreDb: Number(parseFloat(newTotal).toFixed(1)),
+      })
+    }
     setQuizs(newQuiz)
   }
-
-  // const onChangeAnswer = (e, index) => {
-  //   // const newAlternative = quizs.alternative.map(
-  //   //   (alternative, indexalternative) =>
-  //   //     indexalternative == index
-  //   //       ? { ...alternative, [e.target.name]: e.target.value }
-  //   //       : { ...alternative }
-  //   // )
-  //   const newQuiz = quizs.map((quiz, indexQuiz) =>
-  //     indexQuiz == index
-  //       ? { ...quiz, [e.target.name]: e.target.value }
-  //       : { ...quiz }
-  //   )
-  //   setQuizs(newQuiz.alternative)
-  // }
-
+  const onChangeAnswer = (e, indexQuiz, indexAlternative) => {
+    quizs[indexQuiz].alternatives[indexAlternative].answer_content =
+      e.target.value
+    console.log(quizs)
+  }
+  const handleTopicsChange = (e) => {
+    setTopics({ name: e.target.value })
+    console.log(topics.name)
+  }
   const showInformation = () => {
     return (
       <div className="exam-details normal">
@@ -112,15 +142,15 @@ export default function ExamBankDetail() {
           <div className="infor-exam-details">
             <div className="infor-time">
               <div className="open-date">
-                <label className="title" name="field_exam_date">
+                <label className="title-infor" name="field_exam_date">
                   Exam Date:
                 </label>{' '}
                 <label className="content-db" name="exam_date_db">
                   {moment(question.exam_date_db).format('DD/MM/YYYY')}
                 </label>
               </div>
-              <div className="topics">
-                <label className="title" name="field_exam_topic">
+              <div className="topic">
+                <label className="title-infor" name="field_exam_topic">
                   Exam Topics:
                 </label>{' '}
                 <label className="content-db" name="exam_topic_db">
@@ -128,8 +158,8 @@ export default function ExamBankDetail() {
                 </label>
               </div>
               <div className="exam-time">
-                <label className="title" name="field_open">
-                  Open:
+                <label className="title-infor" name="field_open">
+                  Start:
                 </label>{' '}
                 <label className="content-db" name="exam_open_db">
                   {question.hourOpenDb}
@@ -141,8 +171,8 @@ export default function ExamBankDetail() {
                 </label>
               </div>
               <div className="exam-time">
-                <label className="title" name="field_due">
-                  Due:
+                <label className="title-infor" name="field_due">
+                  End:
                 </label>{' '}
                 <label className="content-db" name="exam_due_db">
                   {question.hourDueDb}
@@ -151,6 +181,14 @@ export default function ExamBankDetail() {
                   {'m:'}
                   {question.secondDueDb}
                   {'s'}
+                </label>
+              </div>
+              <div className="max-score">
+                <label className="title-infor" name="totalScoreDb">
+                  Score:
+                </label>{' '}
+                <label className="content-db" name="totalScoreDb">
+                  {question.totalScoreDb} {'(max)'}
                 </label>
               </div>
             </div>
@@ -203,6 +241,16 @@ export default function ExamBankDetail() {
       </div>
     )
   }
+  // const sumPoint = () => {
+  //   var sum = 0
+  //   quizs.forEach((value) => {
+  //     sum = sum + parseFloat(value.point_question)
+  //   })
+  //   setQuestion({
+  //     ...question,
+  //     totalScoreDb: sum,
+  //   })
+  // }
   const editInformation = () => {
     return (
       <div className="exam-details edit">
@@ -217,55 +265,208 @@ export default function ExamBankDetail() {
         <div className="content-exam-details">
           <div className="infor-exam-details">
             <div className="infor-time">
-              <div className="open-date">
-                <label className="title" name="field_exam_date">
+              <div className="exam-time open-date">
+                <label className="title-infor" name="field_exam_date">
                   Exam Date:
                 </label>{' '}
-                <label className="content-db" name="exam_date_db">
-                  {moment(question.exam_date_db).format('DD/MM/YYYY')}
+                <label className="edit-time" name="exam_date_db">
+                  <input
+                    type="date"
+                    name="exam_date_db"
+                    className="cel2"
+                    defaultValue={question.exam_date_db}
+                    onChange={(e) => {
+                      onChangeQuestionInformation(e)
+                    }}
+                  />
                 </label>
               </div>
-              <div className="topics">
-                <label className="title" name="field_exam_topic">
+              <div className="exam-time topic">
+                <label className="title-infor" name="field_exam_topic">
                   Exam Topics:
                 </label>{' '}
-                <label className="content-db" name="exam_topic_db">
-                  {question.exam_topic_db}
+                <label className="edit-topic" name="exam_topic_db">
+                  <select
+                    value={topics.name}
+                    name="exam_topic_db"
+                    className="cel2"
+                    // onChange={handleTopicsChange}
+                    onChange={(e) => {
+                      onChangeQuestionInformation(e)
+                    }}
+                    defaultValue={question.exam_topic_db}
+                  >
+                    {TOPICS?.map((topicChoosen, i) => (
+                      <option key={i} value={topicChoosen.name} name="topics">
+                        {topicChoosen.name}
+                      </option>
+                    ))}
+                  </select>
                 </label>
               </div>
               <div className="exam-time">
-                <label className="title" name="field_open">
-                  Open:
+                <label className="title-infor" name="field_open">
+                  Start:
                 </label>{' '}
                 <label className="content-db" name="exam_open_db">
-                  {question.hourOpenDb}
-                  {'h:'}
-                  {question.minuteOpenDb}
-                  {'m:'}
-                  {question.secondOpenDb}
-                  {'s'}
+                  <label>
+                    Hour{' '}
+                    <select
+                      name="hourOpenDb"
+                      value={hourOpen.name}
+                      onChange={(e) => onChangeQuestionInformation(e)}
+                      defaultValue={question.hourOpenDb}
+                      style={{ width: '50%' }}
+                    >
+                      {HOUROPEN?.map((hourOpenChoosen, i) => (
+                        <option
+                          key={i}
+                          value={hourOpenChoosen.name}
+                          name="hourOpenDb"
+                        >
+                          {hourOpenChoosen.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>{' '}
+                  <label>
+                    Minute{' '}
+                    <select
+                      name="minuteOpenDb"
+                      value={minuteOpen.name}
+                      onChange={(e) => {
+                        onChangeQuestionInformation(e)
+                      }}
+                      defaultValue={question.minuteOpenDb}
+                    >
+                      {MINUTEOPEN?.map((minuteOpenChoosen, i) => (
+                        <option
+                          key={i}
+                          value={minuteOpenChoosen.name}
+                          name="minuteOpenDb"
+                        >
+                          {minuteOpenChoosen.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>{' '}
+                  <label>
+                    Second{' '}
+                    <select
+                      name="secondOpenDb"
+                      value={secondOpen.name}
+                      defaultValue={question.secondOpenDb}
+                      onChange={(e) => onChangeQuestionInformation(e)}
+                    >
+                      {SECONDOPEN?.map((secondOpenChoosen, i) => (
+                        <option
+                          key={i}
+                          value={secondOpenChoosen.name}
+                          name="secondOpenDb"
+                        >
+                          {secondOpenChoosen.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 </label>
               </div>
               <div className="exam-time">
-                <label className="title" name="field_due">
-                  Due:
+                <label className="title-infor" name="field_due">
+                  End:
                 </label>{' '}
                 <label className="content-db" name="exam_due_db">
-                  {question.hourDueDb}
-                  {'h:'}
-                  {question.minuteDueDb}
-                  {'m:'}
-                  {question.secondDueDb}
-                  {'s'}
+                  <label>
+                    Hour{' '}
+                    <select
+                      name="hourDueDb"
+                      value={hourDue.name}
+                      defaultValue={question.hourDueDb}
+                      onChange={(e) => {
+                        onChangeQuestionInformation(e)
+                      }}
+                      style={{ width: '50%' }}
+                    >
+                      {HOURDUE?.map((hourDueChoosen, i) => (
+                        <option
+                          key={i}
+                          value={hourDueChoosen.name}
+                          name="hourDueDb"
+                        >
+                          {hourDueChoosen.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>{' '}
+                  <label>
+                    Minute{' '}
+                    <select
+                      name="minuteDueDb"
+                      value={minuteDue.name}
+                      defaultValue={question.minuteDueDb}
+                      onChange={(e) => {
+                        onChangeQuestionInformation(e)
+                      }}
+                    >
+                      {MINUTEDUE?.map((minuteDueChoosen, i) => (
+                        <option
+                          key={i}
+                          value={minuteDueChoosen.name}
+                          name="minuteDueDb"
+                        >
+                          {minuteDueChoosen.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>{' '}
+                  <label>
+                    Second{' '}
+                    <select
+                      name="secondDueDb"
+                      value={secondDue.name}
+                      defaultValue={question.secondDueDb}
+                      onChange={(e) => {
+                        onChangeQuestionInformation(e)
+                      }}
+                    >
+                      {SECONDDUE?.map((secondDueChoosen, i) => (
+                        <option
+                          key={i}
+                          value={secondDueChoosen.name}
+                          name="secondDueDb"
+                        >
+                          {secondDueChoosen.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 </label>
+              </div>
+              <div className="max-score">
+                <label className="title-infor" name="totalScoreDb">
+                  Score:
+                </label>{' '}
+                <input
+                  type="button"
+                  className="content-db"
+                  name="totalScoreDb"
+                  value={question.totalScoreDb}
+                  defaultValue={question.totalScoreDb}
+                  style={{
+                    backgroundColor: 'rgba(214, 207, 207, 0)',
+                    outline: 'none',
+                    border: '1px solid rgba(214, 207, 207, 0)',
+                  }}
+                />
+                {'(max)'}
               </div>
             </div>
           </div>
           <br />
           <div className="question-exam-details">
-            {quizs.map((quiz, index) => {
+            {quizs.map((quiz, indexQuiz) => {
               return (
-                <div key={index}>
+                <div key={indexQuiz}>
                   <div classname="ques">
                     <label name="infor_question" classname="label_infor">
                       <label name="name_question">
@@ -276,7 +477,7 @@ export default function ExamBankDetail() {
                         className="question_content"
                         name="question_content"
                         defaultValue={quiz.question_content}
-                        onChange={(e) => onChangeQuestion(e, index)}
+                        onChange={(e) => onChangeQuestion(e, indexQuiz)}
                       />
                       <input
                         type="number"
@@ -287,25 +488,26 @@ export default function ExamBankDetail() {
                         name="point_question"
                         defaultValue={quiz.point_question}
                         onChange={(e) => {
-                          onChangeQuestion(e, index)
+                          onChangeQuestion(e, indexQuiz)
                         }}
+                        // onClick={sumPoint}
                       />
                       {'(point)'}
                     </label>
                   </div>
                   <div className="ans">
-                    {quiz.alternatives.map((alternative, index) => (
+                    {quiz.alternatives.map((alternative, indexAlternative) => (
                       <div
-                        key={index}
+                        key={indexAlternative}
                         style={{
                           color: alternative.answer_correct ? 'red' : 'black',
                         }}
                       >
-                        {(index == 0
+                        {(indexAlternative == 0
                           ? 'A'
-                          : index == 1
+                          : indexAlternative == 1
                           ? 'B'
-                          : index == 2
+                          : indexAlternative == 2
                           ? 'C'
                           : 'D') + '. '}
                         <input
@@ -313,7 +515,7 @@ export default function ExamBankDetail() {
                           name="answer_content"
                           defaultValue={alternative.answer_content}
                           onChange={(e) => {
-                            onChangeQuestion(e, index)
+                            onChangeAnswer(e, indexQuiz, indexAlternative)
                           }}
                         />
                       </div>

@@ -74,9 +74,6 @@ export default function Profile() {
     }
   }
 
-  const onUsernameChange = (e) => {
-    setUser({ ...user, username: e.target.value })
-  }
   const onFullnameChange = (e) => {
     setUser({ ...user, fullname: e.target.value })
   }

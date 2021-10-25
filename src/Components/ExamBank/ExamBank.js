@@ -9,8 +9,6 @@ export default function ExamBank() {
   const history = useHistory()
   useEffect(() => {
     async function fetchUser() {
-      const id = localStorage.getItem('id')
-      console.log(id)
       const response = await axios.get(`/quiz/question/`)
       setQuestions(response?.data)
       console.log('Infor Exam Bank: ', response?.data)
@@ -20,9 +18,17 @@ export default function ExamBank() {
   const render = (id_exam) => {
     history.push('/exam-bank-detail', id_exam)
   }
+
+  const handleDeleteExam = async (id_exam, e) => {
+    e.preventDefault();
+    const response = await axios.delete(`/quiz/question/${id_exam}`,{id_exam})
+    const newQuestions = questions.filter(question=>(question._id===response.data._id)?false:true)  
+    setQuestions(newQuestions)
+    console.log('delete: ', response)
+  }
+  
   return (
     <div className="exam-bank">
-      {/* <h3>Exam Bank</h3> */}
       <div className="col">
         <table className="table table-striped table-inverse table-hover">
           <thead className="thead-inverse">
@@ -61,15 +67,17 @@ export default function ExamBank() {
                   </td>
                   <td>
                     <div className="btn-group">
-                      <div className="btn btn-danger">
-                        <box-icon name="x-circle" />
+                      <div className="btn btn-danger" onClick={(e)=>handleDeleteExam(value.id_exam, e)}>
+                          <box-icon
+                            name="x-circle"
+                           />
                         Delete
                       </div>
                     </div>
                   </td>
                 </tr>
               )
-            })}
+            }).reverse()}
           </tbody>
         </table>
       </div>

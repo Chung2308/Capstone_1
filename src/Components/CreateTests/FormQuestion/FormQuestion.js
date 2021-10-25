@@ -68,6 +68,7 @@ export default class FormQuestion extends Component {
       alternatives: [],
       question_type: QUESTION_TYPE.YES_NO,
     }
+    this.changeQuestion = this.changeQuestion.bind(this)
   }
   onPointChange(ev) {
     this.setState({
@@ -89,7 +90,16 @@ export default class FormQuestion extends Component {
       question_content: ev.target.value,
     })
   }
-
+  changeQuestion(updatedQuiz, indexChange) {
+    const newQuiz = this.state.quizs.map((quiz, index) =>
+      index == indexChange ? updatedQuiz : quiz
+    )
+    var sum = 0
+    newQuiz.forEach((quiz) => {
+      sum = sum + parseFloat(quiz.point_question)
+    })
+    this.setState({ ...this.state, quizs: newQuiz, totalScoreDb: sum })
+  }
   /**
     Return true if create question success, otherwise return false
   */
@@ -97,15 +107,6 @@ export default class FormQuestion extends Component {
     const { question_content, point_question } = this.state
     const valid = this.validateQuestionBody()
     if (!valid) return false
-    // question = {
-    //   ...question,
-    //   question_content: question_content,
-    // }
-    // question = {
-    //   ...question,
-    //   point_question: point_question,
-    // }
-
     this.setState({
       ...this.state,
       alternatives: question.alternatives,
@@ -269,7 +270,7 @@ export default class FormQuestion extends Component {
       secondDueDb: event.target.value,
     })
   }
-  handleExamTotalScoreChange(event){
+  handleExamTotalScoreChange(event) {
     this.setState({
       totalScoreDb: event.target.value,
     })
@@ -306,9 +307,6 @@ export default class FormQuestion extends Component {
   }
 
   render() {
-    // console.log(this.state.questions)
-    // console.log(this.state.khoitao)
-    // console.log(this.state.exam_due_db)
     return (
       <div>
         <div className="create-test">
@@ -317,7 +315,7 @@ export default class FormQuestion extends Component {
             <div className="row">
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div className="time-open">
-                  <label className="lable-1">Exam Date: </label>
+                  <label className="lable-1">Exam date: </label>
                   <input
                     onChange={(event) => {
                       this.handleExamDateChange(event)
@@ -346,20 +344,27 @@ export default class FormQuestion extends Component {
                 </div>
                 <div className="id-test">
                   <h5>
-                    <label name="field_id">Exam ID: </label>
+                    <label name="field_id" style={{ fontSize: '80%' }}>
+                      Exam ID:{' '}
+                    </label>
                     <ion-icon
                       className="icon"
                       name="push-outline"
                       onClick={() => this.Ma_code()}
+                      style={{ marginRight: '4.5%' }}
                     ></ion-icon>
                     <input
                       onChange={(event) => {
                         this.handleExamIdChange(event)
                       }}
-                      type="number"
+                      type="button"
                       className="cel2"
                       name="id_exam"
                       value={this.state.id_exam}
+                      style={{
+                        backgroundColor: 'rgba(214, 207, 207, 0)',
+                        textAlign: 'left',
+                      }}
                     />
                   </h5>
                 </div>
@@ -367,7 +372,7 @@ export default class FormQuestion extends Component {
               <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div>
                   <div className="exam-time">
-                    <label className="lable-1">Open: </label>
+                    <label className="lable-1">Exam start: </label>
                     <label>
                       <label>
                         Hour{' '}
@@ -436,7 +441,7 @@ export default class FormQuestion extends Component {
                     </label>
                   </div>
                   <div className="exam-time">
-                    <label className="lable-1">Due: </label>
+                    <label className="lable-1">Exam end: </label>
                     <label>
                       Hour{' '}
                       <select
@@ -539,12 +544,9 @@ export default class FormQuestion extends Component {
               <div className="points">
                 <label className="label-2">Score factor:</label>
                 <input
-                  // onChange={(event) => this.isChange2(event)}
                   type="number"
-                  // required
                   name="point"
                   min={0}
-                  // defaultValue={0}
                   step=".1"
                   className="cel-2-2"
                   onChange={(ev) => {
@@ -587,15 +589,13 @@ export default class FormQuestion extends Component {
             <label>Total questions: </label>
             <input
               type="number"
-              // min={1}
-              // defaultValue={1}
               name="total_number"
               value={this.state.quizs.length}
             />
             <br />
             <label>Total score: </label>
             <input
-              type="number"
+              type="button"
               min={0}
               step=".1"
               defaultValue={0}
@@ -605,6 +605,7 @@ export default class FormQuestion extends Component {
               onChange={(event) => {
                 this.handleExamTotalScoreChange(event)
               }}
+              style={{ backgroundColor: 'white', textAlign: 'left' }}
             />
           </div>
 
@@ -622,6 +623,8 @@ export default class FormQuestion extends Component {
               <QuestionDetail
                 key={index}
                 quiz={quiz}
+                indexChange={index}
+                changeQuestion={this.changeQuestion}
               ></QuestionDetail>
             ))}
           </div>
