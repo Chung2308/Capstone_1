@@ -55,7 +55,6 @@ export default class CreateTests2 extends Component {
       quiz,
     } = data
     
-    const id = localStorage.getItem('id');
     const submitInfor = await axios.post(`/quiz/question/`, {
       id_exam,
       exam_date_db,

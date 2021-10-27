@@ -20,9 +20,16 @@ QuestionDetail.propTypes = {
   }).isRequired,
 }
 
-export default function QuestionDetail({ quiz, indexChange, changeQuestion }) {
+export default function QuestionDetail({
+  quiz,// Đây là quiz đối tượng mà vừa lấy trong quizs (mảng)
+  indexChange,
+  changeQuestion,
+  // changeAnswer,
+  alternatives,
+}) {
   const [status, setStatus] = useState(true)
   const [updatedQuiz, setUpdated] = useState(quiz)
+  const [updatedAlternatives, setUpdatedAlternatives] = useState(alternatives)
   const checkStatus = () => {
     if (status == true) {
       return createdQuestion()
@@ -41,106 +48,141 @@ export default function QuestionDetail({ quiz, indexChange, changeQuestion }) {
   const onChangeQuiz = (event) => {
     setUpdated({ ...updatedQuiz, [event.target.name]: event.target.value })
   }
+  const onChangeAlternative = (event, indexAlternative) => {
+    const newAlternatives = updatedQuiz.alternatives.map((alternative, index) =>
+      index === indexAlternative
+        ? { ...alternative, [event.target.name]: event.target.value }
+        : alternative
+    )
+    console.log('updatedQuiz: ', newAlternatives)
+    setUpdated({ ...updatedQuiz, alternatives: newAlternatives })
+  }
+  const styleAnswer ={
+    fontStyle: "italic"
+  }
   const createdQuestion = () => {
     return (
-      <div className="answers-container">
+      <div className="row answers-container">
         <hr width="80%" />
-        <span className="question-content">
-          <h5>Question Content:</h5> {quiz.question_content}
-          <br />
-          <h5>Question Number:</h5> {quiz.name_question}
-          <br />
-          <h5>Question Score:</h5> {quiz.point_question}
-          <br />
-          <br />
-        </span>
-        <div className="answers-group">
-          <span>Correct Answers:</span>
-          <ul>
-            {quiz.alternatives
-              .filter((a) => a.answer_correct === true)
-              .map((answer, i) => (
-                <li key={i}>{answer.answer_content}</li>
-              ))}
-          </ul>
-        </div>
-        <div className="answers-group">
-          <span>Incorrect Answers:</span>
-          <ul>
-            {quiz.alternatives
-              .filter((a) => a.answer_correct === false)
-              .map((answer, i) => (
-                <li key={i}>{answer.answer_content}</li>
-              ))}
-          </ul>
-        </div>
-        <div className="answers-group action">
-          <span onClick={editClick}>
-            <ion-icon name="create-outline"></ion-icon>
+        <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+          <span className="question-content">
+            <h5>Question Content:</h5> {quiz.question_content}
+            <br />
+            <h5>Question Number:</h5> {quiz.name_question}
+            <br />
+            <h5>Question Score:</h5> <br />
+            {quiz.point_question}
           </span>
-          {actionIcon()}
+        </div>
+        <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <div className="answers-group">
+            <span style={styleAnswer}>Correct Answers:</span>
+            <ul>
+              {quiz.alternatives
+                .filter((a) => a.answer_correct === true)
+                .map((answer, i) => (
+                  <li key={i}>{answer.answer_content}</li>
+                ))}
+            </ul>
+          </div>
+        </div>
+        <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <div className="answers-group">
+            <span style={styleAnswer}>Incorrect Answers:</span>
+            <ul>
+              {quiz.alternatives
+                .filter((a) => a.answer_correct === false)
+                .map((answer, i) => (
+                  <li key={i}>{answer.answer_content}</li>
+                ))}
+            </ul>
+          </div>
+        </div>
+        <div className="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+          <div className="answers-group action">
+            <span onClick={editClick}>
+              <ion-icon name="create-outline"></ion-icon>
+            </span>
+            {actionIcon()}
+          </div>
         </div>
       </div>
     )
   }
   const editCreatedQuestion = () => {
     return (
-      <div className="answers-container">
+      <div className="row answers-container">
         <hr width="80%" />
-        <span className="question-content">
-          <h5>Question Content:</h5>{' '}
-          <input
-            className="edit-content"
-            defaultValue={quiz.question_content}
-            name="question_content"
-            onChange={onChangeQuiz}
-          />
-          <br />
-          <h5>Question Number:</h5>
-          <input className="edit-name" value={quiz.name_question} />
-          <br />
-          <h5>Question Score:</h5>
-          <input
-            type="number"
-            step=".1"
-            min={0}
-            className="edit-score"
-            defaultValue={quiz.point_question}
-            name="point_question"
-            onChange={onChangeQuiz}
-          />
-          <br />
-          <br />
-        </span>
-        <div className="answers-group">
-          <span>Correct Answers:</span>
-          <ul>
-            {quiz.alternatives
-              .filter((a) => a.answer_correct === true)
-              .map((answer, i) => (
-                <li key={i} className="edit-correct-answer">
-                  {answer.answer_content}
-                </li>
-              ))}
-          </ul>
-        </div>
-        <div className="answers-group">
-          <span>Incorrect Answers:</span>
-          <ul>
-            {quiz.alternatives
-              .filter((a) => a.answer_correct === false)
-              .map((answer, i) => (
-                <li key={i} className="edit-incorrect-answer">
-                  {answer.answer_content}
-                </li>
-              ))}
-          </ul>
-        </div>
-        <div className="answers-group action">
-          <span onClick={editSumbit}>
-            <ion-icon name="checkmark-done-outline"></ion-icon>
+        <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+          <span className="question-content">
+            <h5>Question Content:</h5>{' '}
+            <input
+              className="edit-content"
+              defaultValue={quiz.question_content}
+              name="question_content"
+              onChange={onChangeQuiz}
+            />
+            <br />
+            <h5>Question Number:</h5>
+            <input className="edit-name" value={quiz.name_question} />
+            <br />
+            <h5>Question Score:</h5>
+            <input
+              type="number"
+              step=".1"
+              min={0}
+              className="edit-score"
+              defaultValue={quiz.point_question}
+              name="point_question"
+              onChange={onChangeQuiz}
+            />
+            <br />
+            <br />
           </span>
-          {actionIcon()}
+        </div>
+        <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <div className="answers-group">
+            <span style={styleAnswer}>Correct Answers:</span>
+            <ul>
+              {quiz.alternatives.map((answer, index) =>
+                answer.answer_correct === true ? (
+                  <input
+                    key={index}
+                    className="edit-correct-answer"
+                    defaultValue={answer.answer_content}
+                    onChange={(event) => onChangeAlternative(event, index)}
+                    name="answer_content"
+                  />
+                ) : null
+              )}
+            </ul>
+          </div>
+        </div>
+        <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+          <div className="answers-group">
+            <span style={styleAnswer}>Incorrect Answers:</span>
+            <ul>
+              {quiz.alternatives.map((answer, index) =>
+                answer.answer_correct === false ? (
+                  <input
+                    key={index}
+                    className="edit-incorrect-answer"
+                    defaultValue={answer.answer_content}
+                    name="answer_content"
+                    onChange={(event) => onChangeAlternative(event, index)}
+                  />
+                ) : null
+              )}
+            </ul>
+          </div>
+        </div>
+        <div className="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+          <div className="answers-group action">
+            <span onClick={editSumbit}>
+              <ion-icon name="checkmark-done-outline"></ion-icon>
+            </span>
+            {actionIcon()}
+          </div>
         </div>
       </div>
     )

@@ -100,9 +100,11 @@ export default class FormQuestion extends Component {
     })
     this.setState({ ...this.state, quizs: newQuiz, totalScoreDb: sum })
   }
+  
   /**
     Return true if create question success, otherwise return false
   */
+  
   changeQuestionBody(question) {
     const { question_content, point_question } = this.state
     const valid = this.validateQuestionBody()
@@ -149,27 +151,6 @@ export default class FormQuestion extends Component {
       question_type: QUESTION_TYPE.YES_NO,
     })
     console.log(this.state)
-
-    // if (!state.this.answer_corre)
-    //  return alert('Please enter the point of the question first')
-
-    // const { questions, currentQuestionBody } = this.state
-
-    // const valid = this.validateQuestionBody()
-    // if (!valid) return false
-
-    // if (
-    //   !currentQuestionBody.alternatives?.some((a) => a.answer_correct === true)
-    // ) {
-    //   alert('Please choose at least one correct answer')
-    //   return false
-    // }
-
-    // this.setState({
-    //   currentQuestionBody: DEFAULT_QUESTION_BODY,
-    //   questions: questions.concat(currentQuestionBody),
-    // })
-    // console.log(currentQuestionBody)
   }
   validateQuestionBody() {
     const { question_content, point_question } = this.state
@@ -610,21 +591,13 @@ export default class FormQuestion extends Component {
           </div>
 
           <div className="created-questions">
-            {/* {this.state.questions?.map((ques, i) => (
-              <QuestionDetail
-                key={i}
-                questionScore={ques.point_question}
-                questionNumber={i + 1}
-                questionBody={ques}
-                quiz={}
-              ></QuestionDetail>
-            ))} */}
             {this.state.quizs?.map((quiz, index) => (
               <QuestionDetail
                 key={index}
                 quiz={quiz}
                 indexChange={index}
                 changeQuestion={this.changeQuestion}
+                // changeAnswer={this.changeAnswer}
               ></QuestionDetail>
             ))}
           </div>

@@ -11,6 +11,11 @@ import { SECONDOPEN } from '../CreateTests/secondOpen.mock'
 import { HOURDUE } from '../CreateTests/hourDue.mock'
 import { MINUTEDUE } from '../CreateTests/minuteDue.mock'
 import { SECONDDUE } from '../CreateTests/secondDue.mock'
+// import ReactToPrint from 'react-to-print'
+import Pdf from 'react-to-pdf'
+import css from './ExportData.css'
+import ReactToPrint from 'react-to-print'
+const ref = React.createRef()
 export default function ExamBankDetail() {
   const { location } = useHistory()
   const [status, setStatus] = useState(true)
@@ -21,25 +26,7 @@ export default function ExamBankDetail() {
   const [hourDue, setHourDue] = useState([HOURDUE])
   const [minuteDue, setMinuteDue] = useState([MINUTEDUE])
   const [secondDue, setSecondDue] = useState([SECONDDUE])
-  const [question, setQuestion] = useState({
-    // exam_date_db: '',
-    // exam_topic_db: '',
-    // hourOpenDb: '',
-    // minuteOpenDb: '',
-    // secondOpenDb: '',
-    // hourDueDb: '',
-    // minuteDueDb: '',
-    // secondDueDb: '',
-    // totalScoreDb: '',
-  })
-  // useEffect(() => {
-  //   async function fetchUser() {
-  //     const response = await axios.get(`/quiz/question/${location.state}`)
-  //     setQuestion(response?.data?.question)
-  //     console.log('infor: ', response?.data?.question)
-  //   }
-  //   fetchUser()
-  // }, [])
+  const [question, setQuestion] = useState({})
   const [quizs, setQuizs] = useState([])
 
   async function fetchUser() {
@@ -62,7 +49,7 @@ export default function ExamBankDetail() {
       hourDueDb: question.hourDueDb,
       minuteDueDb: question.minuteDueDb,
       secondDueDb: question.secondDueDb,
-      totalScoreDb: question.totalScoreDb
+      totalScoreDb: question.totalScoreDb,
     })
     setQuizs(response?.data?.updateQuestion.quiz)
     console.log('update', response)
@@ -107,7 +94,7 @@ export default function ExamBankDetail() {
       newQuiz.forEach((value) => {
         newTotal += parseFloat(value.point_question)
       })
-    
+
       setQuestion({
         ...question,
         totalScoreDb: Number(parseFloat(newTotal).toFixed(1)),
@@ -124,6 +111,12 @@ export default function ExamBankDetail() {
     setTopics({ name: e.target.value })
     console.log(topics.name)
   }
+  const dataStyle = {
+    color: "black",
+    width: "100%",
+    fontStyle: "normal"
+  }
+  
   const showInformation = () => {
     return (
       <div className="exam-details normal">
@@ -134,11 +127,17 @@ export default function ExamBankDetail() {
             </button>
           </div>
           <div className="export-data">
-            <button>Export Data</button>
+            <Pdf
+              targetRef={ref}
+              filename="study-together.pdf"
+              style={dataStyle}
+            >
+              {({ toPdf }) => <button onClick={toPdf}>Export Data</button>}
+            </Pdf>
           </div>
         </div>
         <hr />
-        <div className="content-exam-details">
+        <div className="content-exam-details" ref={ref}>
           <div className="infor-exam-details">
             <div className="infor-time">
               <div className="open-date">
@@ -241,16 +240,6 @@ export default function ExamBankDetail() {
       </div>
     )
   }
-  // const sumPoint = () => {
-  //   var sum = 0
-  //   quizs.forEach((value) => {
-  //     sum = sum + parseFloat(value.point_question)
-  //   })
-  //   setQuestion({
-  //     ...question,
-  //     totalScoreDb: sum,
-  //   })
-  // }
   const editInformation = () => {
     return (
       <div className="exam-details edit">

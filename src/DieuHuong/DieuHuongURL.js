@@ -45,7 +45,7 @@ export default class DieuHuongURL extends Component {
             <Nav></Nav>
             <Home></Home>
           </Route>
-          <Route    exact path="/sign-up">
+          <Route exact path="/sign-up">
             <SignUp></SignUp>
           </Route>
           <Route exact path="/profile">
@@ -72,7 +72,7 @@ export default class DieuHuongURL extends Component {
             <Nav></Nav>
             <ExamBank></ExamBank>
           </Route>
-          <Route exact path="/exam-bank-detail" >
+          <Route exact path="/exam-bank-detail">
             <Nav></Nav>
             <ExamBankDetail></ExamBankDetail>
           </Route>
