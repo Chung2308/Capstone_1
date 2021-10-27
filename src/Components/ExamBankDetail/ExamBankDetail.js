@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import './ExamBankDetail.css'
 import { useEffect, useState } from 'react'
 import { axios } from '@/instances/axios'
@@ -11,11 +11,8 @@ import { SECONDOPEN } from '../CreateTests/secondOpen.mock'
 import { HOURDUE } from '../CreateTests/hourDue.mock'
 import { MINUTEDUE } from '../CreateTests/minuteDue.mock'
 import { SECONDDUE } from '../CreateTests/secondDue.mock'
-// import ReactToPrint from 'react-to-print'
-import Pdf from 'react-to-pdf'
-import css from './ExportData.css'
 import ReactToPrint from 'react-to-print'
-const ref = React.createRef()
+
 export default function ExamBankDetail() {
   const { location } = useHistory()
   const [status, setStatus] = useState(true)
@@ -28,6 +25,7 @@ export default function ExamBankDetail() {
   const [secondDue, setSecondDue] = useState([SECONDDUE])
   const [question, setQuestion] = useState({})
   const [quizs, setQuizs] = useState([])
+  const componentRef = useRef()
 
   async function fetchUser() {
     const response = await axios.get(`/quiz/question/${location.state}`)
@@ -112,11 +110,29 @@ export default function ExamBankDetail() {
     console.log(topics.name)
   }
   const dataStyle = {
-    color: "black",
-    width: "100%",
-    fontStyle: "normal"
+    color: 'black',
+    backgroundColor: 'red',
+    // width: "100%",
   }
-  
+  const pageStyle = `
+  @page {
+    size: 80mm 50mm;
+  }
+
+  @media all {
+    .pagebreak {
+      display: none;
+    }
+  }
+
+  @media print {
+    .pagebreak {
+      color: black;
+      page-break-before: always;
+    }
+  }
+`;
+
   const showInformation = () => {
     return (
       <div className="exam-details normal">
@@ -127,17 +143,24 @@ export default function ExamBankDetail() {
             </button>
           </div>
           <div className="export-data">
-            <Pdf
+            <ReactToPrint
+              pageStyle={pageStyle}
+              copyStyles={true}
+              trigger={() => <button>Export Data</button>}
+              content={() => componentRef.current}
+            />
+
+            {/* <Pdf
               targetRef={ref}
               filename="study-together.pdf"
               style={dataStyle}
             >
               {({ toPdf }) => <button onClick={toPdf}>Export Data</button>}
-            </Pdf>
+            </Pdf> */}
           </div>
         </div>
         <hr />
-        <div className="content-exam-details" ref={ref}>
+        <div className="content-exam-details" ref={componentRef}>
           <div className="infor-exam-details">
             <div className="infor-time">
               <div className="open-date">

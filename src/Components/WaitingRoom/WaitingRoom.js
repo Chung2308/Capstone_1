@@ -4,6 +4,7 @@ import './WaitingRoom.css'
 import { useEffect, useState } from 'react'
 import { axios } from '@/instances/axios'
 import moment from 'moment'
+import { Today } from '@material-ui/icons'
 
 export default function WaitingRoom() {
 //   const currentDate = new Date()
@@ -23,6 +24,9 @@ const [questions, setQuestions] = useState({})
     }
     fetchUser()
   }, [])
+  const today = new Date();
+  const time = today.getHours()
+  console.log(time-questions.hourOpenDb)
   return (
     <div className="waiting-room">
       <div className="row">
