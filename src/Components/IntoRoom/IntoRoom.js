@@ -1,25 +1,36 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './IntoRoom.css'
-import { Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router'
+import { axios } from '@/instances/axios'
+import { Link } from 'react-router-dom'
 
 export default function IntoRoom() {
-  const [obj, setObj] = useState()
-  const [isRedirectRoom, setIsRedirectRoom] = useState(false)
-  const joinRoom = (event) => {
-    event.preventDefault()
-    if (obj.join_room == '123') {
-      setIsRedirectRoom(true)
-    } else {
-      alert('Invalid ID')
-      setIsRedirectRoom(false)
+
+  const history = useHistory()
+  const [room, setRoom] = useState({})
+  const [questions, setQuestion] = useState([])
+
+  async function fetchUser() {
+    const response = await axios.get(`/quiz/question/`)
+    setQuestion(response?.data?.question)
+  }
+
+  useEffect(() => {
+    fetchUser()
+  }, [])
+
+  const render = () => {
+    if (room.id_exam == questions.id_exam) {
+      history.push('/waiting-room', questions.id_exam)
     }
+    console.log('render: ', questions.id_exam)
   }
-  const objRoom = (event) => {
-    setObj({ [event.target.name]: event.target.value })
+
+  const handleIdExam = (event) => {
+    setRoom({ [event.target.name]: event.target.value })
+    console.log('IdExam: ', room.id_exam)
   }
-  if (isRedirectRoom === true) {
-    return <Redirect to="/waiting-room" />
-  }
+
   return (
     <div className="into-room">
       <div className="row">
@@ -30,13 +41,17 @@ export default function IntoRoom() {
           <div className="input-id">
             <input
               type="text"
-              name="join_room"
-              id
+              name="id_exam"
+              value={room.name}
               placeholder="Enter a join code"
-              onChange={objRoom}
+              onChange={(event) => handleIdExam(event)}
             />
-            <button type="submit" className="btn btn-info" onClick={joinRoom}>
-              <a href="">JOIN</a>
+            <button
+              type="submit"
+              className="btn btn-info"
+              onClick={() => render(questions.id_exam)}
+            >
+              <Link href="">JOIN</Link>
             </button>
           </div>
         </div>

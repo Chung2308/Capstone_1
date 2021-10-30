@@ -1,5 +1,6 @@
 .waiting-room{
     margin: 3% 7%;
+    font-family: cursive;
 }
 .waiting-room .infor-room{
     width: 150px;
@@ -49,3 +50,6 @@ span {
   font-family: cursive;
 }
 
+.countdown{
+  display: flex;
+}

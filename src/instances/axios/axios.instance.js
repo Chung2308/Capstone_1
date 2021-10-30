@@ -8,7 +8,7 @@ axiosInstance.interceptors.request.use((config) => {
   let token = localStorage.getItem('token')
 
   if (!token) {
-    alert('you need to login again')
+    alert('You need to login again')
     return config
   }
 

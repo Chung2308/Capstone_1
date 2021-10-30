@@ -1,32 +1,84 @@
 import React from 'react'
-import Countdown from '../Countdown/Countdown.js'
 import './WaitingRoom.css'
-import { useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { axios } from '@/instances/axios'
 import moment from 'moment'
-import { Today } from '@material-ui/icons'
+import { useHistory } from 'react-router'
 
 export default function WaitingRoom() {
-//   const currentDate = new Date()
-//   const open =
-//     currentDate.getMonth() === 11 && currentDate.getDate() > 23
-//       ? currentDate.getFullYear() + 1
-//       : currentDate.getFullYear()
-//   const today = new Date()
-//   const time =
-//     today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds()
-const [questions, setQuestions] = useState({})
+  // Render lần 1
+  const history = useHistory()
+  const {location} = useHistory()
+  const [questions, setQuestions] = useState({}) // {...}
+  const [timeHours, setTimeHours] = useState('00')
+  const [timeMinutes, setTimeMinutes] = useState('00')
+  const [timeSeconds, setTimeSeconds] = useState('00')
+
+  async function fetchUser() {
+    const response = await axios.get(`/quiz/question/186119`) // response
+    setQuestions({...response?.data.question,})
+    startTimer({...response?.data.question,})
+  }
   useEffect(() => {
-    async function fetchUser() {
-      const response = await axios.get(`/quiz/question/670662`)
-      setQuestions(response?.data.question)
-    console.log('test: ',response)
-    }
     fetchUser()
   }, [])
-  const today = new Date();
-  const time = today.getHours()
-  console.log(time-questions.hourOpenDb)
+
+  let interval = useRef()
+
+  const startTimer = (questions) => {
+    interval = setInterval(() => {
+      const currentDate = Date.parse(
+        `${questions.exam_date_db.split('T')[0]}T${questions.hourOpenDb}:${
+          questions.minuteOpenDb
+        }:${questions.secondOpenDb}`
+      )
+      
+      const time = currentDate - Date.now()
+
+      if (time < 0) {
+        // console.log('Heets thoi gian')
+        history.push('/exam')
+        clearInterval(interval)
+      } else {
+        const hours = Math.floor(time / 1000 / 3600)
+        const minutes = Math.floor(((time / 1000) % 3600) / 60)
+        const seconds = Math.floor((((time / 1000) % 3600) % 60) % 60)
+        setTimeHours(hours)
+        setTimeMinutes(minutes)
+        setTimeSeconds(seconds)
+      }
+      // console.log('currentDate:', questions)
+      // const now = new Date()
+
+      // const nowHours = now.getHours()
+      // const nowMinutes = now.getMinutes()
+      // const nowSeconds = now.getSeconds()
+
+      // var countdownHours = timeHoursDb - nowHours
+      // var countdownMinutes = timeMinutesDb - nowMinutes
+      // var countdownSeconds = timeSecondsDb - nowSeconds
+
+      //mber rồi, ờ là number đó, mà nó k ra number á
+      // console.log(' const hours = Math.floor(
+      //   (countdownHours % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      // )
+      // const minutes = Math.floor(
+      //   (countdownMinutes % (1000 * 60 * 60)) / (1000 * 60)
+      // )
+      // const seconds = Math.floor((countdownSeconds % (1000 * 60)) / 1000) // Math ni là trả về nuhours: ', hours)
+      // if (countdownHours < 0 || countdownMinutes < 0 || countdownSeconds < 0) {
+      //   stop our time
+      //   clearInterval(interval.current)
+      // } else {
+      //   update timer
+      //   setTimeHours(hours)
+      //   setTimeMinutes(minutes)
+      //   setTimeSeconds(seconds)
+      // }
+    }, 1000)
+
+    // console.log('countdownSeconds: ', timeHours)
+  }
   return (
     <div className="waiting-room">
       <div className="row">
@@ -49,9 +101,9 @@ const [questions, setQuestions] = useState({})
             </label>
             <label>
               {questions.hourOpenDb}
-              {'h: '}
+              {'h:'}
               {questions.minuteOpenDb}
-              {'m: '}
+              {'m:'}
               {questions.secondOpenDb}
               {'s'}
             </label>
@@ -60,12 +112,21 @@ const [questions, setQuestions] = useState({})
             <label htmlFor className="infor-room">
               Time remaining:
             </label>
+            <label className="countdown">
+              <span>
+                {timeHours}
+                {'h:'}
+              </span>
+              <span>
+                {timeMinutes}
+                {'m:'}
+              </span>
+              <span>{timeSeconds}{'s'}</span>
+            </label>
             <br />
-            {/* <Countdown date={`${time}-${open}`} /> */}
           </div>
         </div>
         <div className="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-          <h3>Chat Room</h3>
         </div>
       </div>
     </div>
