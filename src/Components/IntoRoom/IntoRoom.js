@@ -5,7 +5,6 @@ import { axios } from '@/instances/axios'
 import { Link } from 'react-router-dom'
 
 export default function IntoRoom() {
-
   const history = useHistory()
   const [room, setRoom] = useState({})
   const [questions, setQuestion] = useState([])
@@ -25,7 +24,7 @@ export default function IntoRoom() {
     }
     console.log('render: ', questions.id_exam)
   }
-
+  
   const handleIdExam = (event) => {
     setRoom({ [event.target.name]: event.target.value })
     console.log('IdExam: ', room.id_exam)

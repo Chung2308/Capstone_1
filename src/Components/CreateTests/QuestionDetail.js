@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types'
 import { QUESTION_TYPE } from './question-types.enum'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import './QuestionDetail.css'
 
 QuestionDetail.propTypes = {
   questionNumber: PropTypes.number.isRequired,
   questionBody: PropTypes.shape({
-    // deleteCreatedQuestion: PropTypes.isRequired,
     question_content: PropTypes.string.isRequired,
     point_question: PropTypes.number.isRequired,
     question_type: PropTypes.oneOf(Object.values(QUESTION_TYPE)),
@@ -21,15 +20,13 @@ QuestionDetail.propTypes = {
 }
 
 export default function QuestionDetail({
-  quiz,// Đây là quiz đối tượng mà vừa lấy trong quizs (mảng)
+  quiz, // Đây là quiz đối tượng mà vừa lấy trong quizs (mảng)
   indexChange,
   changeQuestion,
-  // changeAnswer,
-  alternatives,
 }) {
   const [status, setStatus] = useState(true)
   const [updatedQuiz, setUpdated] = useState(quiz)
-  const [updatedAlternatives, setUpdatedAlternatives] = useState(alternatives)
+  const [quizs, setQuizs] = useState([quiz])
   const checkStatus = () => {
     if (status == true) {
       return createdQuestion()
@@ -42,8 +39,8 @@ export default function QuestionDetail({
     changeQuestion(updatedQuiz, indexChange)
   }
   const editSumbit = () => {
-    changeQuestion(updatedQuiz, indexChange)
     setStatus(true)
+    changeQuestion(updatedQuiz, indexChange)
   }
   const onChangeQuiz = (event) => {
     setUpdated({ ...updatedQuiz, [event.target.name]: event.target.value })
@@ -57,8 +54,15 @@ export default function QuestionDetail({
     console.log('updatedQuiz: ', newAlternatives)
     setUpdated({ ...updatedQuiz, alternatives: newAlternatives })
   }
-  const styleAnswer ={
-    fontStyle: "italic"
+  const styleAnswer = {
+    fontStyle: 'italic',
+  }
+  const deleteQuiz = (indexQuiz) => {
+    // let newQuiz = [...quizs]
+    // newQuiz.splice(indexQuiz)
+    // setQuizs(newQuiz)
+    const newQuiz = quizs.filter((item) => item.indexQuiz !== indexQuiz)
+    setQuizs(newQuiz)
   }
   const createdQuestion = () => {
     return (
@@ -190,9 +194,13 @@ export default function QuestionDetail({
   const actionIcon = () => {
     return (
       <div>
-        <span>
-          <ion-icon name="trash-outline"></ion-icon>
-        </span>
+        {quizs.map((item, index) => {
+          return (
+            <span key={index} onClick={() => deleteQuiz(item.indexQuiz)}>
+              <ion-icon name="trash-outline"></ion-icon>
+            </span>
+          )
+        })}
       </div>
     )
   }

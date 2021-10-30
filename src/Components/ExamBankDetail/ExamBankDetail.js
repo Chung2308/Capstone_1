@@ -31,6 +31,7 @@ export default function ExamBankDetail() {
     const response = await axios.get(`/quiz/question/${location.state}`)
     setQuizs(response?.data.question.quiz)
     setQuestion(response?.data?.question)
+    console.log(response?.data)
   }
   useEffect(() => {
     fetchUser()
@@ -105,15 +106,10 @@ export default function ExamBankDetail() {
       e.target.value
     console.log(quizs)
   }
-  const handleTopicsChange = (e) => {
-    setTopics({ name: e.target.value })
-    console.log(topics.name)
-  }
-  const dataStyle = {
-    color: 'black',
-    backgroundColor: 'red',
-    // width: "100%",
-  }
+  // const handleTopicsChange = (e) => {
+  //   setTopics({ name: e.target.value })
+  //   console.log(topics.name)
+  // }
   const pageStyle = `
   @page {
     size: 80mm 50mm;
@@ -149,14 +145,6 @@ export default function ExamBankDetail() {
               trigger={() => <button>Export Data</button>}
               content={() => componentRef.current}
             />
-
-            {/* <Pdf
-              targetRef={ref}
-              filename="study-together.pdf"
-              style={dataStyle}
-            >
-              {({ toPdf }) => <button onClick={toPdf}>Export Data</button>}
-            </Pdf> */}
           </div>
         </div>
         <hr />

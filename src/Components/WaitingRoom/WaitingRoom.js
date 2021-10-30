@@ -15,7 +15,7 @@ export default function WaitingRoom() {
   const [timeSeconds, setTimeSeconds] = useState('00')
 
   async function fetchUser() {
-    const response = await axios.get(`/quiz/question/186119`) // response
+    const response = await axios.get(`/quiz/question/${location.state}`) // response
     setQuestions({...response?.data.question,})
     startTimer({...response?.data.question,})
   }
@@ -28,9 +28,7 @@ export default function WaitingRoom() {
   const startTimer = (questions) => {
     interval = setInterval(() => {
       const currentDate = Date.parse(
-        `${questions.exam_date_db.split('T')[0]}T${questions.hourOpenDb}:${
-          questions.minuteOpenDb
-        }:${questions.secondOpenDb}`
+        `${questions.exam_date_db.split('T')[0]}T${questions.hourOpenDb}:${questions.minuteOpenDb}:${questions.secondOpenDb}`
       )
       
       const time = currentDate - Date.now()
@@ -58,14 +56,13 @@ export default function WaitingRoom() {
       // var countdownMinutes = timeMinutesDb - nowMinutes
       // var countdownSeconds = timeSecondsDb - nowSeconds
 
-      //mber rồi, ờ là number đó, mà nó k ra number á
       // console.log(' const hours = Math.floor(
       //   (countdownHours % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       // )
       // const minutes = Math.floor(
       //   (countdownMinutes % (1000 * 60 * 60)) / (1000 * 60)
       // )
-      // const seconds = Math.floor((countdownSeconds % (1000 * 60)) / 1000) // Math ni là trả về nuhours: ', hours)
+      // const seconds = Math.floor((countdownSeconds % (1000 * 60)) / 1000)
       // if (countdownHours < 0 || countdownMinutes < 0 || countdownSeconds < 0) {
       //   stop our time
       //   clearInterval(interval.current)
