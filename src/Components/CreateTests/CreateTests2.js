@@ -51,7 +51,6 @@ export default class CreateTests2 extends Component {
       minuteDueDb,
       secondDueDb,
       totalScoreDb,
-      // totalQuestionDb,
       quiz,
     } = data
     
@@ -70,7 +69,6 @@ export default class CreateTests2 extends Component {
     })
     console.log(submitInfor)
     if (submitInfor.data?.jwt) {
-      // localStorage.setItem(username, loginData.data.jwt);
       localStorage.setItem('idExam', submitInfor.data.question.id_exam)
     }
   }

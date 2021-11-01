@@ -66,6 +66,7 @@ export default class DieuHuongURL extends Component {
           </Route>
           <Route exact path="/waiting-room">
             <Nav></Nav>
+
             <WaitingRoom></WaitingRoom>
           </Route>
           <Route exact path="/exam-bank">

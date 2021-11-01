@@ -67,10 +67,33 @@ export default class Home extends Component {
                       </p>
                     </div>
                   </div>
-                </div>                
+                </div>
+                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  <div className="row">
+                    <img
+                      src="./img/exam-bank.png"
+                      alt=""
+                      style={{
+                        width: '27%',
+                        marginRight: '6%',
+                        marginLeft: '3%',
+                      }}
+                    />
+                    <div className="text">
+                      <a href="">
+                        <h3>QUESTION BANKS</h3>
+                      </a>
+                      <hr />
+                      <p>
+                        Summarize all questions by topic of each exam already in
+                        the system.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        );
+        )
     }
 }

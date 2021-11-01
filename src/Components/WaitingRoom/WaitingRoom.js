@@ -3,7 +3,9 @@ import './WaitingRoom.css'
 import { useRef, useEffect, useState } from 'react'
 import { axios } from '@/instances/axios'
 import moment from 'moment'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
+import io from 'socket.io-client'
+import SplitSearch from '../../Utils/SplitSearch'
 
 export default function WaitingRoom() {
   // Render lần 1
@@ -13,28 +15,58 @@ export default function WaitingRoom() {
   const [timeHours, setTimeHours] = useState('00')
   const [timeMinutes, setTimeMinutes] = useState('00')
   const [timeSeconds, setTimeSeconds] = useState('00')
+  const [room, setRoom] = useState("")
+  const [messages, setMessages] = useState([])
 
+  let socket;
+
+  const [search, setSearch] = useState(SplitSearch(location.search))
   async function fetchUser() {
-    const response = await axios.get(`/quiz/question/${location.state}`) // response
-    setQuestions({...response?.data.question,})
-    startTimer({...response?.data.question,})
+    const response = await axios.get(`/quiz/question/${search.room}`)
+    if(response?.data?.question != null){
+      setQuestions({ ...response?.data.question })
+      startTimer({ ...response?.data.question })
+    } else {
+      alert('Invalid ID')
+    }
+  //   const search = window.location.search;
+  //   const params = new URLSearchParams(search);
+  //   const room = params.get('room');
+  //   console.log('room:', room)
+
+  //   setRoom(room)
+    
+  //   socket = io (response)
+  //   socket.emit('join', {room: room}, (error)=>{
+  //     if(error){
+  //       alert(error)
+  //     }
+  //   })
+  //   return () => {
+  //     socket.disconnect();
+  //     socket.off();
+  //   }
   }
   useEffect(() => {
     fetchUser()
   }, [])
-
+  console.log('room: ', search)
+  // useEffect (() =>{
+  //   socket.on('message', msg=>{
+  //     setMessages(prevMessages => [...prevMessages, msg])
+  //   })
+  // }, [])
   let interval = useRef()
 
   const startTimer = (questions) => {
     interval = setInterval(() => {
       const currentDate = Date.parse(
-        `${questions.exam_date_db.split('T')[0]}T${questions.hourOpenDb}:${questions.minuteOpenDb}:${questions.secondOpenDb}`
+        `${questions.exam_date_db?.split('T')[0]}T${questions.hourOpenDb}:${questions.minuteOpenDb}:${questions.secondOpenDb}`
       )
       
       const time = currentDate - Date.now()
 
       if (time < 0) {
-        // console.log('Heets thoi gian')
         history.push('/exam')
         clearInterval(interval)
       } else {
@@ -45,36 +77,8 @@ export default function WaitingRoom() {
         setTimeMinutes(minutes)
         setTimeSeconds(seconds)
       }
-      // console.log('currentDate:', questions)
-      // const now = new Date()
-
-      // const nowHours = now.getHours()
-      // const nowMinutes = now.getMinutes()
-      // const nowSeconds = now.getSeconds()
-
-      // var countdownHours = timeHoursDb - nowHours
-      // var countdownMinutes = timeMinutesDb - nowMinutes
-      // var countdownSeconds = timeSecondsDb - nowSeconds
-
-      // console.log(' const hours = Math.floor(
-      //   (countdownHours % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      // )
-      // const minutes = Math.floor(
-      //   (countdownMinutes % (1000 * 60 * 60)) / (1000 * 60)
-      // )
-      // const seconds = Math.floor((countdownSeconds % (1000 * 60)) / 1000)
-      // if (countdownHours < 0 || countdownMinutes < 0 || countdownSeconds < 0) {
-      //   stop our time
-      //   clearInterval(interval.current)
-      // } else {
-      //   update timer
-      //   setTimeHours(hours)
-      //   setTimeMinutes(minutes)
-      //   setTimeSeconds(seconds)
-      // }
     }, 1000)
 
-    // console.log('countdownSeconds: ', timeHours)
   }
   return (
     <div className="waiting-room">
@@ -123,7 +127,14 @@ export default function WaitingRoom() {
             <br />
           </div>
         </div>
-        <div className="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+        <div className="col-xs-7 col-sm-7 col-md-7 col-lg-7 char-room">
+          {/* <ul>
+            {
+              messages.map((msg, index) => {
+                <li key={index}>{JSON.stringify(msg)}</li>
+              })
+            }
+          </ul> */}
         </div>
       </div>
     </div>

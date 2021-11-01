@@ -51,7 +51,7 @@ export default function ExamBankDetail() {
       totalScoreDb: question.totalScoreDb,
     })
     setQuizs(response?.data?.updateQuestion.quiz)
-    console.log('update', response)
+    console.log('update', response?.data?.updateQuestion)
   }
   const checkInformation = () => {
     if (status == true) {
