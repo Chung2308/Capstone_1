@@ -44,7 +44,7 @@ export default function WaitingRoom() {
   }
 
   useEffect(() => {
-    // fetchUserRoom()
+    fetchUserRoom()
     fetchRoom()
   }, [])
 

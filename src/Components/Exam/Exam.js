@@ -23,7 +23,7 @@ export default function Exam() {
     const response = await axios.get(`/quiz/question/${search.room}`)
     setQuestions({ ...response?.data?.question })
     startTimer({ ...response?.data.question })
-    setQuizs({ ...response?.data?.question.quiz })
+    setQuizs(response?.data?.question.quiz)
     // console.log('test user: ', response?.data?.question)
     // console.log('room: ', search.room)
   }
@@ -65,7 +65,7 @@ export default function Exam() {
 
   const onChangeQuestion = (e, index) => {
     const newQuiz = quizs.map((quiz, indexQuiz) =>
-      index == indexQuiz
+      indexQuiz == index
         ? { ...quiz, [e.target.name]: e.target.value }
         : { ...quiz }
     )
@@ -76,20 +76,18 @@ export default function Exam() {
       <div className="infor-exam">
         <div className="row">
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <div className="exam-topic">
-              <label htmlFor>Exam date: </label>{' '}
+            <div className="exam-date">
+              <label htmlFor className="title-information">
+                Exam date:{' '}
+              </label>{' '}
               <label htmlFor>
                 {moment(questions.exam_date_db).format('DD/MM/YYYY')}
               </label>
             </div>
-            <div className="time-remaining">
-              <label htmlFor>Exam topic: </label>{' '}
-              <label htmlFor>{questions.exam_topic_db}</label>
-            </div>
-          </div>
-          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <div className="time-start">
-              <label htmlFor>Exam start: </label>{' '}
+              <label htmlFor className="title-information">
+                Exam start:{' '}
+              </label>{' '}
               <label htmlFor>
                 {questions.hourOpenDb}
                 {'h:'}
@@ -100,7 +98,9 @@ export default function Exam() {
               </label>
             </div>
             <div className="time-end">
-              <label htmlFor>Exam end: </label>{' '}
+              <label htmlFor className="title-information">
+                Exam end:{' '}
+              </label>{' '}
               <label htmlFor>
                 {questions.hourDueDb}
                 {'h:'}
@@ -109,6 +109,29 @@ export default function Exam() {
                 {questions.secondDueDb}
                 {'s'}
               </label>
+            </div>
+          </div>
+          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div className="time-topic">
+              <label htmlFor className="title-information">
+                Exam topic:{' '}
+              </label>{' '}
+              <label htmlFor>{questions.exam_topic_db}</label>
+            </div>
+            <div className="total-score">
+              <label htmlFor className="title-information">
+                Total score:{' '}
+              </label>{' '}
+              <label htmlFor>
+                {questions.totalScoreDb}
+                {' (max)'}
+              </label>
+            </div>
+            <div className="total-score">
+              <label htmlFor className="title-information">
+                Total question:{' '}
+              </label>{' '}
+              <label htmlFor>{setQuizs.length}{' (questions)'}</label>
             </div>
           </div>
         </div>
@@ -124,68 +147,58 @@ export default function Exam() {
       </div>
       <div className="content-exam">
         <div className="content-question">
-          {/* {quizs.map((quiz, indexQuiz) => {
+          {quizs.map((quiz, index) => {
             return (
-              <div key={indexQuiz}>
+              <div key={index}>
                 <div classname="ques">
                   <label name="infor_question" classname="label_infor">
-                    <label name="name_question">
-                      <strong>Question {quiz.name_question}</strong>
+                    <label className="number-ques">
+                      <label name="name_question">
+                        <strong>
+                          Question {quiz.name_question}
+                          {': '} {quiz.point_question} {'(points)'}
+                        </strong>
+                      </label>
                     </label>
-                    {': '}
-                    <input
-                      className="question_content"
-                      name="question_content"
-                      defaultValue={quiz.question_content}
-                      onChange={(e) => onChangeQuestion(e, indexQuiz)}
-                    />
-                    <input
-                      type="number"
-                      min={0}
-                      // max={10}
-                      step=".1"
-                      className="point_question"
-                      name="point_question"
-                      defaultValue={quiz.point_question}
-                      onChange={(e) => {
-                        onChangeQuestion(e, indexQuiz)
-                      }}
-                      // onClick={sumPoint}
-                    />
-                    {'(point)'}
+                    <br />
+                    <label name="question_content">
+                      {quiz.question_content}
+                    </label>
                   </label>
                 </div>
                 <div className="ans">
-                  {quiz.alternatives.map((alternative, indexAlternative) => (
-                    <div
-                      key={indexAlternative}
-                      style={{
-                        color: alternative.answer_correct ? 'red' : 'black',
-                      }}
-                    >
-                      {(indexAlternative == 0
-                        ? 'A'
-                        : indexAlternative == 1
-                        ? 'B'
-                        : indexAlternative == 2
-                        ? 'C'
-                        : 'D') + '. '}
-                      <input
-                        className="answer_content"
-                        name="answer_content"
-                        defaultValue={alternative.answer_content}
-                        onChange={(e) => {
-                          onChangeAnswer(e, indexQuiz, indexAlternative)
-                        }}
-                      />
+                  {quiz.alternatives.map((alternative, index) => (
+                    <div key={index}>
+                      <label name="answer_content">
+                        {quiz.question_type == 'yesorno' ? (
+                          <input type="radio" name="yesorno" />
+                        ) : quiz.question_type == 'onecorrect' ? (
+                          <input type="radio" name="onecorrect" />
+                        ) : quiz.question_type == 'manycorrect' ? (
+                          <input type="checkbox" name="manycorrect" />
+                        ) : (
+                          <input type="text" name="contentresult" />
+                        )}
+                      </label>{' '}
+                      <label>
+                        {(index == 0
+                          ? 'A'
+                          : index == 1
+                          ? 'B'
+                          : index == 2
+                          ? 'C'
+                          : index == 3
+                          ? 'D'
+                          : '') + '. '}
+                      </label>{' '}
+                      <label>{alternative.answer_content}</label>
                     </div>
                   ))}
                 </div>
               </div>
             )
-          })} */}
+          })}
         </div>
-        <div className="content-answer"></div>
       </div>
     </div>
   )
