@@ -55,6 +55,7 @@ export function YesNoFormQuestion({ changeQuestionBody }) {
         onChange={() => changeYesNo(true)}
         type="radio"
         value="yes"
+        name="question_type"
       />
       Yes
       <br />
@@ -64,6 +65,7 @@ export function YesNoFormQuestion({ changeQuestionBody }) {
         onChange={() => changeYesNo(false)}
         type="radio"
         value="no"
+        name="question_type"
       />
       No
       <br />

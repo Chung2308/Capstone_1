@@ -51,12 +51,14 @@ export function OneCorrectFormQuestion({ changeQuestionBody }) {
             value={ans.code}
             checked={choosenAns?.code === ans.code}
             onChange={() => changeAnswer(ans)}
+            name="question_type"
           />{' '}
           <input
             type="text"
             className="input-2"
             placeholder={ans.placeholder}
             onChange={(ev) => changeAnswerContent(ans, ev)}
+            name="question_type"
           />
           <br />
           <br />

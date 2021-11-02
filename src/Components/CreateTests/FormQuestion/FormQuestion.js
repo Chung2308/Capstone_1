@@ -106,7 +106,7 @@ export default class FormQuestion extends Component {
   */
   
   changeQuestionBody(question) {
-    const { question_content, point_question } = this.state
+    const { question_content, point_question, question_type } = this.state
     const valid = this.validateQuestionBody()
     if (!valid) return false
     this.setState({
@@ -121,7 +121,7 @@ export default class FormQuestion extends Component {
     this.sumPoint()
   }
   createQuestion() {
-    const { question_content, point_question, alternatives } = this.state
+    const { question_content, point_question, alternatives, question_type } = this.state
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
@@ -141,6 +141,7 @@ export default class FormQuestion extends Component {
     this.state.quizs.push({
       question_content,
       point_question,
+      question_type,
       name_question: this.state.quizs.length + 1,
       alternatives: this.state.alternatives,
     })
@@ -282,6 +283,7 @@ export default class FormQuestion extends Component {
       minuteDueDb: this.state.minuteDueDb,
       secondDueDb: this.state.secondDueDb,
       totalScoreDb: this.state.totalScoreDb,
+      // question_type: this.state.question_type,
       quiz: this.state.quizs,
     }
     this.props.onSubmitForm(data)

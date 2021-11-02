@@ -1,9 +1,20 @@
 .exam {
-  margin: 4% 17%;
+  margin: 3% 17%;
   font-family: cursive;
 }
 .exam .infor-exam {
   border: 1px solid rgb(201, 201, 201);
   padding: 2% 10%;
   border-radius: 10px;
+}
+.exam .countdown{
+  display: flex;
+  border: 1px solid rgb(69, 189, 39);
+  border-radius: 5px;
+  background-color: rgb(69, 189, 39);
+  margin-top: 2%;
+  color: white;
+}
+.exam .countdown label{
+  margin: 0px 38%;
 }

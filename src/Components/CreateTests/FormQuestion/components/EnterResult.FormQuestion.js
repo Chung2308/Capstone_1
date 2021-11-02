@@ -8,7 +8,6 @@ export function EnterResultFormQuestion({ changeQuestionBody }) {
     const valueEnterQuestion = event.target.value
     const question = {
       question_type: QUESTION_TYPE.CONTENT_RESULT,
-
       alternatives: [
         {
           answer_content: valueEnterQuestion,
@@ -24,7 +23,7 @@ export function EnterResultFormQuestion({ changeQuestionBody }) {
     <div className="type-4" id="option1-type-4">
       <input
         type="text"
-        name="question_type4"
+        name="question_type"
         placeholder="Content answer: "
         className="input-2-type-4"
         onChange={(event) => {

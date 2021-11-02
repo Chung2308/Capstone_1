@@ -66,13 +66,13 @@ export function ManyCorrectFormQuestion({ changeQuestionBody }) {
             value={ans.code}
             checked={checkedAnswers.some((a) => a.code === ans.code)}
             onChange={() => toggleCheckedAnswer(ans)}
-            name="question_type2"
+            name="question_type"
             id="type2_checkbox1"
           />{' '}
           <input
             type="text"
             className="input-2"
-            name="type2_answer1"
+            name="type2_answer"
             value={ans.answer_content}
             onChange={(ev) => changeAnswerContent(ans, ev)}
             placeholder={ans.placeholder}
