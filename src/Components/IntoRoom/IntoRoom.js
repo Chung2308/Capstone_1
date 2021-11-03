@@ -5,21 +5,29 @@ import { axios } from '@/instances/axios'
 
 export default function IntoRoom() {
   const history = useHistory()
-  const [name, setName] = useState('')
+  const [user, setUser] = useState({})
   const [room, setRoom] = useState()
 
   async function fetchUser() {
     const response = await axios.get(`/quiz/question/${room}`)
     if (response?.data.question != null) {
-      history.push(`/waiting-room?room=${room}`, { room })
+      history.push(`/waiting-room?user=${user.username}&room=${room}`, { room })
     } else {
       alert('Invalid ID')
     }
     console.log('response: ', response)
   }
-
   useEffect(() => {}, [])
 
+  async function fetchUserRoom() {
+    const id = localStorage.getItem('id')
+    const responseUser = await axios.get(`/user/${id}`)
+    setUser(responseUser?.data?.user)
+    console.log('test user: ', responseUser?.data)
+  }
+  useEffect(() => {
+    fetchUserRoom()
+  }, [])
   // const handleIdExam = (event) => {
   //   setRoom({ [event.target.name]: event.target.value })
   //   console.log('IdExam: ', room.id_exam)
@@ -49,7 +57,7 @@ export default function IntoRoom() {
               onClick={(e) => {
                 fetchUser()
                 return !room ? e.preventDefault() : null
-              }} 
+              }}
               style={{ color: 'black' }}
             >
               JOIN

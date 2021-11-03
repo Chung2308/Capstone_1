@@ -17,12 +17,12 @@ export default function WaitingRoom() {
   const [timeMinutes, setTimeMinutes] = useState('00')
   const [timeSeconds, setTimeSeconds] = useState('00')
   const [room, setRoom] = useState('')
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState('')
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
   const [msg, setMsg] = useState('')
-  const backEndUrl = 'https://trung-api-capstone1.herokuapp.com'
+  const backEndUrl = 'http://chatroom-socket-capston1.herokuapp.com/'
 
   const [search, setSearch] = useState(SplitSearch(location.search))
 
@@ -35,8 +35,8 @@ export default function WaitingRoom() {
       alert('Invalid ID')
     }
   }
-  
-  async function fetchUserRoom () {
+
+  async function fetchUserRoom() {
     const id = localStorage.getItem('id')
     const responseUser = await axios.get(`/user/${id}`)
     setUser(responseUser?.data?.user)
@@ -44,24 +44,27 @@ export default function WaitingRoom() {
   }
 
   useEffect(() => {
-    // fetchUserRoom()
+    fetchUserRoom()
     fetchRoom()
   }, [])
 
   useEffect(() => {
     const search = window.location.search
     const params = new URLSearchParams(search)
-    const user = params.get('user')
+    const user = params.get('user') /////////////////////////////////
     const room = params.get('room')
-    console.log('room:', room)
+
     setUser(user)
     setRoom(room)
+
     socket = io(backEndUrl)
+
     socket.emit('join', { user, room }, (error) => {
       if (error) {
-        // alert(error)
+        alert(error)
       }
     })
+
     return () => {
       //user leave room
       socket.disconnect()
@@ -78,6 +81,7 @@ export default function WaitingRoom() {
         div.scrollTop = div.scrollHeight - div.clientWidth
       }, 10)
     })
+
     socket.on('roomMembers', (usrs) => {
       setUsers(usrs)
     })
@@ -108,7 +112,7 @@ export default function WaitingRoom() {
       const time = currentDate - Date.now()
 
       if (time < 0) {
-        history.push(`/exam?room=${room}`, {room})
+        history.push(`/exam?room=${room}`, { room })
         clearInterval(interval)
       } else {
         const hours = Math.floor(time / 1000 / 3600)
@@ -153,9 +157,7 @@ export default function WaitingRoom() {
             <label htmlFor className="infor-room">
               Time remaining:
             </label>
-            <label
-              className="countdown"
-            >
+            <label className="countdown">
               <span>
                 {timeHours}
                 {'h:'}
@@ -178,7 +180,7 @@ export default function WaitingRoom() {
               <p>Active Users</p>
               <ul>
                 {users.map((e, i) => (
-                  <li key={i}>{user.username}</li>
+                  <li key={i}>{e.user}</li>
                 ))}
               </ul>
             </div>
@@ -190,7 +192,7 @@ export default function WaitingRoom() {
                       className="panel-title name-room"
                       style={{ display: 'flex' }}
                     >
-                      {/* <span className="glyphicon glyphicon-comment"></span> */}
+                      {<span className="glyphicon glyphicon-comment"></span>}
                       <img
                         src="./img/room.gif"
                         alt=""
@@ -201,16 +203,8 @@ export default function WaitingRoom() {
                   </div>
                 </div>
                 <div className="panel-body msg_container_base" id="chat_body">
-                  <p>Chung chan</p>
-                  <p>Chung chan</p>
-                  <p>Chung chan</p>
-                  <p>Chung chan</p>
-                  <p>Chung chan</p>
-                  <p>Chung chan</p>
-                  <p>Chung chan</p>
-                  <p>Chung chan</p>
                   {messages.map((e, i) =>
-                    e.user === user?.toLowerCase() ? (
+                    e.user === user?.toString().toLowerCase() ? (
                       <>
                         <div key={i} className="row msg_container base_receive">
                           <div className="col-xs-10 col-md-10">
