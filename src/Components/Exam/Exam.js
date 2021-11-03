@@ -171,7 +171,7 @@ export default function Exam() {
                     <div key={index}>
                       <label name="answer_content">
                         {quiz.question_type == 'yesorno' ? (
-                          <input type="radio" name="yesorno" />
+                          <input type="radio" name={'yesorno'+index} />
                         ) : quiz.question_type == 'onecorrect' ? (
                           <input type="radio" name="onecorrect" />
                         ) : quiz.question_type == 'manycorrect' ? (

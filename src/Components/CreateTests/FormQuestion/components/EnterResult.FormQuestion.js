@@ -11,7 +11,7 @@ export function EnterResultFormQuestion({ changeQuestionBody }) {
       alternatives: [
         {
           answer_content: valueEnterQuestion,
-          answer_correct: true,
+          answer_correct: null,
         },
       ],
     }
