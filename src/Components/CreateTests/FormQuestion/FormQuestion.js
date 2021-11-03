@@ -61,7 +61,7 @@ export default class FormQuestion extends Component {
       minuteDueDb: '',
       secondDueDb: '',
       totalScoreDb: '',
-      // totalQuestionDb: '',
+      totalQuestionDb: '',
       quizs: [],
       question_content: '',
       point_question: '',
@@ -150,6 +150,7 @@ export default class FormQuestion extends Component {
       question_content: '',
       point_question: 0,
       question_type: QUESTION_TYPE.YES_NO,
+      // questionTypeDescriptions: Object.entries(QUESTION_TYPE_DESCRIPTION),
     })
     console.log(this.state)
   }
@@ -252,9 +253,14 @@ export default class FormQuestion extends Component {
       secondDueDb: event.target.value,
     })
   }
-  handleExamTotalScoreChange(event) {
+  // handleExamTotalScoreChange(event) {
+  //   this.setState({
+  //     totalScoreDb: event.target.value,
+  //   })
+  // }
+  handleExamTotalQuestionChange(event) {
     this.setState({
-      totalScoreDb: event.target.value,
+      totalQuestionDb: event.target.value,
     })
   }
   sumPoint() {
@@ -283,6 +289,7 @@ export default class FormQuestion extends Component {
       minuteDueDb: this.state.minuteDueDb,
       secondDueDb: this.state.secondDueDb,
       totalScoreDb: this.state.totalScoreDb,
+      // totalQuestionDb: this.state.totalQuestionDb,
       // question_type: this.state.question_type,
       quiz: this.state.quizs,
     }
@@ -572,8 +579,11 @@ export default class FormQuestion extends Component {
             <label>Total questions: </label>
             <input
               type="number"
-              name="total_number"
+              name="totalQuestionDb"
               value={this.state.quizs.length}
+              // onChange={(event) => {
+              //   this.handleExamTotalQuestionChange(event)
+              // }}
             />
             <br />
             <label>Total score: </label>
