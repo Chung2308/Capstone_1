@@ -11,7 +11,7 @@ export default function Exam() {
   const { location } = useHistory()
   const [questions, setQuestions] = useState({})
   const [quizs, setQuizs] = useState([])
-  const [user, setUser] = useState({ username: '' })
+  const [user, setUser] = useState({})
   const [users, setUsers] = useState([])
   const [room, setRoom] = useState('')
   const [search, setSearch] = useState(SplitSearch(location.search))
@@ -19,13 +19,13 @@ export default function Exam() {
   const [timeMinutes, setTimeMinutes] = useState('00')
   const [timeSeconds, setTimeSeconds] = useState('00')
 
+  const [yesNo, setYesNo] = useState(null)
+
   async function fetchExamRoom() {
     const response = await axios.get(`/quiz/question/${search.room}`)
     setQuestions({ ...response?.data?.question })
     startTimer({ ...response?.data.question })
     setQuizs(response?.data?.question.quiz)
-    // console.log('test user: ', response?.data?.question)
-    // console.log('room: ', search.room)
   }
 
   useEffect(() => {
@@ -50,7 +50,6 @@ export default function Exam() {
       const time = currentDate - Date.now()
 
       if (time < 0) {
-        // history.push(`/exam?room=${room}`, { room })
         clearInterval(interval)
       } else {
         const hours = Math.floor(time / 1000 / 3600)
@@ -63,13 +62,8 @@ export default function Exam() {
     }, 1000)
   }
 
-  const onChangeQuestion = (e, index) => {
-    const newQuiz = quizs.map((quiz, indexQuiz) =>
-      indexQuiz == index
-        ? { ...quiz, [e.target.name]: e.target.value }
-        : { ...quiz }
-    )
-    setQuizs(newQuiz)
+  const onChangeValueChooseAnswer = (event) => {
+    console.log(event.target.value);
   }
   return (
     <div className="exam">
@@ -131,7 +125,10 @@ export default function Exam() {
               <label htmlFor className="title-information">
                 Total question:{' '}
               </label>{' '}
-              <label htmlFor>{setQuizs.length}{' (questions)'}</label>
+              <label htmlFor>
+                {quizs.length}
+                {' (questions)'}
+              </label>
             </div>
           </div>
         </div>
@@ -147,9 +144,9 @@ export default function Exam() {
       </div>
       <div className="content-exam">
         <div className="content-question">
-          {quizs.map((quiz, index) => {
+          {quizs.map((quiz, indexQuiz) => {
             return (
-              <div key={index}>
+              <div key={indexQuiz}>
                 <div classname="ques">
                   <label name="infor_question" classname="label_infor">
                     <label className="number-ques">
@@ -167,27 +164,46 @@ export default function Exam() {
                   </label>
                 </div>
                 <div className="ans">
-                  {quiz.alternatives.map((alternative, index) => (
-                    <div key={index}>
-                      <label name="answer_content">
+                  {quiz.alternatives.map((alternative, indexAlternative) => (
+                    <div key={indexAlternative}>
+                      <label name="answer_content" key={indexAlternative}>
                         {quiz.question_type == 'yesorno' ? (
-                          <input type="radio" name={'yesorno'+index} />
+                          <input
+                            type="radio"
+                            name={`yesorno${indexQuiz}`}
+                            value={alternative.answer_content}
+                            onChange={onChangeValueChooseAnswer}
+                          />
                         ) : quiz.question_type == 'onecorrect' ? (
-                          <input type="radio" name="onecorrect" />
+                          <input
+                            type="radio"
+                            name={`onecorrect${indexQuiz}`}
+                            value={alternative.answer_content}
+                            onChange={onChangeValueChooseAnswer}
+                          />
                         ) : quiz.question_type == 'manycorrect' ? (
-                          <input type="checkbox" name="manycorrect" />
+                          <input
+                            type="checkbox"
+                            name={`manycorrect${indexQuiz}`}
+                            value={alternative.answer_content}
+                            onChange={onChangeValueChooseAnswer}
+                          />
                         ) : (
-                          <input type="text" name="contentresult" />
+                          <input
+                            type="text"
+                            name={`enterresult${indexQuiz}`}
+                            className="enter-result"
+                          />
                         )}
                       </label>{' '}
                       <label>
-                        {(index == 0
+                        {(indexAlternative == 0
                           ? 'A'
-                          : index == 1
+                          : indexAlternative == 1
                           ? 'B'
-                          : index == 2
+                          : indexAlternative == 2
                           ? 'C'
-                          : index == 3
+                          : indexAlternative == 3
                           ? 'D'
                           : '') + '. '}
                       </label>{' '}

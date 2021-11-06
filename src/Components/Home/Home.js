@@ -28,6 +28,7 @@ export default class Home extends Component {
                     <img src="./img/list-test.png" alt="" />
                     <div className="text">
                       <a href="/exam-bank">
+                      
                         <h3>LIST OF TESTS</h3>
                       </a>
                       <hr />
