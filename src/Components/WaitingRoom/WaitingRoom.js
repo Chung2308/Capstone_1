@@ -9,8 +9,6 @@ import SplitSearch from '../../Utils/SplitSearch'
 let socket
 
 export default function WaitingRoom() {
-  // Render lần 1
-
   const history = useHistory()
   const { location } = useHistory()
   const [questions, setQuestions] = useState({})
@@ -24,19 +22,9 @@ export default function WaitingRoom() {
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
-  // const [msg, setMsg] = useState('')
   const backEndUrl = 'http://localhost:8000/'
   const [search, setSearch] = useState(SplitSearch(location.search))
 
-  // user hoặc room trên link là mình không lấy. Vì user có thể fake. oiwf m
-  //Link:
-  // dấu / là tượng trưng cho component
-  // dấu / cũng có thể tượng trưng cho id (user,bài viết,....)
-  // dấu ? tượng trưng search 1 cái chi trong 1 danh sách
-  // http://localhost:3000/waiting-room?user=123&room=024253
-  // /waiting-room component
-  // ?user=123 không phải 1 danh sách. vì user ni không phải admin. muôn lấy username hay cái gì đó thì mình đã nhập rồi cần chi lấy trên link
-  // ?room=024253 danh sách. vì user có thể truy cập nhiều room khác nữa.
   async function fetchRoom() {
     const response = await axios.get(`/quiz/question/${search.room}`)
     if (response?.data?.question != null) {
@@ -45,28 +33,15 @@ export default function WaitingRoom() {
     } else {
       history.push('/into-room')
     }
-    // console.log('user: ', user.username)
-  }
-  // Call API nhưng chưa rerender.
-  async function fetchUserRoom() {
-    // const id = localStorage.getItem('id')
-    // const responseUser = await axios.get(`/user/${id}`)
-    // setUser(responseUser?.data?.user)
-    // console.log('test user: ', responseUser?.data)
-    //à đoạn ni, sao m bỏ đi á, t k hiểu nơi
   }
   useEffect(() => {
-    // fetchUserRoom()
     fetchRoom()
   }, [])
   useEffect(() => {
     const search = window.location.search
     const params = new URLSearchParams(search)
-    // const userUrl = params.get('user') //Không nên lấy user trên link. Vì người dùng có thể nhập dữ liệu khác vào
-    // const user = params.get('user')
-    const room = params.get('room') // //Không nên lấy room trên link. Vì người dùng có thể nhập dữ liệu khác vào. Nếu có lấy thì ràng buộc là invalid id roôm
+    const room = params.get('room')
 
-    // setUser(user)
     setRoom(room)
 
     socket = io(backEndUrl, {
@@ -80,11 +55,6 @@ export default function WaitingRoom() {
         alert(error)
       }
     })
-    // socket.emit('join', { user, room }, (error) => {
-    //   if (error) {
-    //     alert(error)
-    //   }
-    // })
 
     return () => {
       //user leave room
@@ -92,7 +62,6 @@ export default function WaitingRoom() {
       socket.off()
     }
   }, [backEndUrl, window.location.search])
-  // console.log('room: ', search)
   useEffect(() => {
     socket.on('message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg])
@@ -119,7 +88,7 @@ export default function WaitingRoom() {
   const startTimer = (questions) => {
     const search = window.location.search
     const params = new URLSearchParams(search)
-    const room = params.get('room') // m get ở đây
+    const room = params.get('room')
     // console.log('push room: ', room)
     interval = setInterval(() => {
       const currentDate = Date.parse(
@@ -129,8 +98,6 @@ export default function WaitingRoom() {
       )
       const time = currentDate - Date.now()
       if (time < 0) {
-        fetchUserRoom() // chưa rerender => user ={} user.username => undefinded
-        console.log('chưa rerender user: ', user)
         history.push(`/exam?room=${room}`, { room, user })
         clearInterval(interval)
       } else {

@@ -45,7 +45,6 @@ const popup = () => {
     const response = await axios.get(`/quiz/question/${room}`)
     console.log('user: ', user)
     if (response?.data.question != null) {
-      // history.push(`/waiting-room?user=${user.username}&room=${room}`, { room })
       history.push(`/waiting-room?room=${room}`, {
         room,
         user,
@@ -66,10 +65,6 @@ const popup = () => {
   useEffect(() => {
     fetchUserRoom()
   }, [])
-  // const handleIdExam = (event) => {
-  //   setRoom({ [event.target.name]: event.target.value })
-  //   console.log('IdExam: ', room.id_exam)
-  // }
 
   return (
     <div className="into-room">
