@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import './Home.css';
 
-// const CheckLogin =()=>{
-//     const {dataForm:{isAuthentication}}=useContext(AuthContext);
-//     if(isAuthentication)
-//         return true;
-//     else
-//         return false;
-// }
-
-
 export default class Home extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +19,6 @@ export default class Home extends Component {
                     <img src="./img/list-test.png" alt="" />
                     <div className="text">
                       <a href="/exam-bank">
-                      
                         <h3>LIST OF TESTS</h3>
                       </a>
                       <hr />
@@ -81,7 +71,7 @@ export default class Home extends Component {
                       }}
                     />
                     <div className="text">
-                      <a href="">
+                      <a href="/question-bank">
                         <h3>QUESTION BANKS</h3>
                       </a>
                       <hr />

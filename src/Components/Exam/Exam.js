@@ -7,19 +7,15 @@ import SplitSearch from '../../Utils/SplitSearch'
 import moment from 'moment'
 
 export default function Exam() {
-  const history = useHistory()
   const { location } = useHistory()
   const [questions, setQuestions] = useState({})
   const [quizs, setQuizs] = useState([])
-  const [user, setUser] = useState({})
-  const [users, setUsers] = useState([])
-  const [room, setRoom] = useState('')
   const [search, setSearch] = useState(SplitSearch(location.search))
+
+  //Countdown
   const [timeHours, setTimeHours] = useState('00')
   const [timeMinutes, setTimeMinutes] = useState('00')
   const [timeSeconds, setTimeSeconds] = useState('00')
-
-  const [yesNo, setYesNo] = useState(null)
 
   async function fetchExamRoom() {
     const response = await axios.get(`/quiz/question/${search.room}`)
@@ -62,9 +58,35 @@ export default function Exam() {
     }, 1000)
   }
 
-  const onChangeValueChooseAnswer = (event) => {
-    console.log(event.target.value);
+  const onChangeAlternative = (indexAlternative, indexQuiz) => {
+    const newQuizs = quizs.map((quiz, index) => {
+      if (index === indexQuiz) {
+        return {
+          ...quiz,
+          alternatives: quiz.alternatives.map((alternative, index) => {
+            if (index === indexAlternative)
+              return { ...alternative, answer_choose: true }
+            else return { ...alternative, answer_choose: false }
+          }),
+        }
+      } else return quiz
+    })
+    setQuizs(newQuizs)
   }
+  const onSubmitQuestions = async () => {
+    try {
+      const response = await axios.post('/submit-question', {
+        ...questions,
+        quiz: quizs,
+      })
+      if(response.success){
+        alert('Completing the exam')
+      }
+    } catch (error) {
+      console.log('error internet')
+    }
+  }
+  console.log('quizs: ', quizs)
   return (
     <div className="exam">
       <div className="infor-exam">
@@ -172,42 +194,52 @@ export default function Exam() {
                             type="radio"
                             name={`yesorno${indexQuiz}`}
                             value={alternative.answer_content}
-                            onChange={onChangeValueChooseAnswer}
+                            onChange={() =>
+                              onChangeAlternative(indexAlternative, indexQuiz)
+                            }
                           />
                         ) : quiz.question_type == 'onecorrect' ? (
                           <input
                             type="radio"
                             name={`onecorrect${indexQuiz}`}
-                            value={alternative.answer_content}
-                            onChange={onChangeValueChooseAnswer}
+                            value={alternative.code}
+                            onChange={() =>
+                              onChangeAlternative(indexAlternative, indexQuiz)
+                            }
                           />
                         ) : quiz.question_type == 'manycorrect' ? (
                           <input
                             type="checkbox"
                             name={`manycorrect${indexQuiz}`}
                             value={alternative.answer_content}
-                            onChange={onChangeValueChooseAnswer}
+                            onChange={() =>
+                              onChangeAlternative(indexAlternative, indexQuiz)
+                            }
                           />
                         ) : (
                           <input
                             type="text"
-                            name={`enterresult${indexQuiz}`}
+                            name={`contentresult${indexQuiz}`}
                             className="enter-result"
                           />
                         )}
                       </label>{' '}
-                      <label>
-                        {(indexAlternative == 0
-                          ? 'A'
-                          : indexAlternative == 1
-                          ? 'B'
-                          : indexAlternative == 2
-                          ? 'C'
-                          : indexAlternative == 3
-                          ? 'D'
-                          : '') + '. '}
-                      </label>{' '}
-                      <label>{alternative.answer_content}</label>
+                      {quiz.question_type !== 'contentresult' ? (
+                        <>
+                          <label>
+                            {indexAlternative == 0
+                              ? 'A.    '
+                              : indexAlternative == 1
+                              ? 'B. '
+                              : indexAlternative == 2
+                              ? 'C. '
+                              : indexAlternative == 3
+                              ? 'D. '
+                              : ''}
+                          </label>
+                          <label>{alternative.answer_content}</label>
+                        </>
+                      ) : null}
                     </div>
                   ))}
                 </div>
@@ -216,6 +248,12 @@ export default function Exam() {
           })}
         </div>
       </div>
+      <form onSubmit={onSubmitQuestions}>
+        <div className="save">
+          <button type="submit">SAVE</button>
+          <button type="submit">SUBMIT</button>
+        </div>
+      </form>
     </div>
   )
 }

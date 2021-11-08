@@ -186,23 +186,6 @@ export default class FormQuestion extends Component {
       id_exam: macode,
     })
   }
-  deleteCreatedQuestion(idFormQuestionDetail) {
-    // const {currentQuestionBody} = this.state
-    // var dataQuestion=this.state.dataQuestion
-    // dataQuestion.forEach((value, i)=>{
-    //   if(value.i === idFormQuestionDetail){
-    //     dataQuestion=dataQuestion.filter(value=>value.i!=idFormQuestionDetail)
-    //   }
-    // })
-    // const dataQuestion = this.state.currentQuestionBody.filter(
-    //   (currentQuestionBody) => {
-    //     return currentQuestionBody !== idFormQuestionDetail
-    //   }
-    // )
-    // this.setState({
-    //   currentQuestionBody: [...dataQuestion],
-    // })
-  }
   handleExamDateChange(event) {
     this.setState({
       exam_date_db: event.target.value,

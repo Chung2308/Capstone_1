@@ -31,7 +31,7 @@ export default function ExamBankDetail() {
     const response = await axios.get(`/quiz/question/${location.state}`)
     setQuizs(response?.data.question.quiz)
     setQuestion(response?.data?.question)
-    console.log(response?.data)
+    console.log(response)
   }
   useEffect(() => {
     fetchUser()
@@ -106,10 +106,7 @@ export default function ExamBankDetail() {
       e.target.value
     console.log(quizs)
   }
-  // const handleTopicsChange = (e) => {
-  //   setTopics({ name: e.target.value })
-  //   console.log(topics.name)
-  // }
+  
   const pageStyle = `
   @page {
     size: 80mm 50mm;

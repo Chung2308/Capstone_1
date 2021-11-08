@@ -8,6 +8,7 @@ import Home from '../Components/Home/Home'
 import IntoRoom from '../Components/IntoRoom/IntoRoom'
 import Nav from '../Components/Nav/Nav'
 import Profile from '../Components/Profile/Profile'
+import QuestionBank from '../Components/QuestionsBank/QuestionBank'
 import Resources from '../Components/Resources/Resources'
 import ScoreStatistics from '../Components/ScoreStatistics/ScoreStatistics'
 import SignIn from '../Components/SignIn/SignIn'
@@ -83,6 +84,10 @@ export default class DieuHuongURL extends Component {
           <Route exact path="/score-statistics">
             <Nav></Nav>
             <ScoreStatistics></ScoreStatistics>
+          </Route>
+          <Route exact path="/question-bank">
+            <Nav></Nav>
+            <QuestionBank></QuestionBank>
           </Route>
         </div>
       </Router>
