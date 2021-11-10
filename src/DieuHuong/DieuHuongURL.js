@@ -14,6 +14,7 @@ import ScoreStatistics from '../Components/ScoreStatistics/ScoreStatistics'
 import SignIn from '../Components/SignIn/SignIn'
 import SignUp from '../Components/SignUp/SignUp'
 import WaitingRoom from '../Components/WaitingRoom/WaitingRoom'
+import ResultExam from '../Components/ResultExam/ResultExam'
 
 export default class DieuHuongURL extends Component {
   // constructor(props) {
@@ -88,6 +89,10 @@ export default class DieuHuongURL extends Component {
           <Route exact path="/question-bank">
             <Nav></Nav>
             <QuestionBank></QuestionBank>
+          </Route>
+          <Route exact path="result-exam">
+            <Nav></Nav>
+            <ResultExam></ResultExam>
           </Route>
         </div>
       </Router>

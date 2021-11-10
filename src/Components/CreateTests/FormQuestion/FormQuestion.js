@@ -251,10 +251,11 @@ export default class FormQuestion extends Component {
     var sum = 0
     obj.map((value) => {
       sum = sum + parseFloat(value.point_question)
+      // {Number(parseFloat(value.point_question)).toFixed(1)}
       return sum
     })
     this.setState({
-      totalScoreDb: sum,
+      totalScoreDb: Number(sum).toFixed(1),
     })
   }
 

@@ -4,9 +4,7 @@ import './QuestionBank.css'
 import { useState, useEffect } from 'react'
 
 export default function QuestionBank() {
-  const [quiz, setQuiz] = useState({})
   const [quizs, setQuizs] = useState([])
-  const [question, setQuestion] = useState({})
   const [questions, setQuestions] = useState([])
   async function fetchQuestionBank() {
     const response = await axios.get(`/quiz/question`)
@@ -30,15 +28,15 @@ export default function QuestionBank() {
               </label>
             </div>
             <div className="question-content">
-              {quizs.map((quiz, indexQuiz) => (
+              {topic.quiz.map((quiz, indexQuiz) => (
                 <div className="total-question" key={indexQuiz}>
                   <label htmlFor style={{ textDecoration: 'underline' }}>
                     Question {indexQuiz + 1}
                     {'. '}
                   </label>{' '}
-                  <label htmlFor>{quiz.exam_date_db}</label>
+                  <label htmlFor>{quiz.question_content}</label>
                   <br />
-                  {/* <div className="answer-content">
+                  <div className="answer-content">
                     {quiz.alternatives.map((alternative, indexAlternative) => (
                       <div
                         className="total-answer"
@@ -62,7 +60,7 @@ export default function QuestionBank() {
                         ) : null}
                       </div>
                     ))}
-                  </div> */}
+                  </div>
                 </div>
               ))}
             </div>

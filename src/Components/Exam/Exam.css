@@ -56,3 +56,13 @@
   color: white;
   transition: all 0.5s;
 }
+.popup-submit{
+  text-align: center;
+  margin-top: 4%;
+}
+.modal-footer{
+  margin-right: 22%;
+}
+.modal-footer button{
+  width: 120px;
+}

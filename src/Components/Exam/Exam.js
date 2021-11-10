@@ -5,6 +5,7 @@ import { axios } from '@/instances/axios'
 import { useHistory } from 'react-router'
 import SplitSearch from '../../Utils/SplitSearch'
 import moment from 'moment'
+import { Redirect } from 'react-router-dom'
 
 export default function Exam() {
   const { location } = useHistory()
@@ -19,6 +20,7 @@ export default function Exam() {
 
   async function fetchExamRoom() {
     const response = await axios.get(`/quiz/question/${search.room}`)
+    console.log('response: ', response)
     setQuestions({ ...response?.data?.question })
     startTimer({ ...response?.data.question })
     setQuizs(response?.data?.question.quiz)
@@ -65,25 +67,28 @@ export default function Exam() {
           ...quiz,
           alternatives: quiz.alternatives.map((alternative, index) => {
             if (index === indexAlternative)
-              return { ...alternative, answer_choose: true }
-            else return { ...alternative, answer_choose: false }
+              return { ...alternative, answer_choosen: true }
+            else return { ...alternative }
           }),
         }
       } else return quiz
     })
     setQuizs(newQuizs)
   }
-  const onSubmitQuestions = async () => {
+  
+  const onSubmitQuestions = async (e) => {
+    e.preventDefault()
     try {
-      const response = await axios.post('/submit-question', {
+      const response = await axios.post('/result/', {
         ...questions,
         quiz: quizs,
       })
-      if(response.success){
-        alert('Completing the exam')
+      console.log('submit: ', response)
+      if (response.data?.success === false) {
+        alert(response.data?.message)
       }
     } catch (error) {
-      console.log('error internet')
+      alert('Error Internet')
     }
   }
   console.log('quizs: ', quizs)
@@ -139,7 +144,8 @@ export default function Exam() {
                 Total score:{' '}
               </label>{' '}
               <label htmlFor>
-                {questions.totalScoreDb}
+                {/* {questions.totalScoreDb} */}
+                {Number(parseFloat(questions.totalScoreDb)).toFixed(1)}
                 {' (max)'}
               </label>
             </div>
@@ -233,9 +239,7 @@ export default function Exam() {
                               ? 'B. '
                               : indexAlternative == 2
                               ? 'C. '
-                              : indexAlternative == 3
-                              ? 'D. '
-                              : ''}
+                              : 'D. '}
                           </label>
                           <label>{alternative.answer_content}</label>
                         </>
@@ -248,12 +252,59 @@ export default function Exam() {
           })}
         </div>
       </div>
-      <form onSubmit={onSubmitQuestions}>
-        <div className="save">
-          <button type="submit">SAVE</button>
-          <button type="submit">SUBMIT</button>
+      {/* <form onSubmit={onSubmitQuestions} className="save">
+        <button type="submit">SUBMIT</button>
+      </form> */}
+      <div className="popup-submit">
+        <button
+          type="button"
+          className="btn btn-danger"
+          data-toggle="modal"
+          data-target="#exampleModal"
+        >
+          SUBMIT
+        </button>
+        <div
+          className="modal fade"
+          id="exampleModal"
+          tabIndex={-1}
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">X</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                Congratulations on completing the test !!!
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <form onSubmit={onSubmitQuestions} action="/home">
+                  <button type="submit" className="btn btn-danger">
+                    Submit Exam
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   )
 }

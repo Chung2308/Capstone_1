@@ -37,8 +37,7 @@ export function YesNoFormQuestion({ changeQuestionBody }) {
       ],
     }
 
-    return changeQuestionBody(question),
-    console.log(question)
+    return changeQuestionBody(question)
   }
 
   const changeYesNo = (isYes) => {
