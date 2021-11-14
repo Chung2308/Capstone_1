@@ -66,3 +66,12 @@
 .modal-footer button{
   width: 120px;
 }
+.scroll{
+  /* margin-bottom: 100px; */
+  text-align: center;
+  width: 66%;
+  position: fixed; 
+  top: auto;
+  z-index: 1000;
+  bottom: 0;
+}

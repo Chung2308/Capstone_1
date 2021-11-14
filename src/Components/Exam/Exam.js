@@ -5,11 +5,11 @@ import { axios } from '@/instances/axios'
 import { useHistory } from 'react-router'
 import SplitSearch from '../../Utils/SplitSearch'
 import moment from 'moment'
-import { Redirect } from 'react-router-dom'
 
 export default function Exam() {
   const { location } = useHistory()
-  const [questions, setQuestions] = useState({})
+  const history = useHistory()
+  const [questions, setQuestions] = useState({ answer_content: '' })
   const [quizs, setQuizs] = useState([])
   const [search, setSearch] = useState(SplitSearch(location.search))
 
@@ -17,6 +17,13 @@ export default function Exam() {
   const [timeHours, setTimeHours] = useState('00')
   const [timeMinutes, setTimeMinutes] = useState('00')
   const [timeSeconds, setTimeSeconds] = useState('00')
+
+  //Submited
+  const [submitedTime, setSubmitedTime] = useState({
+    hoursubmitDb: '',
+    minutesubmitDb: '',
+    secondsubmitDb: '',
+  })
 
   async function fetchExamRoom() {
     const response = await axios.get(`/quiz/question/${search.room}`)
@@ -31,25 +38,29 @@ export default function Exam() {
   }, [])
 
   let interval = useRef()
-
   const startTimer = (questions) => {
     const styleTime = {
       border: '1px solid red',
       borderRadius: '5px',
       backgroundColor: 'red',
     }
-    interval = setInterval(() => {
+    interval.current = setInterval(() => {
       const currentDate = Date.parse(
         `${questions.exam_date_db?.split('T')[0]}T${questions.hourDueDb}:${
           questions.minuteDueDb
         }:${questions.secondDueDb}`
       )
-
       const time = currentDate - Date.now()
-
+      // if (time == 0) {
+      //   history.push('/home')
+      // }
       if (time < 0) {
-        clearInterval(interval)
-      } else {
+        clearInterval(interval.current)
+      }
+      // else if(time < 300000 && time >=0){
+      //   {styleTime()}
+      // }
+      else {
         const hours = Math.floor(time / 1000 / 3600)
         const minutes = Math.floor(((time / 1000) % 3600) / 60)
         const seconds = Math.floor((((time / 1000) % 3600) % 60) % 60)
@@ -67,7 +78,10 @@ export default function Exam() {
           ...quiz,
           alternatives: quiz.alternatives.map((alternative, index) => {
             if (index === indexAlternative)
-              return { ...alternative, answer_choosen: true }
+              return {
+                ...alternative,
+                answer_choosen: true,
+              }
             else return { ...alternative }
           }),
         }
@@ -75,8 +89,9 @@ export default function Exam() {
     })
     setQuizs(newQuizs)
   }
-  
+
   const onSubmitQuestions = async (e) => {
+    setQuestions({ ...questions, [e.target.name]: e.target.value })
     e.preventDefault()
     try {
       const response = await axios.post('/result/', {
@@ -88,8 +103,19 @@ export default function Exam() {
         alert(response.data?.message)
       }
     } catch (error) {
-      alert('Error Internet')
+      alert('You are not allowed to perform this action')
     }
+
+    var time = new Date()
+    var nowHours = time.getHours()
+    var nowMinutes = time.getMinutes()
+    var nowSeconds = time.getSeconds()
+    setSubmitedTime({nowHours, nowMinutes, nowSeconds})
+
+    clearInterval(interval.current)
+  }
+  const handleAlternative = (event) => {
+    setQuestions({ ...questions, answer_content: event.target.value })
   }
   console.log('quizs: ', quizs)
   return (
@@ -144,7 +170,6 @@ export default function Exam() {
                 Total score:{' '}
               </label>{' '}
               <label htmlFor>
-                {/* {questions.totalScoreDb} */}
                 {Number(parseFloat(questions.totalScoreDb)).toFixed(1)}
                 {' (max)'}
               </label>
@@ -161,14 +186,16 @@ export default function Exam() {
           </div>
         </div>
       </div>
-      <div className="countdown">
-        <label style={{ marginRight: '0.5%' }}>
-          Time remaining: {timeHours}
-          {':'}
-          {timeMinutes}
-          {':'}
-          {timeSeconds}
-        </label>
+      <div className="scroll">
+        <div className="countdown">
+          <label style={{ marginRight: '0.5%' }}>
+            Time remaining: {timeHours}
+            {':'}
+            {timeMinutes}
+            {':'}
+            {timeSeconds}
+          </label>
+        </div>
       </div>
       <div className="content-exam">
         <div className="content-question">
@@ -178,10 +205,21 @@ export default function Exam() {
                 <div classname="ques">
                   <label name="infor_question" classname="label_infor">
                     <label className="number-ques">
-                      <label name="name_question">
+                      <label
+                        name="name_question"
+                        style={{
+                          textDecoration: 'underline',
+                          marginRight: '25px',
+                        }}
+                      >
                         <strong>
                           Question {quiz.name_question}
-                          {': '} {quiz.point_question} {'(points)'}
+                          {': '}
+                        </strong>
+                      </label>{' '}
+                      <label name="name_question">
+                        <strong>
+                          {quiz.point_question} {'(points)'}
                         </strong>
                       </label>
                     </label>
@@ -191,10 +229,10 @@ export default function Exam() {
                     </label>
                   </label>
                 </div>
-                <div className="ans">
+                <div className="ans" style={{ marginLeft: '5%' }}>
                   {quiz.alternatives.map((alternative, indexAlternative) => (
                     <div key={indexAlternative}>
-                      <label name="answer_content" key={indexAlternative}>
+                      <label name="total_answer_content" key={indexAlternative}>
                         {quiz.question_type == 'yesorno' ? (
                           <input
                             type="radio"
@@ -225,8 +263,10 @@ export default function Exam() {
                         ) : (
                           <input
                             type="text"
-                            name={`contentresult${indexQuiz}`}
+                            // name={`contentresult${indexQuiz}`}
+                            name="answer_content"
                             className="enter-result"
+                            onChange={(event) => handleAlternative(event)}
                           />
                         )}
                       </label>{' '}
@@ -234,13 +274,20 @@ export default function Exam() {
                         <>
                           <label>
                             {indexAlternative == 0
-                              ? 'A.    '
+                              ? 'A.'
                               : indexAlternative == 1
-                              ? 'B. '
+                              ? 'B.'
                               : indexAlternative == 2
-                              ? 'C. '
-                              : 'D. '}
-                          </label>
+                              ? 'C.'
+                              : 'D.'}
+                          </label>{' '}
+                          <label>{alternative.answer_content}</label>
+                        </>
+                      ) : null}
+                      <br />
+                      {quiz.question_type === 'contentresult' ? (
+                        <>
+                          <label>Note:</label>{' '}
                           <label>{alternative.answer_content}</label>
                         </>
                       ) : null}
@@ -250,11 +297,43 @@ export default function Exam() {
               </div>
             )
           })}
+          <div className="test-time">
+            <input
+              name="hoursubmitDb"
+              onChange={(event) =>
+                setSubmitedTime({
+                  ...submitedTime,
+                  nowHours: event.target.value
+                })
+              }
+              value={submitedTime.nowHours}
+            ></input>
+            <br />
+            <input
+              name="minutesubmitDb"
+              onChange={(event) =>
+                setSubmitedTime({
+                  ...submitedTime,
+                  nowMinutes: event.target.value
+                })
+              }
+              value={submitedTime.nowMinutes}
+            ></input>
+            <br />
+            <input
+              name="secondsubmitDb"
+              onChange={(event) =>
+                setSubmitedTime({
+                  ...submitedTime,
+                  nowSeconds: event.target.value
+                })
+              }
+              value={submitedTime.nowSeconds}
+            ></input>
+            <br />
+          </div>
         </div>
       </div>
-      {/* <form onSubmit={onSubmitQuestions} className="save">
-        <button type="submit">SUBMIT</button>
-      </form> */}
       <div className="popup-submit">
         <button
           type="button"

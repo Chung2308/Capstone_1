@@ -1,13 +1,14 @@
 import { axios } from '@/instances/axios'
 import React, { Component } from 'react'
 import './CreateTests.css'
-// import data_qs from './Question.json'
+// import dataQuestion from './Question.json'
 import FormQuestion from './FormQuestion/FormQuestion'
 
 export default class CreateTests2 extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      item : [],
       id_exam: '',
       exam_date_db: '',
       exam_topic_db: '',
@@ -22,11 +23,12 @@ export default class CreateTests2 extends Component {
   }
   // componentWillUnmount() {
   //   if (localStorage.getItem('Question') === null) {
-  //     localStorage.setItem('Question', JSON.stringify(data_qs))
-  //   } else {
+  //     localStorage.setItem('Question', JSON.stringify(dataQuestion))
+  //   } 
+  //   else {
   //     var temp = JSON.parse(localStorage.getItem('Question'))
   //     this.setState({
-  //       data_qs: temp,
+  //       dataQuestion: temp,
   //     })
   //   }
   // }
@@ -71,6 +73,9 @@ export default class CreateTests2 extends Component {
     if (submitInfor.data?.jwt) {
       localStorage.setItem('idExam', submitInfor.data.question.id_exam)
     }
+    // if (submitInfor.data?.success === false) {
+    //   alert(submitInfor.data?.message)
+    // }
   }
   render() {
     return (
@@ -80,42 +85,3 @@ export default class CreateTests2 extends Component {
     )
   }
 }
-
-// import React , {useState, useEffect} from 'react'
-// import { axios } from '@/instances/axios'
-// import './CreateTests.css'
-// // import data_qs from './Question.json'
-// import FormQuestion from './FormQuestion/FormQuestion'
-
-// export default function CreateTests2() {
-//   const [data, setData] = useState({
-//           id_exam: '',
-//           exam_date_db: '',
-//           exam_topic_db: '',
-//           hourOpenDb: '',
-//           minuteOpenDb: '',
-//           secondOpenDb: '',
-//           hourDueDb: '',
-//           minuteDueDb: '',
-//           secondDueDb: '',
-//           totalScoreDb: '',
-//           quiz: '',
-//   })
-//   useEffect(() => {
-//     async function fetchUser() {
-//       // const id=localStorage.getItem('id')
-//       const response=await axios.post(`/quiz/question/`)
-//       setData(response?.data?.data)
-//       console.log('create: ',response?.data?.data )
-//     }
-//     fetchUser()
-//   }, [])
-//   const submitQuestion = async (data) =>{
-
-//   }
-//   return (
-//     <div>
-//       <FormQuestion onSubmitForm={this.submitQuestion}></FormQuestion>
-//     </div>
-//   )
-// }

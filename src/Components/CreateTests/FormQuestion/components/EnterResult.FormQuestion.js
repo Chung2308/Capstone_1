@@ -24,7 +24,7 @@ export function EnterResultFormQuestion({ changeQuestionBody }) {
       <input
         type="text"
         name="question_type"
-        placeholder="Content answer: "
+        placeholder="Note: "
         className="input-2-type-4"
         onChange={(event) => {
           genDataAndCreateQuestion(event)

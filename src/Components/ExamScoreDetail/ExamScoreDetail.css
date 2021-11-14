@@ -1,0 +1,43 @@
+.exam-score-detail{
+    font-family: cursive;
+    margin: 3% 20%;
+}
+.exam-score-detail .infor-question{
+    margin-left: 10px;
+    font-weight: bold;
+}
+.exam-score-detail .question{
+    text-decoration: underline;
+    font-weight: bold;
+}
+.add-score{
+    width: 100%;
+    outline: none;
+    /* height: max-content; */
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid rgb(197, 197, 197);
+    margin-bottom: 5px;
+}
+.mark{
+    border-radius: 5px;
+    border: 1px solid rgb(197, 197, 197);
+    outline: none;
+    width: 50px;
+}
+.student-mark{
+    float: right;
+}
+.update-essay-score{
+    text-align: center;
+    margin-left: 80px;
+}
+.update-essay-score button{
+border-radius: 5px;
+    border: 1px solid rgb(197, 197, 197);
+    outline: none;
+    cursor: pointer;
+    margin-top: 60px;
+    height: 40px;
+    background-color: rgb(145, 217, 235);
+}

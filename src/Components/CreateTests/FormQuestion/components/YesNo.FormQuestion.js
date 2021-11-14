@@ -56,7 +56,7 @@ export function YesNoFormQuestion({ changeQuestionBody }) {
         type="radio"
         value="yes"
         name="question_type"
-      />
+      />{' '}
       Yes
       <br />
       <br />
@@ -66,7 +66,7 @@ export function YesNoFormQuestion({ changeQuestionBody }) {
         type="radio"
         value="no"
         name="question_type"
-      />
+      />{' '}
       No
       <br />
     </div>

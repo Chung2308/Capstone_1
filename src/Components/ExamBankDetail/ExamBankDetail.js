@@ -106,7 +106,7 @@ export default function ExamBankDetail() {
       e.target.value
     console.log(quizs)
   }
-  
+
   const pageStyle = `
   @page {
     size: 80mm 50mm;
@@ -124,7 +124,7 @@ export default function ExamBankDetail() {
       page-break-before: always;
     }
   }
-`;
+`
 
   const showInformation = () => {
     return (
@@ -227,16 +227,20 @@ export default function ExamBankDetail() {
                           color: alternative.answer_correct ? 'red' : 'black',
                         }}
                       >
-                        {(index == 0
-                          ? 'A'
-                          : index == 1
-                          ? 'B'
-                          : index == 2
-                          ? 'C'
-                          : 'D') + '. '}
-                        <label name="answer_content">
-                          {alternative.answer_content}
-                        </label>
+                        {quiz.question_type !== 'contentresult' ? (
+                          <>
+                            <label>
+                              {index == 0
+                                ? 'A.'
+                                : index == 1
+                                ? 'B.'
+                                : index == 2
+                                ? 'C.'
+                                : 'D.'}
+                            </label>{' '}
+                            <label>{alternative.answer_content}</label>
+                          </>
+                        ) : null}
                       </div>
                     ))}
                   </div>
@@ -500,21 +504,25 @@ export default function ExamBankDetail() {
                           color: alternative.answer_correct ? 'red' : 'black',
                         }}
                       >
-                        {(indexAlternative == 0
-                          ? 'A'
-                          : indexAlternative == 1
-                          ? 'B'
-                          : indexAlternative == 2
-                          ? 'C'
-                          : 'D') + '. '}
-                        <input
-                          className="answer_content"
-                          name="answer_content"
-                          defaultValue={alternative.answer_content}
-                          onChange={(e) => {
-                            onChangeAnswer(e, indexQuiz, indexAlternative)
-                          }}
-                        />
+                        {quiz.question_type !== 'contentresult' ? (
+                          <>
+                            {(indexAlternative == 0
+                              ? 'A'
+                              : indexAlternative == 1
+                              ? 'B'
+                              : indexAlternative == 2
+                              ? 'C'
+                              : 'D') + '. '}
+                            <input
+                              className="answer_content"
+                              name="answer_content"
+                              defaultValue={alternative.answer_content}
+                              onChange={(e) => {
+                                onChangeAnswer(e, indexQuiz, indexAlternative)
+                              }}
+                            />
+                          </>
+                        ) : null}
                       </div>
                     ))}
                   </div>

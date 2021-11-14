@@ -14,27 +14,10 @@ import ScoreStatistics from '../Components/ScoreStatistics/ScoreStatistics'
 import SignIn from '../Components/SignIn/SignIn'
 import SignUp from '../Components/SignUp/SignUp'
 import WaitingRoom from '../Components/WaitingRoom/WaitingRoom'
-import ResultExam from '../Components/ResultExam/ResultExam'
+import ExamScore from '../Components/ExamScore/ExamScore'
+import ExamScoreDetail from '../Components/ExamScoreDetail/ExamScoreDetail'
 
 export default class DieuHuongURL extends Component {
-  // constructor(props) {
-  //   super(props)
-  //   this.state = {
-  //     isAuthentication: false,
-  //   }
-  // }
-  // checkToken = () => {
-  //     const local = localStorage['userToken'];
-  //     axios.defaults.headers.common['Authorization'] = `Bearer ${local}`;
-  //     const verifytoken = await axios.get('https://trung-api-capstone1.herokuapp.com/auth');
-  //     if (verifytoken.success == true){
-  //         this.setState({ ...this.state, [this.state.isAuthentication]: true });
-  //         localStorage.setItem('userToken',verifytoken.token);
-  //     }
-  //     else
-  //     axios.defaults.headers.common['Authorization'] = `Bearer ${local}`;
-  // }
-  // useEffect(checkToken, []);
 
   render() {
     return (
@@ -90,9 +73,13 @@ export default class DieuHuongURL extends Component {
             <Nav></Nav>
             <QuestionBank></QuestionBank>
           </Route>
-          <Route exact path="result-exam">
+          <Route exact path="/exam-score">
             <Nav></Nav>
-            <ResultExam></ResultExam>
+            <ExamScore></ExamScore>
+          </Route>
+          <Route exact path="/exam-score-detail">
+            <Nav></Nav>
+            <ExamScoreDetail></ExamScoreDetail>
           </Route>
         </div>
       </Router>

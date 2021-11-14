@@ -13,10 +13,9 @@ export default class SignUp extends Component {
       password: '',
       phone: '',
       birthday: '',
-      // account:""
     }
   }
-  submitForm (event) {
+  submitForm(event) {
     event.preventDefault()
     if (this.state.password == this.state.password2) {
       this.setState({
@@ -29,7 +28,7 @@ export default class SignUp extends Component {
       })
     }
   }
-  content (event) {
+  content(event) {
     event.preventDefault()
     // console.log(event.target.name);
     const tenControl = event.target.name
@@ -43,16 +42,13 @@ export default class SignUp extends Component {
   async LoginForm(event) {
     event.preventDefault()
     const { fullname, phone, birthday, username, password } = this.state
-    const loginData = await axios.post(
-      '/auth/register',
-      {
-        fullname,
-        phone,
-        birthday,
-        username,
-        password,
-      }
-    )
+    const loginData = await axios.post('/auth/register', {
+      fullname,
+      phone,
+      birthday,
+      username,
+      password,
+    })
     console.log(loginData)
     if (loginData.data?.sucess === false) {
       alert(loginData.data?.message)
@@ -111,8 +107,6 @@ export default class SignUp extends Component {
                       placeholder="Enter password"
                     />
                   </div>
-                </div>
-                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <div className="form-group">
                     <label htmlFor="exampleInputPassword1">
                       Confirm password
@@ -126,6 +120,8 @@ export default class SignUp extends Component {
                       placeholder="Enter password"
                     />
                   </div>
+                </div>
+                <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <div className="form-group">
                     <label htmlFor="exampleInputPassword1">Phone number</label>
                     <input
@@ -147,6 +143,23 @@ export default class SignUp extends Component {
                       id
                       placeholder="Enter birth of year"
                     />
+                  </div>
+                  <div className="form-group role">
+                    <label htmlFor="exampleInputPassword1">Role </label>
+                    <div className="choose-role">
+                      <select
+                        className="form-control"
+                        onChange={(event) => this.content(event)}
+                      >
+                        <option>---</option>
+                        <option name="user_type" value="teacher">
+                          Teacher
+                        </option>
+                        <option name="user_type" value="student">
+                          Student
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { QUESTION_TYPE } from './question-types.enum'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import './QuestionDetail.css'
 
@@ -55,7 +55,8 @@ export default function QuestionDetail({
     setUpdated({ ...updatedQuiz, alternatives: newAlternatives })
   }
   const styleAnswer = {
-    fontStyle: 'italic',
+    // fontStyle: 'italic',
+    textDecoration: 'underline'
   }
   const deleteQuiz = (indexQuiz) => {
     // let newQuiz = [...quizs]
@@ -64,24 +65,32 @@ export default function QuestionDetail({
     const newQuiz = quizs.filter((item) => item.indexQuiz !== indexQuiz)
     setQuizs(newQuiz)
   }
+  // useEffect(()=>{
+  //   let items = JSON.parse(localStorage.getItem('Question'))
+  //   setQuizs({
+  //     quizs: items,
+  //   })
+  // })
   const createdQuestion = () => {
     return (
       <div className="row answers-container">
         <hr width="80%" />
-        <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+        <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5 ">
           <span className="question-content">
-            <h5>Question Content:</h5> {quiz.question_content}
+            <h5>Question Content:</h5>
+            <label className="content-answer-db">{quiz.question_content}</label>
             <br />
-            <h5>Question Number:</h5> {quiz.name_question}
+            <h5>Question Number:</h5>
+            <label className="content-answer-db">{quiz.name_question}</label>
             <br />
-            <h5>Question Score:</h5> <br />
-            {quiz.point_question}
+            <h5>Question Score:</h5>
+            <label className="content-answer-db">{quiz.point_question}</label>
           </span>
         </div>
         <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
           <div className="answers-group">
             <span style={styleAnswer}>Correct Answers:</span>
-            <ul>
+            <ul className="show-answer">
               {quiz.alternatives
                 .filter((a) => a.answer_correct === true)
                 .map((answer, i) => (
@@ -93,7 +102,7 @@ export default function QuestionDetail({
         <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
           <div className="answers-group">
             <span style={styleAnswer}>Incorrect Answers:</span>
-            <ul>
+            <ul className="show-answer">
               {quiz.alternatives
                 .filter((a) => a.answer_correct === false)
                 .map((answer, i) => (
@@ -114,8 +123,9 @@ export default function QuestionDetail({
     )
   }
   const editCreatedQuestion = () => {
+    // localStorage.setItem('Question', JSON.stringify(setQuizs(quizs)))
     return (
-      <div className="row answers-container">
+      <div className="row answers-container-edit">
         <hr width="80%" />
         <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
           <span className="question-content">
@@ -126,10 +136,10 @@ export default function QuestionDetail({
               name="question_content"
               onChange={onChangeQuiz}
             />
-            <br />
+            
             <h5>Question Number:</h5>
             <input className="edit-name" value={quiz.name_question} />
-            <br />
+            
             <h5>Question Score:</h5>
             <input
               type="number"
@@ -190,6 +200,7 @@ export default function QuestionDetail({
         </div>
       </div>
     )
+    
   }
   const actionIcon = () => {
     return (

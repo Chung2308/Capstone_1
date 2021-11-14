@@ -1,5 +1,14 @@
 import React, { Component } from 'react'
 import './FormQuestion.css'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation,
+} from 'react-router-dom'
 
 import QuestionDetail from '../QuestionDetail'
 
@@ -100,11 +109,11 @@ export default class FormQuestion extends Component {
     })
     this.setState({ ...this.state, quizs: newQuiz, totalScoreDb: sum })
   }
-  
+
   /**
     Return true if create question success, otherwise return false
   */
-  
+
   changeQuestionBody(question) {
     const { question_content, point_question, question_type } = this.state
     const valid = this.validateQuestionBody()
@@ -120,24 +129,27 @@ export default class FormQuestion extends Component {
     this.createQuestion()
     this.sumPoint()
   }
+
+  // UNSAFE_componentWillMount() {
+  //   let items = JSON.parse(localStorage.getItem('Question'))
+  //   this.setState({
+  //     quizs: items,
+  //   })
+  // }
+
   createQuestion() {
-    const { question_content, point_question, alternatives, question_type } = this.state
+    const { question_content, point_question, alternatives, question_type } =
+      this.state
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
     if (alternatives.length == 0)
       return alert('Please choose at least one correct answer')
-    // else if (
+    // console.log(
     //   alternatives.filter((item) =>
     //     item.answer_content.toString() != '' ? true : false
-    //   ).length != alternatives.length
+    //   )
     // )
-    // return alert('The answer are not empty')
-    console.log(
-      alternatives.filter((item) =>
-        item.answer_content.toString() != '' ? true : false
-      )
-    )
     this.state.quizs.push({
       question_content,
       point_question,
@@ -153,6 +165,7 @@ export default class FormQuestion extends Component {
       // questionTypeDescriptions: Object.entries(QUESTION_TYPE_DESCRIPTION),
     })
     console.log(this.state)
+    // localStorage.setItem('Question', JSON.stringify(this.state.quizs))
   }
   validateQuestionBody() {
     const { question_content, point_question } = this.state
@@ -282,7 +295,7 @@ export default class FormQuestion extends Component {
 
   render() {
     return (
-      <div>
+      <div className="create-quiz">
         <div className="create-test">
           <div className="infor-questions">
             <h4>Question Information</h4>
@@ -356,6 +369,7 @@ export default class FormQuestion extends Component {
                           onChange={(event) =>
                             this.handleExamHourOpenChange(event)
                           }
+                          style={{ width: '45px' }}
                         >
                           {this.state.hourOpen?.map((hourOpenChoosen, i) => (
                             <option
@@ -424,6 +438,7 @@ export default class FormQuestion extends Component {
                         onChange={(event) => {
                           this.handleExamHourDueChange(event)
                         }}
+                        style={{ width: '45px' }}
                       >
                         {this.state.hourDue?.map((hourDueChoosen, i) => (
                           <option
@@ -554,6 +569,9 @@ export default class FormQuestion extends Component {
               <button
                 className="btn-icon"
                 onClick={() => this.totalCreateQuestion()}
+                // class="btn btn-primary"
+                // data-toggle="modal"
+                // data-target="#exampleModal"
               >
                 <ion-icon name="add-circle-outline" id="iconadd" />
               </button>
@@ -565,9 +583,6 @@ export default class FormQuestion extends Component {
               type="number"
               name="totalQuestionDb"
               value={this.state.quizs.length}
-              // onChange={(event) => {
-              //   this.handleExamTotalQuestionChange(event)
-              // }}
             />
             <br />
             <label>Total score: </label>
@@ -598,15 +613,59 @@ export default class FormQuestion extends Component {
             ))}
           </div>
         </div>
-        <form
-          onSubmit={(event) => {
-            this.handleSubmit(event)
-          }}
-        >
-          <div className="save">
-            <button type="submit">SAVE</button>
+        <div className="popup-submit" style={{ marginBottom: '2%' }}>
+          <button
+            type="button"
+            className="btn btn-danger"
+            data-toggle="modal"
+            data-target="#exampleModal"
+          >
+            SUBMIT
+          </button>
+          <div
+            className="modal fade"
+            id="exampleModal"
+            tabIndex={-1}
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">X</span>
+                  </button>
+                </div>
+                <div className="modal-body">Do you want to save the test?</div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <form
+                    onSubmit={(event) => {
+                      this.handleSubmit(event)
+                    }}
+                    action="/home"
+                  >
+                    <button type="submit" className="btn btn-danger">
+                      Save Exam
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
     )
   }
