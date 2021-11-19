@@ -19,8 +19,8 @@ export default function ExamScore() {
   useEffect(() => {
     fetchScoreExam()
   }, [])
-  const renderScore = (id_exam, _id) => {
-    history.push('/exam-score-detail', id_exam, _id)
+  const renderScore = (id_exam, id_user) => {
+    history.push(`/exam-score-detail/${id_user}`, id_exam)
   }
   return (
     <div className="exam-score">
@@ -49,14 +49,26 @@ export default function ExamScore() {
                   <td name="list_score">
                     {Number(parseFloat(value.total_score).toFixed(1))}
                   </td>
-                  <td name="list_time_total">{value.hoursubmitDb}</td>
-                  <td name="list_time_end"></td>
+                  <td name="list_time_total">
+                    {value.totalhourDb}
+                    {' hou '} {value.totalminuteDb}
+                    {' min '}
+                    {value.totalsecondDb}
+                    {' sec '}
+                  </td>
+                  <td name="list_time_end">
+                    {value.hoursubmitDb}
+                    {':'}
+                    {value.minutesubmitDb}
+                    {':'}
+                    {value.secondsubmitDb}
+                  </td>
                   <td>
                     <input
                       type="button"
                       value="Details"
                       className="btn-details"
-                      onClick={() => renderScore(value.id_exam, value._id)}
+                      onClick={() => renderScore(value.id_exam, value.id_user)}
                     />
                   </td>
                 </tr>

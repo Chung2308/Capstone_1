@@ -224,7 +224,7 @@ export default function ExamBankDetail() {
                       <div
                         key={index}
                         style={{
-                          color: alternative.answer_correct ? 'red' : 'black',
+                          color: alternative.answer_correct ? 'LimeGreen' : 'black',
                         }}
                       >
                         {quiz.question_type !== 'contentresult' ? (
@@ -501,7 +501,7 @@ export default function ExamBankDetail() {
                       <div
                         key={indexAlternative}
                         style={{
-                          color: alternative.answer_correct ? 'red' : 'black',
+                          color: alternative.answer_correct ? 'LimeGreen' : 'black',
                         }}
                       >
                         {quiz.question_type !== 'contentresult' ? (

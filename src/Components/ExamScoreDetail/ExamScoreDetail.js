@@ -8,10 +8,15 @@ export default function ExamScoreDetail() {
   const [questions, setQuestions] = useState([])
   const [results, setResults] = useState([])
   async function fetchQuestion() {
-    const response = await axios.get(`/quiz/result/${location.state}`)
+    const response = await axios.get(
+      `/quiz/results/${location.state}/${location.pathname.split('/')[2]}`
+    )
+    //https://trung-api-capstone1.herokuapp.com/quiz/result/id_exam/id_user
     setQuestions(response?.data?.quiz)
     setResults(response?.data?.results)
-    console.log('location: ', location.state)
+    // console.log('id_user: ', location.pathname.split('/')[2])
+    console.log('id_user: ', location)
+    console.log(response)
   }
   useEffect(() => {
     fetchQuestion()
@@ -21,7 +26,8 @@ export default function ExamScoreDetail() {
   }
   return (
     <div className="exam-score-detail">
-      {questions.map((question, indexQuestion) => {
+      {questions?.map((question, indexQuestion) => {
+        // console.log(question)
         return (
           <div className="total-question" key={indexQuestion}>
             <label className="question">
@@ -60,6 +66,7 @@ export default function ExamScoreDetail() {
                       <label>{alternative.answer_content}</label>
                     </>
                   ) : null}
+
                   {question.question_type === 'contentresult' ? (
                     <>
                       <input
@@ -79,33 +86,49 @@ export default function ExamScoreDetail() {
                       </div>
                     </>
                   ) : null}
-                  {/* {results.map((quiz, indexResults) => (
-                    <label key={indexResults}>
-                      {quiz.quiz.map((valueQuiz, indexQuiz) => (
-                        <label key={indexQuiz}>
-                          {valueQuiz.alternatives.map(
-                            (valueAlternatives, indexAlternatives) => (
-                              <label
-                                key={indexAlternatives}
-                                style={{
-                                  color: valueAlternatives.answer_choosen
-                                    ? 'red'
-                                    : 'black',
-                                }}
-                              >{valueAlternatives.answer_choosen}</label>
-                            )
-                          )}
-                        </label>
-                      ))}
-                    </label>
-                  ))} */}
                 </div>
               ))}
+              {results.map((quiz, indexResults) => {
+                // console.log('quiz', quiz)
+                return (
+                  <div key={indexResults}>
+                    {quiz.quiz
+                      .filter((value) => value._id === question._id)
+                      .map((valueQuiz, indexQuiz) => (
+                        <div key={indexQuiz}>
+                          {valueQuiz.alternatives.map(
+                            (valueAlternatives, indexAlternatives) => (
+                              <div key={indexAlternatives}>
+                                {valueAlternatives.answer_choosen === true ? (
+                                  <label
+                                    className="style-answer-choosen"
+                                    style={{
+                                      color:
+                                        valueAlternatives.answer_choosen ===
+                                        valueAlternatives.answer_correct
+                                          ? 'LimeGreen'
+                                          : 'red',
+                                    }}
+                                  >
+                                    Answer choosen:{' '}
+                                    {valueAlternatives.answer_content}
+                                  </label>
+                                ) : null}
+                              </div>
+                            )
+                          )}
+                        </div>
+                      ))}
+                  </div>
+                )
+              })}
               {question.question_type === 'contentresult' ? (
                 <>
                   <form
                     className="update-essay-score"
-                    onSubmit={updateEssayScore()}
+                    onSubmit={(event) => {
+                      updateEssayScore(event)
+                    }}
                   >
                     <button>Update essay score</button>
                   </form>

@@ -13,6 +13,7 @@ export default class SignUp extends Component {
       password: '',
       phone: '',
       birthday: '',
+      user_type: ''
     }
   }
   submitForm(event) {
@@ -31,23 +32,25 @@ export default class SignUp extends Component {
   content(event) {
     event.preventDefault()
     // console.log(event.target.name);
-    const tenControl = event.target.name
-    const giatri = event.target.value
+    const name = event.target.name
+    const value = event.target.value
     this.setState({
       ...this.state,
       [event.target.name]: event.target.value,
-      [tenControl]: giatri,
+      [name]: value,
     })
   }
   async LoginForm(event) {
     event.preventDefault()
-    const { fullname, phone, birthday, username, password } = this.state
+    const { fullname, phone, birthday, username, password, user_type } =
+      this.state
     const loginData = await axios.post('/auth/register', {
       fullname,
       phone,
       birthday,
       username,
       password,
+      user_type
     })
     console.log(loginData)
     if (loginData.data?.sucess === false) {
@@ -57,6 +60,7 @@ export default class SignUp extends Component {
         isRedirect: true,
       })
     }
+    
   }
   render() {
     if (this.state.isRedirect) {
@@ -81,7 +85,6 @@ export default class SignUp extends Component {
                       aria-describedby=""
                       placeholder="Enter full name"
                     />
-                    {/* <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> */}
                   </div>
                   <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Username</label>
@@ -94,7 +97,6 @@ export default class SignUp extends Component {
                       aria-describedby="emailHelp"
                       placeholder="Enter username"
                     />
-                    {/* <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> */}
                   </div>
                   <div className="form-group">
                     <label htmlFor="exampleInputPassword1">Password</label>
@@ -150,12 +152,13 @@ export default class SignUp extends Component {
                       <select
                         className="form-control"
                         onChange={(event) => this.content(event)}
+                        name="user_type"
                       >
                         <option>---</option>
-                        <option name="user_type" value="teacher">
+                        <option name="user_type" value="T">
                           Teacher
                         </option>
-                        <option name="user_type" value="student">
+                        <option name="user_type" value="S">
                           Student
                         </option>
                       </select>

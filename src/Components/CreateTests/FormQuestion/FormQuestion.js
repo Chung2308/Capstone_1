@@ -164,7 +164,7 @@ export default class FormQuestion extends Component {
       question_type: QUESTION_TYPE.YES_NO,
       // questionTypeDescriptions: Object.entries(QUESTION_TYPE_DESCRIPTION),
     })
-    console.log(this.state)
+    // console.log(this.state)
     // localStorage.setItem('Question', JSON.stringify(this.state.quizs))
   }
   validateQuestionBody() {

@@ -41,3 +41,6 @@ border-radius: 5px;
     height: 40px;
     background-color: rgb(145, 217, 235);
 }
+.style-answer-choosen{
+    font-style: italic;
+}

@@ -19,11 +19,14 @@ export default function Exam() {
   const [timeSeconds, setTimeSeconds] = useState('00')
 
   //Submited
-  const [submitedTime, setSubmitedTime] = useState({
-    hoursubmitDb: '',
-    minutesubmitDb: '',
-    secondsubmitDb: '',
-  })
+  const [hoursubmitDb, setHoursubmitDb] = useState('')
+  const [minutesubmitDb, setMinutesubmitDb] = useState('')
+  const [secondsubmitDb, setSecondsubmitDb] = useState('')
+
+  //Total time
+  const [totalhourDb, setTotalhourDb] = useState('')
+  const [totalminuteDb, setTotalminuteDb] = useState('')
+  const [totalsecondDb, setTotalSecondDb] = useState('')
 
   async function fetchExamRoom() {
     const response = await axios.get(`/quiz/question/${search.room}`)
@@ -31,11 +34,109 @@ export default function Exam() {
     setQuestions({ ...response?.data?.question })
     startTimer({ ...response?.data.question })
     setQuizs(response?.data?.question.quiz)
+
+    //TODO: HOT FIX BEGIN
+    var idStorage = search.room + 'hourOpenDb'
+    var time = new Date()
+    var nowHours = time.getHours()
+    var nowMinutes = time.getMinutes()
+    var nowSeconds = time.getSeconds()
+    if (nowHours < 10) {
+      nowHours = '0' + nowHours
+    }
+    if (nowMinutes < 10) {
+      nowMinutes = '0' + nowMinutes
+    }
+    if (nowSeconds < 10) {
+      nowSeconds = '0' + nowSeconds
+    }
+    if (localStorage.getItem(idStorage) == null) {
+      localStorage.setItem(search.room + 'hourOpenDb', nowHours)
+      localStorage.setItem(search.room + 'minuteOpenDb', nowMinutes)
+      localStorage.setItem(search.room + 'secondsOpenDb', nowSeconds)
+    }
+    //TODO: HOT FIX END
   }
 
   useEffect(() => {
     fetchExamRoom()
   }, [])
+  useEffect(() => {
+    var time = new Date()
+    var nowHours = time.getHours()
+    var nowMinutes = time.getMinutes()
+    var nowSeconds = time.getSeconds()
+    if (nowHours < 10) {
+      nowHours = '0' + nowHours
+    }
+    if (nowMinutes < 10) {
+      nowMinutes = '0' + nowMinutes
+    }
+    if (nowSeconds < 10) {
+      nowSeconds = '0' + nowSeconds
+    }
+    setHoursubmitDb(nowHours)
+    setMinutesubmitDb(nowMinutes)
+    setSecondsubmitDb(nowSeconds)
+  }, [])
+
+  useEffect(() => {
+    //max time
+    var maxHours =
+      questions.hourDueDb - localStorage.getItem(search.room + 'hourOpenDb') //12-00
+    // console.log('Chung: ' + localStorage.getItem(search.room + 'hourOpenDb'))
+    var maxMinutes =
+      questions.minuteDueDb - localStorage.getItem(search.room + 'minuteOpenDb') //30-30
+    var maxSeconds =
+      questions.secondDueDb -
+      localStorage.getItem(search.room + 'secondsOpenDb') //00-00
+
+    if (maxMinutes < 0) {
+      maxMinutes = maxMinutes * -1
+    }
+    if (maxSeconds < 0) {
+      maxSeconds = maxSeconds * -1
+    }
+
+    //convert time int
+    var maxHoursInt = Math.floor(maxHours * 60 * 60)
+    var maxMinutesInt = Math.floor(maxMinutes * 60)
+    var maxSecondsInt = Math.floor(maxSeconds)
+
+    //totalMaxInt
+    var totalMaxInt = maxHoursInt + maxMinutesInt + maxSecondsInt
+
+    var timeRemainingHoursInt = Math.floor(timeHours * 60 * 60)
+    var timeRemainingMinutesInt = Math.floor(timeMinutes * 60)
+    var timeRemainingSecondsInt = Math.floor(timeSeconds)
+
+    //totalRemainingInt
+    var totalRemainingInt =
+      timeRemainingHoursInt + timeRemainingMinutesInt + timeRemainingSecondsInt
+
+    //totalInt
+    var totalInt = totalMaxInt - totalRemainingInt
+
+    // total time
+    var totalHours = Math.floor(totalInt / 3600)
+    var totalMinutes = Math.floor(totalInt / 60)
+    var totalSeconds = Math.floor(
+      totalInt - (totalHours * 3600 + totalMinutes * 60)
+    )
+
+    if (totalHours < 10) {
+      totalHours = '0' + totalHours
+    }
+    if (totalMinutes < 10) {
+      totalMinutes = '0' + totalMinutes
+    }
+    if (totalSeconds < 10) {
+      totalSeconds = '0' + totalSeconds
+    }
+    setTotalhourDb(totalHours)
+    setTotalminuteDb(totalMinutes)
+    setTotalSecondDb(totalSeconds)
+  })
 
   let interval = useRef()
   const startTimer = (questions) => {
@@ -61,9 +162,18 @@ export default function Exam() {
       //   {styleTime()}
       // }
       else {
-        const hours = Math.floor(time / 1000 / 3600)
-        const minutes = Math.floor(((time / 1000) % 3600) / 60)
-        const seconds = Math.floor((((time / 1000) % 3600) % 60) % 60)
+        var hours = Math.floor(time / 1000 / 3600)
+        var minutes = Math.floor(((time / 1000) % 3600) / 60)
+        var seconds = Math.floor((((time / 1000) % 3600) % 60) % 60)
+        if (hours < 10) {
+          hours = '0' + hours
+        }
+        if (minutes < 10) {
+          minutes = '0' + minutes
+        }
+        if (seconds < 10) {
+          seconds = '0' + seconds
+        }
         setTimeHours(hours)
         setTimeMinutes(minutes)
         setTimeSeconds(seconds)
@@ -91,12 +201,18 @@ export default function Exam() {
   }
 
   const onSubmitQuestions = async (e) => {
-    setQuestions({ ...questions, [e.target.name]: e.target.value })
     e.preventDefault()
+    setQuestions({ ...questions, [e.target.name]: e.target.value })
     try {
       const response = await axios.post('/result/', {
         ...questions,
         quiz: quizs,
+        hoursubmitDb: hoursubmitDb,
+        minutesubmitDb: minutesubmitDb,
+        secondsubmitDb: secondsubmitDb,
+        totalhourDb: totalhourDb,
+        totalminuteDb: totalminuteDb,
+        totalsecondDb: totalsecondDb,
       })
       console.log('submit: ', response)
       if (response.data?.success === false) {
@@ -105,19 +221,13 @@ export default function Exam() {
     } catch (error) {
       alert('You are not allowed to perform this action')
     }
-
-    var time = new Date()
-    var nowHours = time.getHours()
-    var nowMinutes = time.getMinutes()
-    var nowSeconds = time.getSeconds()
-    setSubmitedTime({nowHours, nowMinutes, nowSeconds})
-
     clearInterval(interval.current)
   }
+
   const handleAlternative = (event) => {
     setQuestions({ ...questions, answer_content: event.target.value })
   }
-  console.log('quizs: ', quizs)
+  // console.log('quizs: ', quizs)
   return (
     <div className="exam">
       <div className="infor-exam">
@@ -297,41 +407,14 @@ export default function Exam() {
               </div>
             )
           })}
-          <div className="test-time">
-            <input
-              name="hoursubmitDb"
-              onChange={(event) =>
-                setSubmitedTime({
-                  ...submitedTime,
-                  nowHours: event.target.value
-                })
-              }
-              value={submitedTime.nowHours}
-            ></input>
+          {/* <div className="test-time">
+            <input name="hoursubmitDb"></input>
             <br />
-            <input
-              name="minutesubmitDb"
-              onChange={(event) =>
-                setSubmitedTime({
-                  ...submitedTime,
-                  nowMinutes: event.target.value
-                })
-              }
-              value={submitedTime.nowMinutes}
-            ></input>
+            <input name="minutesubmitDb"></input>
             <br />
-            <input
-              name="secondsubmitDb"
-              onChange={(event) =>
-                setSubmitedTime({
-                  ...submitedTime,
-                  nowSeconds: event.target.value
-                })
-              }
-              value={submitedTime.nowSeconds}
-            ></input>
+            <input name="secondsubmitDb"></input>
             <br />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="popup-submit">

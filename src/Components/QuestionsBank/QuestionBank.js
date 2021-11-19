@@ -26,6 +26,7 @@ export default function QuestionBank() {
               <label htmlFor name="exam_topic">
                 {topic.exam_topic_db}
               </label>
+              <ion-icon name="caret-down-outline"></ion-icon>
             </div>
             <div className="question-content">
               {topic.quiz.map((quiz, indexQuiz) => (

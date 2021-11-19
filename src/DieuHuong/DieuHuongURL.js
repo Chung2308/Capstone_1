@@ -18,7 +18,6 @@ import ExamScore from '../Components/ExamScore/ExamScore'
 import ExamScoreDetail from '../Components/ExamScoreDetail/ExamScoreDetail'
 
 export default class DieuHuongURL extends Component {
-
   render() {
     return (
       <Router>
@@ -77,7 +76,7 @@ export default class DieuHuongURL extends Component {
             <Nav></Nav>
             <ExamScore></ExamScore>
           </Route>
-          <Route exact path="/exam-score-detail">
+          <Route exact path="/exam-score-detail/:slug">
             <Nav></Nav>
             <ExamScoreDetail></ExamScoreDetail>
           </Route>
