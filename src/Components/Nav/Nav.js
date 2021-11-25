@@ -13,7 +13,8 @@ export default function Nav() {
         className="navbar navbar-expand-sm navbar-light"
         style={{ backgroundColor: 'rgba(171, 210, 223, 0.829)' }}
       >
-        <img src="./img/logo-capstone.png" alt="" />
+        <img src="./img/logo-capstone.png" alt="logo" />
+
         <button
           className="navbar-toggler d-lg-none"
           type="button"
@@ -45,17 +46,17 @@ export default function Nav() {
                 Statistical
               </a>
             </li>
-            <li className="nav-item">
+            {/* <li className="navbar-nav mt-2 mt-lg-0">
               <a className="nav-link" href="/" onClick={logout}>
                 Log Out
               </a>
-            </li>
+            </li> */}
             {/* <li className="nav-item">
                                 <a className="nav-link" href="#"><ion-icon name="person-outline" style={{ fontSize: '110%' }} /></a>
                             </li> */}
           </ul>
           <form className="form-inline my-2 my-lg-0">
-            <input
+            {/* <input
               className="form-control mr-sm-2"
               type="text"
               placeholder="Search"
@@ -68,7 +69,15 @@ export default function Nav() {
                 name="search-outline"
                 style={{ fontSize: '120%', fontWeight: 'bolder' }}
               />
-            </button>
+            </button> */}
+            <li
+              className="navbar-nav mt-2 mt-lg-0"
+              style={{ fontSize: '16.5px', color: 'black' }}
+            >
+              <a className="nav-link" href="/" onClick={logout}>
+                <ion-icon name="log-out-outline"></ion-icon> Log Out
+              </a>
+            </li>
           </form>
         </div>
       </nav>

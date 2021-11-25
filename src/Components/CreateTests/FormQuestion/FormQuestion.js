@@ -130,12 +130,15 @@ export default class FormQuestion extends Component {
     this.sumPoint()
   }
 
-  // UNSAFE_componentWillMount() {
-  //   let items = JSON.parse(localStorage.getItem('Question'))
-  //   this.setState({
-  //     quizs: items,
-  //   })
-  // }
+  UNSAFE_componentWillMount() {
+    let items = JSON.parse(localStorage.getItem('Question'))
+    if (items === null || items === '') {
+      items = []
+    }
+    this.setState({
+      quizs: items,
+    })
+  }
 
   createQuestion() {
     const { question_content, point_question, alternatives, question_type } =
@@ -143,13 +146,9 @@ export default class FormQuestion extends Component {
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
-    if (alternatives.length == 0)
+    if (alternatives.length == 0 && question_type!=='contentresult')
       return alert('Please choose at least one correct answer')
-    // console.log(
-    //   alternatives.filter((item) =>
-    //     item.answer_content.toString() != '' ? true : false
-    //   )
-    // )
+
     this.state.quizs.push({
       question_content,
       point_question,
@@ -162,10 +161,14 @@ export default class FormQuestion extends Component {
       question_content: '',
       point_question: 0,
       question_type: QUESTION_TYPE.YES_NO,
-      // questionTypeDescriptions: Object.entries(QUESTION_TYPE_DESCRIPTION),
+      //test type
+      // questionTypeDescriptions: QUESTION_TYPE_DESCRIPTION.YES_NO,
     })
     // console.log(this.state)
-    // localStorage.setItem('Question', JSON.stringify(this.state.quizs))
+    localStorage.setItem('Question', JSON.stringify(this.state.quizs))
+  }
+  clearLocalStorage(){
+    localStorage.removeItem('Question', localStorage.getItem('Question', ''))
   }
   validateQuestionBody() {
     const { question_content, point_question } = this.state
@@ -249,11 +252,7 @@ export default class FormQuestion extends Component {
       secondDueDb: event.target.value,
     })
   }
-  // handleExamTotalScoreChange(event) {
-  //   this.setState({
-  //     totalScoreDb: event.target.value,
-  //   })
-  // }
+
   handleExamTotalQuestionChange(event) {
     this.setState({
       totalQuestionDb: event.target.value,
@@ -286,8 +285,6 @@ export default class FormQuestion extends Component {
       minuteDueDb: this.state.minuteDueDb,
       secondDueDb: this.state.secondDueDb,
       totalScoreDb: this.state.totalScoreDb,
-      // totalQuestionDb: this.state.totalQuestionDb,
-      // question_type: this.state.question_type,
       quiz: this.state.quizs,
     }
     this.props.onSubmitForm(data)
@@ -617,8 +614,19 @@ export default class FormQuestion extends Component {
           <button
             type="button"
             className="btn btn-danger"
+            onClick={() => {
+              this.clearLocalStorage()
+            }}
+            style={{ width: '90px' }}
+          >
+            CLEAR
+          </button>{' '}
+          <button
+            type="button"
+            className="btn btn-danger"
             data-toggle="modal"
             data-target="#exampleModal"
+            style={{ width: '90px' }}
           >
             SUBMIT
           </button>

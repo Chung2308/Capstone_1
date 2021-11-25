@@ -66,26 +66,6 @@ export default function ExamScoreDetail() {
                       <label>{alternative.answer_content}</label>
                     </>
                   ) : null}
-
-                  {question.question_type === 'contentresult' ? (
-                    <>
-                      <input
-                        value={alternative.answer_content}
-                        type="text"
-                        className="add-score"
-                      />
-                      <div className="student-mark">
-                        Mark:{' '}
-                        <input
-                          type="number"
-                          step={0.1}
-                          min={0}
-                          max={10}
-                          className="mark"
-                        />
-                      </div>
-                    </>
-                  ) : null}
                 </div>
               ))}
               {results.map((quiz, indexResults) => {
@@ -98,8 +78,8 @@ export default function ExamScoreDetail() {
                         <div key={indexQuiz}>
                           {valueQuiz.alternatives.map(
                             (valueAlternatives, indexAlternatives) => (
-                              <div key={indexAlternatives}>
-                                {valueAlternatives.answer_choosen === true ? (
+                              <label key={indexAlternatives}>
+                                {question.question_type !== 'contentresult' ? (
                                   <label
                                     className="style-answer-choosen"
                                     style={{
@@ -110,11 +90,37 @@ export default function ExamScoreDetail() {
                                           : 'red',
                                     }}
                                   >
-                                    Answer choosen:{' '}
-                                    {valueAlternatives.answer_content}
+                                    {valueAlternatives.answer_choosen ===
+                                    true ? (
+                                      <>
+                                        Answer choosen:{' '}
+                                        {valueAlternatives.answer_content}{','}
+                                      </>
+                                    ) : null}
+                                    
                                   </label>
-                                ) : null}
-                              </div>
+                                ) : (
+                                  <>
+                                    <input
+                                      value={
+                                        valueAlternatives.essay_answer_content
+                                      }
+                                      type="text"
+                                      className="add-score"
+                                    />
+                                    <div className="student-mark">
+                                      <input
+                                        type="number"
+                                        step={0.1}
+                                        min={0}
+                                        max={10}
+                                        className="mark"
+                                      />{' '}
+                                      Score
+                                    </div>
+                                  </>
+                                )}
+                              </label>
                             )
                           )}
                         </div>
@@ -122,22 +128,30 @@ export default function ExamScoreDetail() {
                   </div>
                 )
               })}
-              {question.question_type === 'contentresult' ? (
-                <>
-                  <form
-                    className="update-essay-score"
-                    onSubmit={(event) => {
-                      updateEssayScore(event)
-                    }}
-                  >
-                    <button>Update essay score</button>
-                  </form>
-                </>
-              ) : null}
             </div>
+            {/* {question.question_type === 'contentresult' ? (
+              <>
+                <form
+                  className="update-essay-score"
+                  onSubmit={(event) => {
+                    updateEssayScore(event)
+                  }}
+                >
+                  <button>Update essay score</button>
+                </form>
+              </>
+            ) : null} */}
           </div>
         )
       })}
+      <form
+        className="update-essay-score"
+        onSubmit={(event) => {
+          updateEssayScore(event)
+        }}
+      >
+        <button>Update essay score</button>
+      </form>
     </div>
   )
 }

@@ -7,10 +7,9 @@ export default function QuestionBank() {
   const [quizs, setQuizs] = useState([])
   const [questions, setQuestions] = useState([])
   async function fetchQuestionBank() {
-    const response = await axios.get(`/quiz/question`)
+    const response = await axios.get(`/quiz/examtopic`)
     setQuestions(response?.data)
-    setQuizs(response?.data)
-    console.log('topic: ', response)
+    console.log('topic: ', response?.data)
   }
   useEffect(() => {
     fetchQuestionBank()
@@ -20,50 +19,76 @@ export default function QuestionBank() {
       {questions.map((topic, indexTopic) => {
         return (
           <div key={indexTopic}>
-            <div className="topics">
-              <label htmlFor>Topic {indexTopic + 1}</label>
-              {'. '}
-              <label htmlFor name="exam_topic">
-                {topic.exam_topic_db}
-              </label>
-              <ion-icon name="caret-down-outline"></ion-icon>
-            </div>
-            <div className="question-content">
-              {topic.quiz.map((quiz, indexQuiz) => (
-                <div className="total-question" key={indexQuiz}>
-                  <label htmlFor style={{ textDecoration: 'underline' }}>
-                    Question {indexQuiz + 1}
-                    {'. '}
-                  </label>{' '}
-                  <label htmlFor>{quiz.question_content}</label>
-                  <br />
-                  <div className="answer-content">
-                    {quiz.alternatives.map((alternative, indexAlternative) => (
-                      <div
-                        className="total-answer"
-                        key={indexAlternative}
-                        style={{ marginLeft: '4%' }}
+            <div className="col-xs col-sm col-md col-lg">
+              <div id="nodeid" role="tablist" aria-multiselectable="true">
+                <div className="card">
+                  <div className="card-header" role="tab" id="content">
+                    <h6 className="mb-0">
+                      <a
+                        data-toggle="collapse"
+                        data-parent="#nodeid1"
+                        href={'#index' + indexTopic}
+                        aria-expanded="true"
+                        aria-controls="section1ContentId"
                       >
-                        {quiz.question_type !== 'contentresult' ? (
-                          <>
-                            <label>
-                              {indexAlternative == 0
-                                ? 'A'
-                                : indexAlternative == 1
-                                ? 'B'
-                                : indexAlternative == 2
-                                ? 'C'
-                                : 'D'}
-                            </label>
-                            {'. '}
-                            <label>{alternative.answer_content}</label>
-                          </>
-                        ) : null}
+                        Topic {indexTopic + 1}
+                        {': '}
+                        {topic._id.exam_topic_db}
+                      </a>
+                    </h6>
+                  </div>
+                  <div
+                    id={'index' + indexTopic}
+                    className="collapse in"
+                    role="tabpanel"
+                    aria-labelledby="content"
+                  >
+                    <div className="card-body">
+                      <div className="question-content">
+                        {topic.quiz.map((question, indexQuestion) => (
+                          <div className="total-question" key={indexQuestion}>
+                            <label style={{ textDecoration: 'underline' }}>
+                              Question {indexQuestion + 1}
+                              {'. '}
+                            </label>{' '}
+                            <label>{question.question_content} </label>
+                            <br />
+                            <div className="answer-content">
+                              {question.alternatives.map(
+                                (alternative, indexAlternative) => (
+                                  <div
+                                    className="total-answer"
+                                    key={indexAlternative}
+                                    style={{ marginLeft: '4%', fontWeight:alternative.answer_correct ? 'bold' : 'none' }}
+                                  >
+                                    {question.question_type !== 'contentresult' ? (
+                                      <>
+                                        <label>
+                                          {indexAlternative == 0
+                                            ? 'A'
+                                            : indexAlternative == 1
+                                            ? 'B'
+                                            : indexAlternative == 2
+                                            ? 'C'
+                                            : 'D'}
+                                        </label>
+                                        {'. '}
+                                        <label>
+                                          {alternative.answer_content}
+                                        </label>
+                                      </>
+                                    ) : null}
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         )

@@ -214,7 +214,7 @@ export default function WaitingRoom() {
                             <div className="messages msg_sent">
                               <p>{e.text}</p>
                               <time>{e.user}</time>
-                              <time style={{ float: 'left' }}>{time}</time>
+                              {/* <time style={{ float: 'left' }}>{time}</time> */}
                             </div>
                           </div>
                         </div>
@@ -229,9 +229,9 @@ export default function WaitingRoom() {
                             >
                               <p>{e.text}</p>
                               <time>{e.user}</time>
-                              <time style={{ float: 'right', marginTop: '1%' }}>
+                              {/* <time style={{ float: 'right', marginTop: '1%' }}>
                                 {time}
-                              </time>
+                              </time> */}
                             </div>
                           </div>
                         </div>

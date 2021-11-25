@@ -166,7 +166,7 @@ export default function ExamBankDetail() {
               </div>
               <div className="exam-time">
                 <label className="title-infor" name="field_open">
-                  Start:
+                  Exam Start:
                 </label>{' '}
                 <label className="content-db" name="exam_open_db">
                   {question.hourOpenDb}
@@ -179,7 +179,7 @@ export default function ExamBankDetail() {
               </div>
               <div className="exam-time">
                 <label className="title-infor" name="field_due">
-                  End:
+                  Exam End:
                 </label>{' '}
                 <label className="content-db" name="exam_due_db">
                   {question.hourDueDb}
@@ -192,7 +192,7 @@ export default function ExamBankDetail() {
               </div>
               <div className="max-score">
                 <label className="title-infor" name="totalScoreDb">
-                  Score:
+                  Exam Score:
                 </label>{' '}
                 <label className="content-db" name="totalScoreDb">
                   {question.totalScoreDb} {'(max)'}
@@ -207,16 +207,24 @@ export default function ExamBankDetail() {
                 <div key={index}>
                   <div classname="ques">
                     <label name="infor_question" classname="label_infor">
-                      <label name="name_question">
+                      <label
+                        name="name_question"
+                        style={{ textDecoration: 'underline' }}
+                      >
                         <strong>Question {quiz.name_question}</strong>
                       </label>
                       {': '}
-                      <label name="question_content">
+                      <label
+                        name="question_content"
+                        style={{ marginLeft: '20px' }}
+                      >
+                        {quiz.point_question}
+                      </label>{' '}
+                      {'(points)'}
+                      <br />
+                      <label name="point_question">
                         {quiz.question_content}
                       </label>
-                      {' - '}
-                      <label name="point_question">{quiz.point_question}</label>
-                      {'(point)'}
                     </label>
                   </div>
                   <div className="ans">
@@ -224,7 +232,9 @@ export default function ExamBankDetail() {
                       <div
                         key={index}
                         style={{
-                          color: alternative.answer_correct ? 'LimeGreen' : 'black',
+                          color: alternative.answer_correct
+                            ? 'LimeGreen'
+                            : 'black',
                         }}
                       >
                         {quiz.question_type !== 'contentresult' ? (
@@ -307,7 +317,7 @@ export default function ExamBankDetail() {
               </div>
               <div className="exam-time">
                 <label className="title-infor" name="field_open">
-                  Start:
+                  Exam Start:
                 </label>{' '}
                 <label className="content-db" name="exam_open_db">
                   <label>
@@ -374,7 +384,7 @@ export default function ExamBankDetail() {
               </div>
               <div className="exam-time">
                 <label className="title-infor" name="field_due">
-                  End:
+                  Exam End:
                 </label>{' '}
                 <label className="content-db" name="exam_due_db">
                   <label>
@@ -445,7 +455,7 @@ export default function ExamBankDetail() {
               </div>
               <div className="max-score">
                 <label className="title-infor" name="totalScoreDb">
-                  Score:
+                  Exam Score:
                 </label>{' '}
                 <input
                   type="button"
@@ -470,7 +480,7 @@ export default function ExamBankDetail() {
                 <div key={indexQuiz}>
                   <div classname="ques">
                     <label name="infor_question" classname="label_infor">
-                      <label name="name_question">
+                      <label name="name_question" style={{textDecoration:'underline'}}>
                         <strong>Question {quiz.name_question}</strong>
                       </label>
                       {': '}

@@ -215,5 +215,9 @@ export default function QuestionDetail({
       </div>
     )
   }
-  return <div>{checkStatus({ quiz })}</div>
+  return (
+    <div>
+      {checkStatus({ quiz })}
+    </div>
+  )
 }

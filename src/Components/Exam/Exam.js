@@ -9,14 +9,22 @@ import moment from 'moment'
 export default function Exam() {
   const { location } = useHistory()
   const history = useHistory()
-  const [questions, setQuestions] = useState({ answer_content: '' })
+  const [questions, setQuestions] = useState({})
   const [quizs, setQuizs] = useState([])
   const [search, setSearch] = useState(SplitSearch(location.search))
+
+  const [essay, setEssay] = useState('')
+
+  let interval = useRef()
 
   //Countdown
   const [timeHours, setTimeHours] = useState('00')
   const [timeMinutes, setTimeMinutes] = useState('00')
   const [timeSeconds, setTimeSeconds] = useState('00')
+
+  const [hoursStart, setHoursStart] = useState('')
+  const [minutesStart, setMinutesStart] = useState('')
+  const [secondsStart, setSecondsStart] = useState('')
 
   //Submited
   const [hoursubmitDb, setHoursubmitDb] = useState('')
@@ -28,102 +36,95 @@ export default function Exam() {
   const [totalminuteDb, setTotalminuteDb] = useState('')
   const [totalsecondDb, setTotalSecondDb] = useState('')
 
-  async function fetchExamRoom() {
-    const response = await axios.get(`/quiz/question/${search.room}`)
-    console.log('response: ', response)
-    setQuestions({ ...response?.data?.question })
-    startTimer({ ...response?.data.question })
-    setQuizs(response?.data?.question.quiz)
-
-    //TODO: HOT FIX BEGIN
-    var idStorage = search.room + 'hourOpenDb'
-    var time = new Date()
-    var nowHours = time.getHours()
-    var nowMinutes = time.getMinutes()
-    var nowSeconds = time.getSeconds()
-    if (nowHours < 10) {
-      nowHours = '0' + nowHours
+  //TODO: LocalStorage quiz
+  const loadQuizs = async (quizs) => {
+    console.log(localStorage.getItem('AnswerChoosen'))
+    let items = JSON.parse(localStorage.getItem('AnswerChoosen'))
+    console.log(items)
+    if (items === null || items === undefined || items?.length === 0) {
+      items = []
+      setQuizs(quizs)
+    } else {
+      const newQuizs = quizs.map((quiz, indexQuiz) => {
+        return {
+          ...quiz,
+          alternatives: quiz.alternatives.map(
+            (alternative, indexAlternative) => {
+              return {
+                ...alternative,
+                answer_choosen:
+                  items[indexQuiz].alternatives[indexAlternative]
+                    .answer_choosen || false,
+              }
+            }
+          ),
+        }
+      })
+      setQuizs(newQuizs)
     }
-    if (nowMinutes < 10) {
-      nowMinutes = '0' + nowMinutes
-    }
-    if (nowSeconds < 10) {
-      nowSeconds = '0' + nowSeconds
-    }
-    if (localStorage.getItem(idStorage) == null) {
-      localStorage.setItem(search.room + 'hourOpenDb', nowHours)
-      localStorage.setItem(search.room + 'minuteOpenDb', nowMinutes)
-      localStorage.setItem(search.room + 'secondsOpenDb', nowSeconds)
-    }
-    //TODO: HOT FIX END
   }
 
+  // TODO: Call API method get
+  async function fetchExamRoom() {
+    const response = await axios.get(`/quiz/question/${search.room}`)
+    setQuestions({ ...response?.data?.question })
+    startTimer({ ...response?.data.question })
+    loadQuizs(response?.data?.question.quiz)
+    // time start
+    var timeStart = new Date()
+    var nowHoursStart = timeStart.getHours()
+    var nowMinutesStart = timeStart.getMinutes()
+    var nowSecondsStart = timeStart.getSeconds()
+    if (nowHoursStart < 10) {
+      nowHoursStart = '0' + nowHoursStart
+    }
+    if (nowMinutesStart < 10) {
+      nowMinutesStart = '0' + nowMinutesStart
+    }
+    if (nowSecondsStart < 10) {
+      nowSecondsStart = '0' + nowSecondsStart
+    }
+    setHoursStart(nowHoursStart)
+    setMinutesStart(nowMinutesStart)
+    setSecondsStart(nowSecondsStart)
+  }
+
+  // TODO: Call function fetchExamRoom
   useEffect(() => {
     fetchExamRoom()
   }, [])
+
+  // TODO: Time submited
   useEffect(() => {
-    var time = new Date()
-    var nowHours = time.getHours()
-    var nowMinutes = time.getMinutes()
-    var nowSeconds = time.getSeconds()
-    if (nowHours < 10) {
-      nowHours = '0' + nowHours
+    var timeSubmit = new Date()
+    var nowHoursSubmit = timeSubmit.getHours()
+    var nowMinutesSubmit = timeSubmit.getMinutes()
+    var nowSecondsSubmit = timeSubmit.getSeconds()
+    if (nowHoursSubmit < 10) {
+      nowHoursSubmit = '0' + nowHoursSubmit
     }
-    if (nowMinutes < 10) {
-      nowMinutes = '0' + nowMinutes
+    if (nowMinutesSubmit < 10) {
+      nowMinutesSubmit = '0' + nowMinutesSubmit
     }
-    if (nowSeconds < 10) {
-      nowSeconds = '0' + nowSeconds
+    if (nowSecondsSubmit < 10) {
+      nowSecondsSubmit = '0' + nowSecondsSubmit
     }
-    setHoursubmitDb(nowHours)
-    setMinutesubmitDb(nowMinutes)
-    setSecondsubmitDb(nowSeconds)
-  }, [])
+    setHoursubmitDb(nowHoursSubmit)
+    setMinutesubmitDb(nowMinutesSubmit)
+    setSecondsubmitDb(nowSecondsSubmit)
+  })
 
+  // TODO: Total time exam = time start - time submited
   useEffect(() => {
-    //max time
-    var maxHours =
-      questions.hourDueDb - localStorage.getItem(search.room + 'hourOpenDb') //12-00
-    // console.log('Chung: ' + localStorage.getItem(search.room + 'hourOpenDb'))
-    var maxMinutes =
-      questions.minuteDueDb - localStorage.getItem(search.room + 'minuteOpenDb') //30-30
-    var maxSeconds =
-      questions.secondDueDb -
-      localStorage.getItem(search.room + 'secondsOpenDb') //00-00
-
-    if (maxMinutes < 0) {
-      maxMinutes = maxMinutes * -1
+    var totalHours = hoursubmitDb - hoursStart
+    var totalMinutes = minutesubmitDb - minutesStart
+    var totalSeconds = secondsubmitDb - secondsStart
+    if (totalMinutes < 0) {
+      totalMinutes = totalMinutes * -1
     }
-    if (maxSeconds < 0) {
-      maxSeconds = maxSeconds * -1
+    if (totalSeconds < 0) {
+      totalSeconds = totalSeconds * -1
     }
-
-    //convert time int
-    var maxHoursInt = Math.floor(maxHours * 60 * 60)
-    var maxMinutesInt = Math.floor(maxMinutes * 60)
-    var maxSecondsInt = Math.floor(maxSeconds)
-
-    //totalMaxInt
-    var totalMaxInt = maxHoursInt + maxMinutesInt + maxSecondsInt
-
-    var timeRemainingHoursInt = Math.floor(timeHours * 60 * 60)
-    var timeRemainingMinutesInt = Math.floor(timeMinutes * 60)
-    var timeRemainingSecondsInt = Math.floor(timeSeconds)
-
-    //totalRemainingInt
-    var totalRemainingInt =
-      timeRemainingHoursInt + timeRemainingMinutesInt + timeRemainingSecondsInt
-
-    //totalInt
-    var totalInt = totalMaxInt - totalRemainingInt
-
-    // total time
-    var totalHours = Math.floor(totalInt / 3600)
-    var totalMinutes = Math.floor(totalInt / 60)
-    var totalSeconds = Math.floor(
-      totalInt - (totalHours * 3600 + totalMinutes * 60)
-    )
-
     if (totalHours < 10) {
       totalHours = '0' + totalHours
     }
@@ -138,13 +139,8 @@ export default function Exam() {
     setTotalSecondDb(totalSeconds)
   })
 
-  let interval = useRef()
+  //TODO: Time remaining (fixing)
   const startTimer = (questions) => {
-    const styleTime = {
-      border: '1px solid red',
-      borderRadius: '5px',
-      backgroundColor: 'red',
-    }
     interval.current = setInterval(() => {
       const currentDate = Date.parse(
         `${questions.exam_date_db?.split('T')[0]}T${questions.hourDueDb}:${
@@ -152,16 +148,13 @@ export default function Exam() {
         }:${questions.secondDueDb}`
       )
       const time = currentDate - Date.now()
-      // if (time == 0) {
-      //   history.push('/home')
-      // }
-      if (time < 0) {
+
+      if (time <= 0) {
+        onSubmitInformationQuestion()
         clearInterval(interval.current)
-      }
-      // else if(time < 300000 && time >=0){
-      //   {styleTime()}
-      // }
-      else {
+        // alert('DONE')
+        // history.push('/home')
+      } else {
         var hours = Math.floor(time / 1000 / 3600)
         var minutes = Math.floor(((time / 1000) % 3600) / 60)
         var seconds = Math.floor((((time / 1000) % 3600) % 60) % 60)
@@ -181,32 +174,87 @@ export default function Exam() {
     }, 1000)
   }
 
+  //TODO: Save content essay
+  const changeEssayContent = (indexAlternative, indexQuiz, e) => {
+    onChangeAlternative(indexAlternative, indexQuiz)
+    setEssay(e.target.value)
+    // console.log('essay: ', essay)
+    // const input = e.target;
+    // const value = input.value
+    // setEssay({[input.name]: value})
+  }
+
+  //TODO: Save content checked
   const onChangeAlternative = (indexAlternative, indexQuiz) => {
-    const newQuizs = quizs.map((quiz, index) => {
-      if (index === indexQuiz) {
+    const newQuizs = quizs.map((quiz, indexQizMap) => {
+      if (indexQizMap === indexQuiz) {
         return {
           ...quiz,
-          alternatives: quiz.alternatives.map((alternative, index) => {
-            if (index === indexAlternative)
+          alternatives: quiz.alternatives.map((alternative, indexAlterMap) => {
+            if (indexAlterMap === indexAlternative) {
+              if (quiz.question_type == 'manycorrect') {
+                return {
+                  ...alternative,
+                  answer_choosen: !alternative.answer_choosen,
+                }
+              } else if (quiz.question_type == 'contentresult') {
+                return {
+                  ...alternative,
+                  essay_answer_content: essay,
+                }
+              } else
+                return {
+                  ...alternative,
+                  answer_choosen: true,
+                }
+            } else
               return {
                 ...alternative,
-                answer_choosen: true,
+                answer_choosen:
+                  quiz.question_type === 'manycorrect'
+                    ? alternative.answer_choosen
+                      ? alternative.answer_choosen
+                      : false
+                    : false,
               }
-            else return { ...alternative }
           }),
         }
       } else return quiz
     })
     setQuizs(newQuizs)
+    const newQuizsChoosen = newQuizs.map((quiz, indexQizMap) => {
+      return {
+        ...quiz,
+        alternatives: quiz.alternatives.map((alternative, index) => {
+          const newAlternative = Object.assign({}, alternative) // Vì dính địa chỉ con trỏ đối tượng quiz nên tạo mới...
+          delete newAlternative['answer_correct']
+          return newAlternative
+        }),
+      }
+    })
+
+    localStorage.setItem('AnswerChoosen', JSON.stringify(newQuizsChoosen))
   }
 
-  const onSubmitQuestions = async (e) => {
+  //TODO: Submit Exam
+  const onSubmitQuestions = (e) => {
     e.preventDefault()
     setQuestions({ ...questions, [e.target.name]: e.target.value })
+    setEssay({ ...essay, [e.target.name]: e.target.value })
+    onSubmitInformationQuestion(e)
+    clearInterval(interval.current)
+    history.push('/home')
+  }
+
+  //TODO: Submit Exam
+  const onSubmitInformationQuestion = async () => {
     try {
       const response = await axios.post('/result/', {
         ...questions,
         quiz: quizs,
+        hoursStart: hoursStart,
+        minutesStart: minutesStart,
+        secondsStart: secondsStart,
         hoursubmitDb: hoursubmitDb,
         minutesubmitDb: minutesubmitDb,
         secondsubmitDb: secondsubmitDb,
@@ -221,13 +269,8 @@ export default function Exam() {
     } catch (error) {
       alert('You are not allowed to perform this action')
     }
-    clearInterval(interval.current)
   }
 
-  const handleAlternative = (event) => {
-    setQuestions({ ...questions, answer_content: event.target.value })
-  }
-  // console.log('quizs: ', quizs)
   return (
     <div className="exam">
       <div className="infor-exam">
@@ -351,12 +394,18 @@ export default function Exam() {
                             onChange={() =>
                               onChangeAlternative(indexAlternative, indexQuiz)
                             }
+                            checked={
+                              alternative.answer_choosen ? 'checked' : ''
+                            }
                           />
                         ) : quiz.question_type == 'onecorrect' ? (
                           <input
                             type="radio"
                             name={`onecorrect${indexQuiz}`}
-                            value={alternative.code}
+                            value={alternative.answer_content}
+                            checked={
+                              alternative.answer_choosen ? 'checked' : ''
+                            }
                             onChange={() =>
                               onChangeAlternative(indexAlternative, indexQuiz)
                             }
@@ -366,6 +415,9 @@ export default function Exam() {
                             type="checkbox"
                             name={`manycorrect${indexQuiz}`}
                             value={alternative.answer_content}
+                            checked={
+                              alternative.answer_choosen ? 'checked' : ''
+                            }
                             onChange={() =>
                               onChangeAlternative(indexAlternative, indexQuiz)
                             }
@@ -373,10 +425,16 @@ export default function Exam() {
                         ) : (
                           <input
                             type="text"
-                            // name={`contentresult${indexQuiz}`}
-                            name="answer_content"
+                            name="essay_answer_content"
                             className="enter-result"
-                            onChange={(event) => handleAlternative(event)}
+                            onChange={(e) =>
+                              changeEssayContent(indexAlternative, indexQuiz, e)
+                            }
+                            defaultValue={
+                              alternative.essay_answer_content
+                                ? alternative.essay_answer_content
+                                : ''
+                            }
                           />
                         )}
                       </label>{' '}
@@ -397,8 +455,10 @@ export default function Exam() {
                       <br />
                       {quiz.question_type === 'contentresult' ? (
                         <>
-                          <label>Note:</label>{' '}
+                          {alternative.answer_content !== null ? (<>
+                            <label>Note:</label>{' '}
                           <label>{alternative.answer_content}</label>
+                          </>): null}
                         </>
                       ) : null}
                     </div>
@@ -407,14 +467,6 @@ export default function Exam() {
               </div>
             )
           })}
-          {/* <div className="test-time">
-            <input name="hoursubmitDb"></input>
-            <br />
-            <input name="minutesubmitDb"></input>
-            <br />
-            <input name="secondsubmitDb"></input>
-            <br />
-          </div> */}
         </div>
       </div>
       <div className="popup-submit">

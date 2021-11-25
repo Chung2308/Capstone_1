@@ -76,7 +76,7 @@ export default class DieuHuongURL extends Component {
             <Nav></Nav>
             <ExamScore></ExamScore>
           </Route>
-          <Route exact path="/exam-score-detail/:slug">
+          <Route exact path="/exam-score-detail/:id_user">
             <Nav></Nav>
             <ExamScoreDetail></ExamScoreDetail>
           </Route>
