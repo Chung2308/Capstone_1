@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { QUESTION_TYPE } from './question-types.enum'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import './QuestionDetail.css'
 
@@ -19,14 +19,10 @@ QuestionDetail.propTypes = {
   }).isRequired,
 }
 
-export default function QuestionDetail({
-  quiz, // Đây là quiz đối tượng mà vừa lấy trong quizs (mảng)
-  indexChange,
-  changeQuestion,
-}) {
+export default function QuestionDetail({ quiz, indexChange, changeQuestion }) {
   const [status, setStatus] = useState(true)
   const [updatedQuiz, setUpdated] = useState(quiz)
-  const [quizs, setQuizs] = useState([quiz])
+
   const checkStatus = () => {
     if (status == true) {
       return createdQuestion()
@@ -41,7 +37,9 @@ export default function QuestionDetail({
   const editSumbit = () => {
     setStatus(true)
     changeQuestion(updatedQuiz, indexChange)
+    saveNewQuiz()
   }
+  console.log('quiz: ', quiz)
   const onChangeQuiz = (event) => {
     setUpdated({ ...updatedQuiz, [event.target.name]: event.target.value })
   }
@@ -55,75 +53,76 @@ export default function QuestionDetail({
     setUpdated({ ...updatedQuiz, alternatives: newAlternatives })
   }
   const styleAnswer = {
-    // fontStyle: 'italic',
-    textDecoration: 'underline'
+    textDecoration: 'underline',
   }
-  const deleteQuiz = (indexQuiz) => {
-    // let newQuiz = [...quizs]
-    // newQuiz.splice(indexQuiz)
-    // setQuizs(newQuiz)
-    const newQuiz = quizs.filter((item) => item.indexQuiz !== indexQuiz)
-    setQuizs(newQuiz)
+
+  const saveNewQuiz = () => {
+    let saveQuizs = JSON.parse(localStorage.getItem('Question'))
+    let saveNewQuizs = saveQuizs.map((itemQuiz)=>{
+      if (itemQuiz.name_question === updatedQuiz.name_question)
+        return updatedQuiz
+      else
+        return itemQuiz
+    })
+    localStorage.setItem('Question', JSON.stringify(saveNewQuizs))
   }
-  // useEffect(()=>{
-  //   let items = JSON.parse(localStorage.getItem('Question'))
-  //   setQuizs({
-  //     quizs: items,
-  //   })
-  // })
+
   const createdQuestion = () => {
     return (
-      <div className="row answers-container">
-        <hr width="80%" />
-        <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5 ">
-          <span className="question-content">
-            <h5>Question Content:</h5>
-            <label className="content-answer-db">{quiz.question_content}</label>
-            <br />
-            <h5>Question Number:</h5>
-            <label className="content-answer-db">{quiz.name_question}</label>
-            <br />
-            <h5>Question Score:</h5>
-            <label className="content-answer-db">{quiz.point_question}</label>
-          </span>
-        </div>
-        <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-          <div className="answers-group">
-            <span style={styleAnswer}>Correct Answers:</span>
-            <ul className="show-answer">
-              {quiz.alternatives
-                .filter((a) => a.answer_correct === true)
-                .map((answer, i) => (
-                  <li key={i}>{answer.answer_content}</li>
-                ))}
-            </ul>
-          </div>
-        </div>
-        <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-          <div className="answers-group">
-            <span style={styleAnswer}>Incorrect Answers:</span>
-            <ul className="show-answer">
-              {quiz.alternatives
-                .filter((a) => a.answer_correct === false)
-                .map((answer, i) => (
-                  <li key={i}>{answer.answer_content}</li>
-                ))}
-            </ul>
-          </div>
-        </div>
-        <div className="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-          <div className="answers-group action">
-            <span onClick={editClick}>
-              <ion-icon name="create-outline"></ion-icon>
+      <div>
+        <div className="row answers-container">
+          <hr width="80%" />
+          <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5 ">
+            <span className="question-content">
+              <h5>Question Content:</h5>
+              <label className="content-answer-db">
+                {quiz.question_content}
+              </label>
+              <br />
+              <h5>Question Number:</h5>
+              <label className="content-answer-db">{quiz.name_question}</label>
+              <br />
+              <h5>Question Score:</h5>
+              <label className="content-answer-db">{quiz.point_question}</label>
             </span>
-            {actionIcon()}
+          </div>
+          <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <div className="answers-group">
+              <span style={styleAnswer}>Correct Answers:</span>
+              <ul className="show-answer">
+                {quiz.alternatives
+                  .filter((a) => a.answer_correct === true)
+                  .map((answer, i) => (
+                    <li key={i}>{answer.answer_content}</li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+          <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <div className="answers-group">
+              <span style={styleAnswer}>Incorrect Answers:</span>
+              <ul className="show-answer">
+                {quiz.alternatives
+                  .filter((a) => a.answer_correct === false)
+                  .map((answer, i) => (
+                    <li key={i}>{answer.answer_content}</li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+          <div className="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+            <div className="answers-group action">
+              <span onClick={editClick}>
+                <ion-icon name="create-outline"></ion-icon>
+              </span>
+            </div>
           </div>
         </div>
       </div>
     )
   }
+
   const editCreatedQuestion = () => {
-    // localStorage.setItem('Question', JSON.stringify(setQuizs(quizs)))
     return (
       <div className="row answers-container-edit">
         <hr width="80%" />
@@ -136,10 +135,8 @@ export default function QuestionDetail({
               name="question_content"
               onChange={onChangeQuiz}
             />
-            
             <h5>Question Number:</h5>
             <input className="edit-name" value={quiz.name_question} />
-            
             <h5>Question Score:</h5>
             <input
               type="number"
@@ -195,29 +192,26 @@ export default function QuestionDetail({
             <span onClick={editSumbit}>
               <ion-icon name="checkmark-done-outline"></ion-icon>
             </span>
-            {actionIcon()}
+            {/* {actionIcon()} */}
           </div>
         </div>
       </div>
     )
-    
   }
-  const actionIcon = () => {
-    return (
-      <div>
-        {quizs.map((item, index) => {
-          return (
-            <span key={index} onClick={() => deleteQuiz(item.indexQuiz)}>
-              <ion-icon name="trash-outline"></ion-icon>
-            </span>
-          )
-        })}
-      </div>
-    )
-  }
-  return (
-    <div>
-      {checkStatus({ quiz })}
-    </div>
-  )
+  // const actionIcon = () => {
+  //   return (
+  //     <div>
+  //       {quizs.map((item, index) => {
+  //         return (
+  //           <div key={index}>
+  //             <span onClick={() => deleteQuiz(item)}>
+  //               <ion-icon name="trash-outline"></ion-icon>
+  //             </span>
+  //           </div>
+  //         )
+  //       })}
+  //     </div>
+  //   )
+  // }
+  return <div>{checkStatus({ quiz })}</div>
 }

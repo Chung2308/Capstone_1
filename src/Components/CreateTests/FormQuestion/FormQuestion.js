@@ -1,14 +1,5 @@
 import React, { Component } from 'react'
 import './FormQuestion.css'
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  useHistory,
-  useLocation,
-} from 'react-router-dom'
 
 import QuestionDetail from '../QuestionDetail'
 
@@ -107,7 +98,8 @@ export default class FormQuestion extends Component {
     newQuiz.forEach((quiz) => {
       sum = sum + parseFloat(quiz.point_question)
     })
-    this.setState({ ...this.state, quizs: newQuiz, totalScoreDb: sum })
+    this.setState({ ...this.state, quizs: newQuiz, totalScoreDb: Number(sum).toFixed(1) })
+    localStorage.setItem('PointTotal', JSON.stringify(sum))
   }
 
   /**
@@ -120,8 +112,7 @@ export default class FormQuestion extends Component {
     if (!valid) return false
     this.setState({
       ...this.state,
-      alternatives: question.alternatives,
-      // questions: newQuestionsList,
+      alternatives: question.alternatives
     })
     return true
   }
@@ -131,6 +122,7 @@ export default class FormQuestion extends Component {
   }
 
   UNSAFE_componentWillMount() {
+    //TODO: QUESTION
     let items = JSON.parse(localStorage.getItem('Question'))
     if (items === null || items === '') {
       items = []
@@ -138,6 +130,12 @@ export default class FormQuestion extends Component {
     this.setState({
       quizs: items,
     })
+
+    //TODO: POINTTOTAL
+    let point = JSON.parse(localStorage.getItem('PointTotal'))
+    this.setState({
+      totalScoreDb: Number(point).toFixed(1),
+    })    
   }
 
   createQuestion() {
@@ -146,7 +144,7 @@ export default class FormQuestion extends Component {
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
-    if (alternatives.length == 0 && question_type!=='contentresult')
+    if (alternatives.length == 0 && question_type !== 'contentresult')
       return alert('Please choose at least one correct answer')
 
     this.state.quizs.push({
@@ -161,14 +159,14 @@ export default class FormQuestion extends Component {
       question_content: '',
       point_question: 0,
       question_type: QUESTION_TYPE.YES_NO,
-      //test type
-      // questionTypeDescriptions: QUESTION_TYPE_DESCRIPTION.YES_NO,
     })
-    // console.log(this.state)
     localStorage.setItem('Question', JSON.stringify(this.state.quizs))
   }
-  clearLocalStorage(){
-    localStorage.removeItem('Question', localStorage.getItem('Question', ''))
+  clearLocalStorage() {
+    localStorage.removeItem('Question')
+    localStorage.removeItem('PointTotal')
+    localStorage.removeItem('PointTotalUpdate')
+    localStorage.removeItem('Date')
   }
   validateQuestionBody() {
     const { question_content, point_question } = this.state
@@ -183,7 +181,7 @@ export default class FormQuestion extends Component {
     }
     return true
   }
-  Ma_code() {
+  randomExamId() {
     const chuoi_random = '0123456789'
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min)) + min
@@ -206,6 +204,7 @@ export default class FormQuestion extends Component {
     this.setState({
       exam_date_db: event.target.value,
     })
+    localStorage.setItem('Date', JSON.stringify(this.state.exam_date_db))
   }
   handleExamIdChange(event) {
     this.setState({
@@ -263,12 +262,12 @@ export default class FormQuestion extends Component {
     var sum = 0
     obj.map((value) => {
       sum = sum + parseFloat(value.point_question)
-      // {Number(parseFloat(value.point_question)).toFixed(1)}
       return sum
     })
     this.setState({
       totalScoreDb: Number(sum).toFixed(1),
     })
+    localStorage.setItem('PointTotal', JSON.stringify(Number(sum).toFixed(1)))
   }
 
   handleSubmit(event) {
@@ -288,6 +287,26 @@ export default class FormQuestion extends Component {
       quiz: this.state.quizs,
     }
     this.props.onSubmitForm(data)
+  }
+
+  deleteQuestionDetails(indexQuiz) {
+    const newQuiz = this.state.quizs.filter((item) => item !== indexQuiz).map((itemDeleteQuiz, indexDeleteQuiz)=>{
+      return {...itemDeleteQuiz, name_question:indexDeleteQuiz+1}
+    })
+    this.setState({
+      quizs: newQuiz,
+    })
+    var sumUpdate = 0
+    newQuiz.forEach((quiz) => {
+      sumUpdate = sumUpdate + parseFloat(quiz.point_question)
+    })
+    this.setState({
+      ...this.state,
+      quizs: newQuiz,
+      totalScoreDb: Number(sumUpdate).toFixed(1),
+    })
+    localStorage.setItem('Question', JSON.stringify(newQuiz))
+    localStorage.setItem('PointTotal', JSON.stringify(sumUpdate))
   }
 
   render() {
@@ -334,7 +353,7 @@ export default class FormQuestion extends Component {
                     <ion-icon
                       className="icon"
                       name="push-outline"
-                      onClick={() => this.Ma_code()}
+                      onClick={() => this.randomExamId()}
                       style={{ marginRight: '4.5%' }}
                     ></ion-icon>
                     <input
@@ -566,9 +585,6 @@ export default class FormQuestion extends Component {
               <button
                 className="btn-icon"
                 onClick={() => this.totalCreateQuestion()}
-                // class="btn btn-primary"
-                // data-toggle="modal"
-                // data-target="#exampleModal"
               >
                 <ion-icon name="add-circle-outline" id="iconadd" />
               </button>
@@ -600,13 +616,17 @@ export default class FormQuestion extends Component {
 
           <div className="created-questions">
             {this.state.quizs?.map((quiz, index) => (
-              <QuestionDetail
-                key={index}
-                quiz={quiz}
-                indexChange={index}
-                changeQuestion={this.changeQuestion}
-                // changeAnswer={this.changeAnswer}
-              ></QuestionDetail>
+              <div key={index}>
+                <QuestionDetail
+                  key={index}
+                  quiz={quiz}
+                  indexChange={index}
+                  changeQuestion={this.changeQuestion}
+                ></QuestionDetail>
+                <button onClick={() => this.deleteQuestionDetails(quiz)}>
+                  <ion-icon name="trash-outline"></ion-icon>
+                </button>
+              </div>
             ))}
           </div>
         </div>
