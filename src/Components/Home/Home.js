@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Home.css';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
 export default class Home extends Component {
     constructor(props) {
@@ -18,9 +19,9 @@ export default class Home extends Component {
                   <div className="row">
                     <img src="./img/list-test.png" alt="" />
                     <div className="text">
-                      <a href="/exam-bank">
+                      <Link to="/exam-bank">
                         <h3>LIST OF TESTS</h3>
-                      </a>
+                      </Link>
                       <hr />
                       <p>Search for exam questions stored in the exam bank.</p>
                     </div>
@@ -30,9 +31,9 @@ export default class Home extends Component {
                   <div className="row">
                     <img src="./img/create-question.png" alt="" />
                     <div className="text">
-                      <a href="/create-test">
+                      <Link to="/create-test">
                         <h3>CREATE QUESTIONS</h3>
-                      </a>
+                      </Link>
                       <hr />
                       <p>
                         Create your quiz. Attention should be paid to the type
@@ -48,9 +49,9 @@ export default class Home extends Component {
                   <div className="row">
                     <img src="./img/quick.png" alt="" />
                     <div className="text">
-                      <a href="/into-room">
+                      <Link to="/into-room">
                         <h3>INTO THE EXAMINATION ROOM</h3>
-                      </a>
+                      </Link>
                       <hr />
                       <p>
                         To get into the exam room quickly, candidates need to
@@ -71,9 +72,9 @@ export default class Home extends Component {
                       }}
                     />
                     <div className="text">
-                      <a href="/question-bank">
+                      <Link to="/question-bank">
                         <h3>QUESTION BANKS</h3>
-                      </a>
+                      </Link>
                       <hr />
                       <p>
                         Summarize all questions by topic of each exam already in

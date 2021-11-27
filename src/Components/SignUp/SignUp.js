@@ -13,12 +13,13 @@ export default class SignUp extends Component {
       password: '',
       phone: '',
       birthday: '',
-      user_type: ''
+      user_type: '',
+      password2: '',
     }
   }
-  submitForm(event) {
-    event.preventDefault()
-    if (this.state.password == this.state.password2) {
+  submitForm() {
+    // event.preventDefault()
+    if (this.state.password === this.state.password2) {
       this.setState({
         isRedirect: true,
       })
@@ -42,6 +43,7 @@ export default class SignUp extends Component {
   }
   async LoginForm(event) {
     event.preventDefault()
+    // this.submitForm()
     const { fullname, phone, birthday, username, password, user_type } =
       this.state
     const loginData = await axios.post('/auth/register', {
@@ -50,17 +52,25 @@ export default class SignUp extends Component {
       birthday,
       username,
       password,
-      user_type
+      user_type,
     })
     console.log(loginData)
     if (loginData.data?.sucess === false) {
       alert(loginData.data?.message)
-    } else {
+    } else if (this.state.password === this.state.password2) {
       this.setState({
         isRedirect: true,
       })
+    } else if (this.state.password !== this.state.password2) {
+      alert("Password doesn't match")
+      this.setState({
+        isRedirect: false,
+      })
+    }else{
+      this.setState({
+        isRedirect: false,
+      })
     }
-    
   }
   render() {
     if (this.state.isRedirect) {

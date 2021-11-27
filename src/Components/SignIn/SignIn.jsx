@@ -4,6 +4,7 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "./SignIn.css";
 import { axios } from '@/instances/axios'
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
 import { Redirect } from "react-router-dom";
 // import background from '../';
@@ -132,7 +133,7 @@ function SignIn() {
               }}
             >
               Don{"'"}t have an account?{" "}
-              <a href="/sign-up"> Create new account</a>
+              <Link to="/sign-up"> Create new account</Link>
             </p>
           </form>
         </div>

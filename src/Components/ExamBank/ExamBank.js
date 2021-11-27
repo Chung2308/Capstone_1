@@ -6,12 +6,14 @@ import moment from 'moment'
 import { useHistory } from 'react-router'
 export default function ExamBank() {
   const [questions, setQuestions] = useState([])
+  const [lengthQuizs, setLengthQuizs]=useState()
   const history = useHistory()
   useEffect(() => {
     async function fetchUser() {
       const response = await axios.get(`/quiz/question/`)
       setQuestions(response?.data)
       console.log('Infor Exam Bank: ', response?.data)
+      setLengthQuizs(response?.data?.length)
     }
     fetchUser()
   }, [])
@@ -53,38 +55,47 @@ export default function ExamBank() {
               .map((value, index) => {
                 return (
                   <tr key={index}>
-                    <td name="list_topic">{value.exam_topic_db}</td>
-                    <td name="list_id">{value.id_exam}</td>
-                    <td name="list_date">
-                      {moment(value.exam_date_db).format('DD/MM/YYYY')}
-                    </td>
-                    <td>
-                      <input
-                        type="button"
-                        value="Details"
-                        onClick={() => render(value.id_exam)}
-                        className="btn-details"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="button"
-                        value="View"
-                        className="btn-details"
-                        onClick={() => renderScore(value.id_exam)}
-                      ></input>
-                    </td>
-                    <td>
-                      <div className="btn-group">
-                        <div
-                          className="btn btn-danger"
-                          onClick={(e) => handleDeleteExam(value.id_exam, e)}
-                        >
-                          <box-icon name="x-circle" />
-                          Delete
-                        </div>
-                      </div>
-                    </td>
+                    {lengthQuizs === 0 ? (
+                      <>Chung</>
+                    ) : (
+                      <>
+                        <td name="list_topic">{value.exam_topic_db}</td>
+                        <td name="list_id">{value.id_exam}</td>
+                        <td name="list_date">
+                          {moment(value.exam_date_db).format('DD/MM/YYYY')}
+                        </td>
+                        <td>
+                          <input
+                            type="button"
+                            value="Details"
+                            onClick={() => render(value.id_exam)}
+                            className="btn-details"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="button"
+                            value="View"
+                            className="btn-details"
+                            onClick={() => renderScore(value.id_exam)}
+                          ></input>
+                        </td>
+                        <td>
+                          <div className="btn-group">
+                            <div
+                              className="btn btn-danger"
+                              onClick={(e) =>
+                                handleDeleteExam(value.id_exam, e)
+                              }
+                            >
+                              <box-icon name="x-circle" />
+                              Delete
+                            </div>
+                          </div>
+                        </td>
+                      </>
+                    )}
+                    {console.log('length: ', lengthQuizs)}
                   </tr>
                 )
               })

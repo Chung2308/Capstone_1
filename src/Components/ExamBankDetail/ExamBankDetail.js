@@ -25,6 +25,7 @@ export default function ExamBankDetail() {
   const [secondDue, setSecondDue] = useState([SECONDDUE])
   const [question, setQuestion] = useState({})
   const [quizs, setQuizs] = useState([])
+  const [visibleAnswer, setVisibleAnswer] = useState(false)
   const componentRef = useRef()
 
   async function fetchUser() {
@@ -135,6 +136,12 @@ export default function ExamBankDetail() {
               Edit
             </button>
           </div>
+          <div onClick={() => setVisibleAnswer(!visibleAnswer)}>
+            <button style={{ width: '220px' }}>
+              {' '}
+              Show/Hide Answer Correct{' '}
+            </button>
+          </div>
           <div className="export-data">
             <ReactToPrint
               pageStyle={pageStyle}
@@ -233,7 +240,9 @@ export default function ExamBankDetail() {
                         key={index}
                         style={{
                           color: alternative.answer_correct
-                            ? 'LimeGreen'
+                            ? visibleAnswer
+                              ? 'LimeGreen'
+                              : 'black'
                             : 'black',
                         }}
                       >
@@ -480,7 +489,10 @@ export default function ExamBankDetail() {
                 <div key={indexQuiz}>
                   <div classname="ques">
                     <label name="infor_question" classname="label_infor">
-                      <label name="name_question" style={{textDecoration:'underline'}}>
+                      <label
+                        name="name_question"
+                        style={{ textDecoration: 'underline' }}
+                      >
                         <strong>Question {quiz.name_question}</strong>
                       </label>
                       {': '}
@@ -511,7 +523,9 @@ export default function ExamBankDetail() {
                       <div
                         key={indexAlternative}
                         style={{
-                          color: alternative.answer_correct ? 'LimeGreen' : 'black',
+                          color: alternative.answer_correct
+                            ? 'LimeGreen'
+                            : 'black',
                         }}
                       >
                         {quiz.question_type !== 'contentresult' ? (

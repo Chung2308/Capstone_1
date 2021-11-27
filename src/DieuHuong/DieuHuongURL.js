@@ -10,12 +10,12 @@ import Nav from '../Components/Nav/Nav'
 import Profile from '../Components/Profile/Profile'
 import QuestionBank from '../Components/QuestionsBank/QuestionBank'
 import Resources from '../Components/Resources/Resources'
-import ScoreStatistics from '../Components/ScoreStatistics/ScoreStatistics'
 import SignIn from '../Components/SignIn/SignIn'
 import SignUp from '../Components/SignUp/SignUp'
 import WaitingRoom from '../Components/WaitingRoom/WaitingRoom'
 import ExamScore from '../Components/ExamScore/ExamScore'
 import ExamScoreDetail from '../Components/ExamScoreDetail/ExamScoreDetail'
+import Statistical from '../Components/Statistical/Statistical'
 
 export default class DieuHuongURL extends Component {
   render() {
@@ -64,10 +64,6 @@ export default class DieuHuongURL extends Component {
             <Nav></Nav>
             <Exam></Exam>
           </Route>
-          <Route exact path="/score-statistics">
-            <Nav></Nav>
-            <ScoreStatistics></ScoreStatistics>
-          </Route>
           <Route exact path="/question-bank">
             <Nav></Nav>
             <QuestionBank></QuestionBank>
@@ -79,6 +75,11 @@ export default class DieuHuongURL extends Component {
           <Route exact path="/exam-score-detail/:id_user">
             <Nav></Nav>
             <ExamScoreDetail></ExamScoreDetail>
+          </Route>
+          <Route exact path="/statistical">
+            <Nav></Nav>
+            {/* <Statistical></Statistical> */}
+            <Statistical></Statistical>
           </Route>
         </div>
       </Router>

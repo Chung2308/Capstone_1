@@ -1,5 +1,6 @@
 import React from 'react'
 import './Nav.css'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
 export default function Nav() {
   const logout = () => {
@@ -27,54 +28,32 @@ export default function Nav() {
         <div className="collapse navbar-collapse" id="collapsibleNavId">
           <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
             <li className="nav-item active">
-              <a className="nav-link" href="/Home">
+              <Link to="/Home" className="nav-link">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/profile">
+              <Link to="/profile" className="nav-link">
                 Profile
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/resources">
+              <Link to="/resources" className="nav-link">
                 Resources
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/statistical">
+              <Link to="/statistical" className="nav-link">
                 Statistical
-              </a>
+              </Link>
             </li>
-            {/* <li className="navbar-nav mt-2 mt-lg-0">
-              <a className="nav-link" href="/" onClick={logout}>
-                Log Out
-              </a>
-            </li> */}
-            {/* <li className="nav-item">
-                                <a className="nav-link" href="#"><ion-icon name="person-outline" style={{ fontSize: '110%' }} /></a>
-                            </li> */}
           </ul>
           <form className="form-inline my-2 my-lg-0">
-            {/* <input
-              className="form-control mr-sm-2"
-              type="text"
-              placeholder="Search"
-            />
-            <button
-              className="btn btn-outline-success my-2 my-sm-0"
-              type="submit"
-            >
-              <ion-icon
-                name="search-outline"
-                style={{ fontSize: '120%', fontWeight: 'bolder' }}
-              />
-            </button> */}
             <li
               className="navbar-nav mt-2 mt-lg-0"
               style={{ fontSize: '16.5px', color: 'black' }}
             >
-              <a className="nav-link" href="/" onClick={logout}>
+              <a href="/" className="nav-link" onClick={logout}>
                 <ion-icon name="log-out-outline"></ion-icon> Log Out
               </a>
             </li>

@@ -14,7 +14,6 @@ export default function ExamScoreDetail() {
     //https://trung-api-capstone1.herokuapp.com/quiz/result/id_exam/id_user
     setQuestions(response?.data?.quiz)
     setResults(response?.data?.results)
-    // console.log('id_user: ', location.pathname.split('/')[2])
     console.log('id_user: ', location)
     console.log(response)
   }
@@ -23,6 +22,7 @@ export default function ExamScoreDetail() {
   }, [])
   const updateEssayScore = (event) => {
     event.preventDefault()
+    
   }
   return (
     <div className="exam-score-detail">
