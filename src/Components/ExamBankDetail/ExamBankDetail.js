@@ -155,6 +155,14 @@ export default function ExamBankDetail() {
         <div className="content-exam-details" ref={componentRef}>
           <div className="infor-exam-details">
             <div className="infor-time">
+              <div className="id-exam">
+                <label className="title-infor" name="id_exam">
+                  Exam ID:
+                </label>{' '}
+                <label className="content-db" name="exam_date_db">
+                  {question.id_exam}
+                </label>
+              </div>
               <div className="open-date">
                 <label className="title-infor" name="field_exam_date">
                   Exam Date:

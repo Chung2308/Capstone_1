@@ -7,11 +7,12 @@ import { axios } from '@/instances/axios'
 
 export default function Profile() {
   const [user, setUser] = useState({
-    username: "",
+    username: '',
     fullname: '',
     phone: '',
     birthday: '',
     avatarUrl: '',
+    user_type: ''
   })
 
   const [trangthai, setTrangthai] = useState(true)
@@ -21,7 +22,7 @@ export default function Profile() {
       const id = localStorage.getItem('id')
       const response = await axios.get(`/user/${id}`)
       setUser(response?.data?.user)
-      console.log('user fetched:', response?.data?.user)
+      console.log('user fetched:', response)
     }
     fetchUser()
   }, [])
@@ -108,7 +109,7 @@ export default function Profile() {
         <div className="content">
           <div className="row infor">
             <div
-              className="col-xs-3 col-sm-3 col-md-3 col-lg-3"
+              className="col-xs-5 col-sm-5 col-md-5 col-lg-5"
               style={{ marginTop: '1%' }}
             >
               <img
@@ -119,7 +120,7 @@ export default function Profile() {
               />
             </div>
             <div
-              className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+              className="col-xs-7 col-sm-7 col-md-7 col-lg-7"
               style={{ marginTop: '1%' }}
             >
               <div className="inf">
@@ -143,19 +144,17 @@ export default function Profile() {
                   {moment(user.birthday).format('DD/MM/YYYY')}
                 </label>
               </div>
+              <div className="inf">
+                <label htmlFor className="lable-1">
+                  Role:{' '}
+                </label>
+                <label className="label-db">{user.user_type}</label>
+              </div>
               <div className="edit-infor">
                 <button type="submit" onClick={editClick}>
                   Edit
                 </button>
               </div>
-            </div>
-            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-              <img
-                src="./img/profile.png"
-                alt=""
-                className="avatar"
-                style={{ width: '100%' }}
-              />
             </div>
           </div>
         </div>
@@ -169,7 +168,7 @@ export default function Profile() {
         <div className="content">
           <div className="row infor">
             <div
-              className="col-xs-3 col-sm-3 col-md-3 col-lg-3"
+              className="col-xs-5 col-sm-5 col-md-5 col-lg-5"
               style={{ marginTop: '1%' }}
             >
               <img
@@ -179,7 +178,6 @@ export default function Profile() {
                 name="image"
               />
               <div className="file-upload">
-                {/* <span>Change</span> */}
                 <ion-icon name="camera-outline"></ion-icon>
                 <input
                   type="file"
@@ -191,7 +189,7 @@ export default function Profile() {
               </div>
             </div>
             <div
-              className="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+              className="col-xs-7 col-sm-7 col-md-7 col-lg-7"
               style={{ marginTop: '1%' }}
             >
               <div className="inf-update">
@@ -199,7 +197,6 @@ export default function Profile() {
                   Username:{' '}
                 </label>
                 <input
-                  // onChange={(e) => onUsernameChange(e)}
                   type="text"
                   name=""
                   id=""
@@ -242,25 +239,30 @@ export default function Profile() {
                   defaultValue={user.birthday}
                 ></input>
               </div>
+              <div className="inf-update">
+                <label htmlFor className="lable-1">
+                  Role:{' '}
+                </label>
+                <input
+                  onChange={(e) => onBirthdayChange(e)}
+                  type="text"
+                  name=""
+                  id=""
+                  value={user.user_type}
+                ></input>
+              </div>
               <div className="edit-infor">
                 <form action="" onClick={updateInfor}>
                   <button
                     type="submit"
                     onClick={(e) => submitUpdate(e)}
                     //   onClick={updateInfor}
+                    style={{marginLeft: '-73px', marginTop: '5px'}}
                   >
                     Update
                   </button>
                 </form>
               </div>
-            </div>
-            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-              <img
-                src="./img/profile.png"
-                alt=""
-                className="avatar"
-                style={{ width: '100%' }}
-              />
             </div>
           </div>
         </div>

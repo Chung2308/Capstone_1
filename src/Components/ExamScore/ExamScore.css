@@ -1,6 +1,7 @@
 .exam-score{
     margin: 4% 10%;
     font-family: cursive;
+    margin-bottom: 25%;
 }
 .exam-score tr th{
     color: rgb(53, 53, 53);

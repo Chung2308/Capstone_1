@@ -14,7 +14,7 @@ export default function Nav() {
         className="navbar navbar-expand-sm navbar-light"
         style={{ backgroundColor: 'rgba(171, 210, 223, 0.829)' }}
       >
-        <img src="./img/logo-capstone.png" alt="logo" />
+        <img src="./img/logo-capstone.png"/>
 
         <button
           className="navbar-toggler d-lg-none"
@@ -37,11 +37,11 @@ export default function Nav() {
                 Profile
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link to="/resources" className="nav-link">
                 Resources
               </Link>
-            </li>
+            </li> */}
             <li className="nav-item">
               <Link to="/statistical" className="nav-link">
                 Statistical

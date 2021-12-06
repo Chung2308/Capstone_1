@@ -8,6 +8,13 @@ export default function ExamBank() {
   const [questions, setQuestions] = useState([])
   const [lengthQuizs, setLengthQuizs]=useState()
   const history = useHistory()
+
+  const loadUser = async () => {
+    const id = localStorage.getItem('id')
+    const response = await axios.get(`/user/${id}`)
+    if (response?.data?.user?.user_type === 'Student') history.push('/not-view')
+  }
+
   useEffect(() => {
     async function fetchUser() {
       const response = await axios.get(`/quiz/question/`)
@@ -16,6 +23,7 @@ export default function ExamBank() {
       setLengthQuizs(response?.data?.length)
     }
     fetchUser()
+    loadUser()
   }, [])
   const render = (id_exam) => {
     history.push('/exam-bank-detail', id_exam)

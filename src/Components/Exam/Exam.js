@@ -6,12 +6,14 @@ import { useHistory } from 'react-router'
 import SplitSearch from '../../Utils/SplitSearch'
 import moment from 'moment'
 
+
 export default function Exam() {
   const { location } = useHistory()
   const history = useHistory()
   const [questions, setQuestions] = useState({})
   const [quizs, setQuizs] = useState([])
   const [search, setSearch] = useState(SplitSearch(location.search))
+
 
   const [essay, setEssay] = useState('')
 
@@ -35,6 +37,17 @@ export default function Exam() {
   const [totalhourDb, setTotalhourDb] = useState('')
   const [totalminuteDb, setTotalminuteDb] = useState('')
   const [totalsecondDb, setTotalSecondDb] = useState('')
+
+  //TODO: authorization
+  const loadUser = async () => {
+    const id = localStorage.getItem('id')
+    const response = await axios.get(`/user/${id}`)
+    if (response?.data?.user?.user_type === 'Teacher') history.push('/not-view')
+  }
+
+  useEffect(() => {
+    loadUser()
+  })
 
   //TODO: LocalStorage quiz
   const loadQuizs = async (quizs) => {
@@ -76,7 +89,7 @@ export default function Exam() {
     var nowMinutesStart = timeStart.getMinutes()
     var nowSecondsStart = timeStart.getSeconds()
     if (nowHoursStart < 10) {
-      nowHoursStart = '0' + nowHoursStart
+      nowHoursStart = '0' + nowHoursStart 
     }
     if (nowMinutesStart < 10) {
       nowMinutesStart = '0' + nowMinutesStart
@@ -243,6 +256,7 @@ export default function Exam() {
     setEssay({ ...essay, [e.target.name]: e.target.value })
     onSubmitInformationQuestion(e)
     clearInterval(interval.current)
+    alert('DONE')
     history.push('/home')
   }
 
@@ -455,10 +469,12 @@ export default function Exam() {
                       <br />
                       {quiz.question_type === 'contentresult' ? (
                         <>
-                          {alternative.answer_content !== null ? (<>
-                            <label>Note:</label>{' '}
-                          <label>{alternative.answer_content}</label>
-                          </>): null}
+                          {alternative.answer_content !== null ? (
+                            <>
+                              <label>Note:</label>{' '}
+                              <label>{alternative.answer_content}</label>
+                            </>
+                          ) : null}
                         </>
                       ) : null}
                     </div>

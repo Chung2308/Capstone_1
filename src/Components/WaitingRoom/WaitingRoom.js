@@ -25,6 +25,9 @@ export default function WaitingRoom() {
   const backEndUrl = 'http://localhost:8000/'
   const [search, setSearch] = useState(SplitSearch(location.search))
 
+  const [hoursSendMessage, setHoursSendMessage] = useState('')
+  const [minutesSendMessage, setMinutesSendMessage] = useState('')
+
   async function fetchRoom() {
     const response = await axios.get(`/quiz/question/${search.room}`)
     if (response?.data?.question != null) {
@@ -62,6 +65,7 @@ export default function WaitingRoom() {
       socket.off()
     }
   }, [backEndUrl, window.location.search])
+
   useEffect(() => {
     socket.on('message', (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg])
@@ -75,7 +79,17 @@ export default function WaitingRoom() {
       console.log('users: ', usrs)
       setUsers(usrs)
     })
+    let saveMessages = JSON.parse(localStorage.getItem('Messages'))
+    if (
+      saveMessages === null ||
+      saveMessages === undefined ||
+      saveMessages?.length === 0
+    ) {
+      saveMessages = []
+    }
+    setMessages(saveMessages)
   }, [])
+
   const sendMessage = (e) => {
     e.preventDefault()
     socket.emit('sendMessage', message, () => setMessage(''))
@@ -83,6 +97,15 @@ export default function WaitingRoom() {
       var div = document.getElementById('chat_body')
       div.scrollTop = div.scrollHeight
     }, 100)
+    localStorage.setItem('Messages', JSON.stringify(messages))
+
+    //TODO: Save time localStorage
+    var timeSendMessage = new Date()
+    var hours = timeSendMessage.getHours()
+    var minutes = timeSendMessage.getMinutes()
+    setHoursSendMessage(hours)
+    setMinutesSendMessage(minutes)
+    // localStorage.setItem('Time', JSON.stringify(time))
   }
   let interval = useRef()
   const startTimer = (questions) => {
@@ -119,8 +142,6 @@ export default function WaitingRoom() {
       }
     }, 1000)
   }
-  var today = new Date()
-  var time = today.getHours() + ':' + today.getMinutes()
   return (
     <div className="waiting-room">
       <div className="row">
@@ -214,7 +235,11 @@ export default function WaitingRoom() {
                             <div className="messages msg_sent">
                               <p>{e.text}</p>
                               <time>{e.user}</time>
-                              {/* <time style={{ float: 'left' }}>{time}</time> */}
+                              <time style={{ float: 'left' }}>
+                                {hoursSendMessage}
+                                {':'}
+                                {minutesSendMessage}
+                              </time>
                             </div>
                           </div>
                         </div>
@@ -229,9 +254,11 @@ export default function WaitingRoom() {
                             >
                               <p>{e.text}</p>
                               <time>{e.user}</time>
-                              {/* <time style={{ float: 'right', marginTop: '1%' }}>
-                                {time}
-                              </time> */}
+                              <time style={{ float: 'right', marginTop: '1%' }}>
+                                {hoursSendMessage}
+                                {':'}
+                                {minutesSendMessage}
+                              </time>
                             </div>
                           </div>
                         </div>

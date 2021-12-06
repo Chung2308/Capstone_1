@@ -165,10 +165,10 @@ export default class SignUp extends Component {
                         name="user_type"
                       >
                         <option>---</option>
-                        <option name="user_type" value="T">
+                        <option name="user_type" value="Teacher">
                           Teacher
                         </option>
-                        <option name="user_type" value="S">
+                        <option name="user_type" value="Student">
                           Student
                         </option>
                       </select>

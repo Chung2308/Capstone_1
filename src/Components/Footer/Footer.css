@@ -1,7 +1,7 @@
 footer{
     font-size: 90%;
-    /* position : absolute; */
-    bottom : 0;
+    position : absolute;
+    bottom : auto;
     width: 100%;
     line-height: 7px;
     padding-top: 2%;

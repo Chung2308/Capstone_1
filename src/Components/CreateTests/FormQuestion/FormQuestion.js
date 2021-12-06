@@ -98,7 +98,11 @@ export default class FormQuestion extends Component {
     newQuiz.forEach((quiz) => {
       sum = sum + parseFloat(quiz.point_question)
     })
-    this.setState({ ...this.state, quizs: newQuiz, totalScoreDb: Number(sum).toFixed(1) })
+    this.setState({
+      ...this.state,
+      quizs: newQuiz,
+      totalScoreDb: Number(sum).toFixed(1),
+    })
     localStorage.setItem('PointTotal', JSON.stringify(sum))
   }
 
@@ -112,7 +116,7 @@ export default class FormQuestion extends Component {
     if (!valid) return false
     this.setState({
       ...this.state,
-      alternatives: question.alternatives
+      alternatives: question.alternatives,
     })
     return true
   }
@@ -135,7 +139,7 @@ export default class FormQuestion extends Component {
     let point = JSON.parse(localStorage.getItem('PointTotal'))
     this.setState({
       totalScoreDb: Number(point).toFixed(1),
-    })    
+    })
   }
 
   createQuestion() {
@@ -144,7 +148,7 @@ export default class FormQuestion extends Component {
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
-    if (alternatives.length == 0 && question_type !== 'contentresult')
+    if (alternatives.length == 0)
       return alert('Please choose at least one correct answer')
 
     this.state.quizs.push({
@@ -290,9 +294,11 @@ export default class FormQuestion extends Component {
   }
 
   deleteQuestionDetails(indexQuiz) {
-    const newQuiz = this.state.quizs.filter((item) => item !== indexQuiz).map((itemDeleteQuiz, indexDeleteQuiz)=>{
-      return {...itemDeleteQuiz, name_question:indexDeleteQuiz+1}
-    })
+    const newQuiz = this.state.quizs
+      .filter((item) => item !== indexQuiz)
+      .map((itemDeleteQuiz, indexDeleteQuiz) => {
+        return { ...itemDeleteQuiz, name_question: indexDeleteQuiz + 1 }
+      })
     this.setState({
       quizs: newQuiz,
     })

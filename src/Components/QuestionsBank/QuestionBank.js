@@ -2,18 +2,26 @@ import { axios } from '@/instances/axios'
 import React from 'react'
 import './QuestionBank.css'
 import { useState, useEffect } from 'react'
+import { useHistory } from 'react-router'
 
 export default function QuestionBank() {
-  const [quizs, setQuizs] = useState([])
   const [questions, setQuestions] = useState([])
+  const history = useHistory()
   async function fetchQuestionBank() {
     const response = await axios.get(`/quiz/examtopic`)
     setQuestions(response?.data)
     console.log('topic: ', response?.data)
   }
+  const loadUser = async () => {
+    const id = localStorage.getItem('id')
+    const response = await axios.get(`/user/${id}`)
+    if (response?.data?.user?.user_type === 'Student') history.push('/not-view')
+  }
   useEffect(() => {
     fetchQuestionBank()
+    loadUser()
   }, [])
+
   return (
     <div className="question-bank">
       {questions.map((topic, indexTopic) => {
@@ -33,7 +41,7 @@ export default function QuestionBank() {
                       >
                         Topic {indexTopic + 1}
                         {': '}
-                        {topic._id.exam_topic_db}
+                        {topic._id.exam_topic_db}{' '}
                       </a>
                     </h6>
                   </div>
@@ -59,9 +67,15 @@ export default function QuestionBank() {
                                   <div
                                     className="total-answer"
                                     key={indexAlternative}
-                                    style={{ marginLeft: '4%', fontWeight:alternative.answer_correct ? 'bold' : 'none' }}
+                                    style={{
+                                      marginLeft: '4%',
+                                      fontWeight: alternative.answer_correct
+                                        ? 'bold'
+                                        : 'none',
+                                    }}
                                   >
-                                    {question.question_type !== 'contentresult' ? (
+                                    {question.question_type !==
+                                    'contentresult' ? (
                                       <>
                                         <label>
                                           {indexAlternative == 0

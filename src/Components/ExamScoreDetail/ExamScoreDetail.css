@@ -11,7 +11,7 @@
   font-weight: bold;
 }
 .add-score {
-  width: 350%;
+  width: 100%;
   outline: none;
   /* height: max-content; */
   height: 40px;
@@ -44,4 +44,11 @@
 }
 .style-answer-choosen {
   font-style: italic;
+}
+
+.answer-content ion-icon{
+  font-weight: 900;
+  font-size: 130%;
+  margin-left: 10px;
+  margin-bottom: -5px;
 }

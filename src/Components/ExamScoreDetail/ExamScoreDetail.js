@@ -5,31 +5,50 @@ import './ExamScoreDetail.css'
 
 export default function ExamScoreDetail() {
   const { location } = useHistory()
-  const [questions, setQuestions] = useState([])
-  const [results, setResults] = useState([])
+  const [result, setResult] = useState({})
+  const [quizs, setQuizs] = useState([]) 
   async function fetchQuestion() {
     const response = await axios.get(
-      `/quiz/results/${location.state}/${location.pathname.split('/')[2]}`
+      `/result/one-exam/${location.state}/${location.pathname.split('/')[2]}` // result/one-exam
     )
-    //https://trung-api-capstone1.herokuapp.com/quiz/result/id_exam/id_user
-    setQuestions(response?.data?.quiz)
-    setResults(response?.data?.results)
-    console.log('id_user: ', location)
-    console.log(response)
+    setResult({
+      ...response?.data?.result,
+    }) //Cái ni
+    setQuizs(response?.data?.result?.quiz)
+    console.log('get: ', response?.data)
   }
   useEffect(() => {
     fetchQuestion()
   }, [])
-  const updateEssayScore = (event) => {
+
+  const updateEssayScore = async (event) => {
     event.preventDefault()
-    
+    try {
+      const response = await axios.patch(
+        `/result/one-exam/${location.state}/${location.pathname.split('/')[2]}`,
+        result
+      )
+      setResult(response?.data) 
+      console.log('patch: ', response)
+    } catch (error) {
+      alert(error)
+    }
+  }
+  const onChangeEssayScore = (e, index) => {
+    const newQuiz = result.quiz
+    newQuiz[index] = {
+      ...newQuiz[index],
+      [e.target.name]: Number(e.target.value),
+    }
+    console.log(newQuiz)
+    setResult({ ...result, quiz: newQuiz }) 
+    console.log('essay score: ', result.essay_score)
   }
   return (
     <div className="exam-score-detail">
-      {questions?.map((question, indexQuestion) => {
-        // console.log(question)
+      {quizs?.map((question, indexQuestion) => {
         return (
-          <div className="total-question" key={indexQuestion}>
+          <div key={indexQuestion} className="total-question">
             <label className="question">
               Question {indexQuestion + 1}
               {'. '}
@@ -66,81 +85,56 @@ export default function ExamScoreDetail() {
                       <label>{alternative.answer_content}</label>
                     </>
                   ) : null}
+                  {question.question_type !== 'contentresult' ? (
+                    <label
+                      className="style-answer-choosen"
+                      style={{
+                        color:
+                          alternative.answer_choosen ===
+                          alternative.answer_correct
+                            ? 'LimeGreen'
+                            : 'red',
+                      }}
+                    >
+                      {alternative.answer_choosen === true &&
+                      alternative.answer_correct === true ? (
+                        <>
+                          <ion-icon name="checkmark-outline"></ion-icon>
+                        </>
+                      ) : alternative.answer_choosen === true &&
+                        alternative.answer_correct === false ? (
+                        <>
+                          <ion-icon name="close-outline"></ion-icon>
+                        </>
+                      ) : null}
+                    </label>
+                  ) : (
+                    <>
+                      <input
+                        value={alternative.essay_answer_content}
+                        type="text"
+                        className="add-score"
+                      />
+                      <div className="student-mark">
+                        <input
+                          type="number"
+                          step={0.1}
+                          min={0}
+                          max={question.point_question}
+                          className="mark"
+                          onChange={(e) => {
+                            onChangeEssayScore(e, indexQuestion)
+                          }}
+                          defaultValue={question.essay_score}
+                          name="essay_score"
+                        />{' '}
+                        Score
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
-              {results.map((quiz, indexResults) => {
-                // console.log('quiz', quiz)
-                return (
-                  <div key={indexResults}>
-                    {quiz.quiz
-                      .filter((value) => value._id === question._id)
-                      .map((valueQuiz, indexQuiz) => (
-                        <div key={indexQuiz}>
-                          {valueQuiz.alternatives.map(
-                            (valueAlternatives, indexAlternatives) => (
-                              <label key={indexAlternatives}>
-                                {question.question_type !== 'contentresult' ? (
-                                  <label
-                                    className="style-answer-choosen"
-                                    style={{
-                                      color:
-                                        valueAlternatives.answer_choosen ===
-                                        valueAlternatives.answer_correct
-                                          ? 'LimeGreen'
-                                          : 'red',
-                                    }}
-                                  >
-                                    {valueAlternatives.answer_choosen ===
-                                    true ? (
-                                      <>
-                                        Answer choosen:{' '}
-                                        {valueAlternatives.answer_content}{','}
-                                      </>
-                                    ) : null}
-                                    
-                                  </label>
-                                ) : (
-                                  <>
-                                    <input
-                                      value={
-                                        valueAlternatives.essay_answer_content
-                                      }
-                                      type="text"
-                                      className="add-score"
-                                    />
-                                    <div className="student-mark">
-                                      <input
-                                        type="number"
-                                        step={0.1}
-                                        min={0}
-                                        max={10}
-                                        className="mark"
-                                      />{' '}
-                                      Score
-                                    </div>
-                                  </>
-                                )}
-                              </label>
-                            )
-                          )}
-                        </div>
-                      ))}
-                  </div>
-                )
-              })}
             </div>
-            {/* {question.question_type === 'contentresult' ? (
-              <>
-                <form
-                  className="update-essay-score"
-                  onSubmit={(event) => {
-                    updateEssayScore(event)
-                  }}
-                >
-                  <button>Update essay score</button>
-                </form>
-              </>
-            ) : null} */}
           </div>
         )
       })}
