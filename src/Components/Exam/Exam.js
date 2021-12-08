@@ -163,10 +163,8 @@ export default function Exam() {
       const time = currentDate - Date.now()
 
       if (time <= 0) {
-        onSubmitInformationQuestion()
+        document.getElementById('autoClick').click()
         clearInterval(interval.current)
-        // alert('DONE')
-        // history.push('/home')
       } else {
         var hours = Math.floor(time / 1000 / 3600)
         var minutes = Math.floor(((time / 1000) % 3600) / 60)
@@ -191,10 +189,6 @@ export default function Exam() {
   const changeEssayContent = (indexAlternative, indexQuiz, e) => {
     onChangeAlternative(indexAlternative, indexQuiz)
     setEssay(e.target.value)
-    // console.log('essay: ', essay)
-    // const input = e.target;
-    // const value = input.value
-    // setEssay({[input.name]: value})
   }
 
   //TODO: Save content checked
@@ -256,7 +250,7 @@ export default function Exam() {
     setEssay({ ...essay, [e.target.name]: e.target.value })
     onSubmitInformationQuestion(e)
     clearInterval(interval.current)
-    alert('DONE')
+    alert('Congratulations on completing the exam !!!!')
     history.push('/home')
   }
 
@@ -281,7 +275,8 @@ export default function Exam() {
         alert(response.data?.message)
       }
     } catch (error) {
-      alert('You are not allowed to perform this action')
+      // alert('You are not allowed to perform this action')
+      alert(error)
     }
   }
 
@@ -343,7 +338,7 @@ export default function Exam() {
             </div>
             <div className="total-score">
               <label htmlFor className="title-information">
-                Total question:{' '}
+                Total questions:{' '}
               </label>{' '}
               <label htmlFor>
                 {quizs.length}
@@ -525,8 +520,12 @@ export default function Exam() {
                 >
                   Close
                 </button>
-                <form onSubmit={onSubmitQuestions} action="/home">
-                  <button type="submit" className="btn btn-danger">
+                <form onSubmit={onSubmitQuestions}>
+                  <button
+                    type="submit"
+                    className="btn btn-danger"
+                    id="autoClick"
+                  >
                     Submit Exam
                   </button>
                 </form>

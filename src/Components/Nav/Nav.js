@@ -14,7 +14,7 @@ export default function Nav() {
         className="navbar navbar-expand-sm navbar-light"
         style={{ backgroundColor: 'rgba(171, 210, 223, 0.829)' }}
       >
-        <img src="./img/logo-capstone.png"/>
+        <img src="./img/logo-capstone.png" />
 
         <button
           className="navbar-toggler d-lg-none"
@@ -54,7 +54,7 @@ export default function Nav() {
               style={{ fontSize: '16.5px', color: 'black' }}
             >
               <a href="/" className="nav-link" onClick={logout}>
-                <ion-icon name="log-out-outline"></ion-icon> Log Out
+                Log Out <ion-icon name="log-out-outline"></ion-icon>
               </a>
             </li>
           </form>

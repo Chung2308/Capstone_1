@@ -13,7 +13,7 @@ export default function ExamScoreDetail() {
     )
     setResult({
       ...response?.data?.result,
-    }) //Cái ni
+    }) 
     setQuizs(response?.data?.result?.quiz)
     console.log('get: ', response?.data)
   }
@@ -33,6 +33,7 @@ export default function ExamScoreDetail() {
     } catch (error) {
       alert(error)
     }
+    alert('You have successfully updated')
   }
   const onChangeEssayScore = (e, index) => {
     const newQuiz = result.quiz
@@ -129,6 +130,20 @@ export default function ExamScoreDetail() {
                           name="essay_score"
                         />{' '}
                         Score
+                        {question.essay_score > question.point_question ? (
+                          <>
+                            <p style={{ color: 'red', fontStyle: 'italic' }}>
+                              Update score should not exceed{' '}
+                              {question.point_question} points
+                            </p>
+                          </>
+                        ) : question.essay_score < 0 ? (
+                          <>
+                            <p style={{ color: 'red', fontStyle: 'italic' }}>
+                              Update score should not be less than 0
+                            </p>
+                          </>
+                        ) : null}
                       </div>
                     </>
                   )}
