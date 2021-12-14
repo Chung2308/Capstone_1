@@ -12,7 +12,7 @@ export default function Profile() {
     phone: '',
     birthday: '',
     avatarUrl: '',
-    user_type: ''
+    user_type: '',
   })
 
   const [trangthai, setTrangthai] = useState(true)
@@ -117,6 +117,7 @@ export default function Profile() {
                 alt=""
                 className="avatar"
                 name="image"
+                style={{ borderRadius: '20px' }}
               />
             </div>
             <div
@@ -150,6 +151,12 @@ export default function Profile() {
                 </label>
                 <label className="label-db">{user.user_type}</label>
               </div>
+              {/* <div className="inf">
+                <label htmlFor className="lable-1">
+                  Change Password:
+                </label>
+                <label className="label-db">******</label>
+              </div> */}
               <div className="edit-infor">
                 <button type="submit" onClick={editClick}>
                   Edit
@@ -176,6 +183,7 @@ export default function Profile() {
                 alt=""
                 className="avatar"
                 name="image"
+                style={{ borderRadius: '20px' }}
               />
               <div className="file-upload">
                 <ion-icon name="camera-outline"></ion-icon>
@@ -196,12 +204,7 @@ export default function Profile() {
                 <label htmlFor className="lable-1">
                   Username:{' '}
                 </label>
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  value={user.username}
-                ></input>
+                <input type="text" name="" id="" value={user.username}></input>
               </div>
               <div className="inf-update">
                 <label htmlFor className="lable-1">
@@ -243,21 +246,32 @@ export default function Profile() {
                 <label htmlFor className="lable-1">
                   Role:{' '}
                 </label>
-                <input
-                  onChange={(e) => onBirthdayChange(e)}
-                  type="text"
-                  name=""
-                  id=""
-                  value={user.user_type}
-                ></input>
+                <input type="text" name="" id="" value={user.user_type}></input>
               </div>
+              {/* <div className="inf-update">
+                <label htmlFor className="lable-1">
+                  Old password:
+                </label>
+                <input type="password"></input>
+              </div>
+              <div className="inf-update">
+                <label htmlFor className="lable-1">
+                  New password:
+                </label>
+                <input type="password"></input>
+              </div>
+              <div className="inf-update">
+                <label htmlFor className="lable-1">
+                  Confirm password:
+                </label>
+                <input type="password"></input>
+              </div> */}
               <div className="edit-infor">
                 <form action="" onClick={updateInfor}>
                   <button
                     type="submit"
                     onClick={(e) => submitUpdate(e)}
-                    //   onClick={updateInfor}
-                    style={{marginLeft: '-73px', marginTop: '5px'}}
+                    style={{ marginLeft: '-73px', marginTop: '5px' }}
                   >
                     Update
                   </button>

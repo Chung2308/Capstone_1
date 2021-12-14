@@ -170,7 +170,6 @@ export default class FormQuestion extends Component {
     localStorage.removeItem('Question')
     localStorage.removeItem('PointTotal')
     localStorage.removeItem('PointTotalUpdate')
-    localStorage.removeItem('Date')
   }
   validateQuestionBody() {
     const { question_content, point_question } = this.state
@@ -291,6 +290,8 @@ export default class FormQuestion extends Component {
       quiz: this.state.quizs,
     }
     this.props.onSubmitForm(data)
+    document.getElementById('close').click()
+    alert
   }
 
   deleteQuestionDetails(indexQuiz) {
@@ -682,6 +683,7 @@ export default class FormQuestion extends Component {
                     type="button"
                     className="btn btn-secondary"
                     data-dismiss="modal"
+                    id="close"
                   >
                     Close
                   </button>

@@ -117,6 +117,8 @@ import ExamScoreDetail from '../Components/ExamScoreDetail/ExamScoreDetail'
 import Statistical from '../Components/Statistical/Statistical'
 import NotView from '../Components/NotView/NotView'
 import Contact from '../Components/Contact/Contact'
+import Congratulations from '../Components/Congratulations/Congratulations'
+import TimeOut from '../Components/TimeOut/TimeOut'
 
 export default function DieuHuongURL() {
 
@@ -186,6 +188,14 @@ export default function DieuHuongURL() {
         <Route exact path="/contact">
           <Nav></Nav>
           <Contact></Contact>
+        </Route>
+        <Route exact path="/congratulations">
+          <Nav></Nav>
+          <Congratulations></Congratulations>
+        </Route>
+        <Route exact path="/time-out">
+          <Nav></Nav>
+          <TimeOut></TimeOut>
         </Route>
       </div>
     </Router>

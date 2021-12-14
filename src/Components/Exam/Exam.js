@@ -152,7 +152,7 @@ export default function Exam() {
     setTotalSecondDb(totalSeconds)
   })
 
-  //TODO: Time remaining (fixing)
+  //TODO: Time remaining
   const startTimer = (questions) => {
     interval.current = setInterval(() => {
       const currentDate = Date.parse(
@@ -162,8 +162,11 @@ export default function Exam() {
       )
       const time = currentDate - Date.now()
 
+      if(currentDate <= Date.now()){
+        history.push('/time-out')
+      }
       if (time <= 0) {
-        document.getElementById('autoClick').click()
+        document.getElementById('autoClick')?.click()
         clearInterval(interval.current)
       } else {
         var hours = Math.floor(time / 1000 / 3600)
@@ -183,6 +186,9 @@ export default function Exam() {
         setTimeSeconds(seconds)
       }
     }, 1000)
+    console.log('time: ', questions.exam_date_db)
+    console.log('now: ', Date.now())
+
   }
 
   //TODO: Save content essay
@@ -250,8 +256,8 @@ export default function Exam() {
     setEssay({ ...essay, [e.target.name]: e.target.value })
     onSubmitInformationQuestion(e)
     clearInterval(interval.current)
-    alert('Congratulations on completing the exam !!!!')
-    history.push('/home')
+    document.getElementById('close').click()
+    history.push('/congratulations')
   }
 
   //TODO: Submit Exam
@@ -517,6 +523,7 @@ export default function Exam() {
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
+                  id="close"
                 >
                   Close
                 </button>

@@ -79,6 +79,7 @@
   /* font-family: cursive; */
   font-weight: 400;
   font-size: 110%;
+  font-family: cursive;
 }
 
 .file-upload {
@@ -114,3 +115,9 @@
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
+/* .change-password{
+  border: 1px solid rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0);
+  font-family: cursive;
+  margin-left: -10px;
+} */

@@ -123,11 +123,11 @@ export default function CreateTest2() {
       quiz,
     })
     console.log(submitInfor)
+    if (submitInfor?.data?.success === false) {
+      alert('submitInfor.data?.message')
+    }
     if (submitInfor.data?.jwt) {
       localStorage.setItem('idExam', submitInfor.data.question.id_exam)
-    }
-    if (submitInfor.data?.success === false) {
-      alert('submitInfor.data?.message')
     }
   }
   return (

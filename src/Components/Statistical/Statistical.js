@@ -80,9 +80,9 @@ export default function Statistical() {
               </tr>
             </thead>
             <tbody>
-              {statistical.map((value, index)=>(
+              {statistical.map((value, index) => (
                 <tr key={index}>
-                  <th scope="row">{index+1}</th>
+                  <th scope="row">{index + 1}</th>
                   <td>{value?._id?.total_score}</td>
                   <td>{value?.count}</td>
                 </tr>
