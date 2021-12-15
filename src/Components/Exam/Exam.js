@@ -6,14 +6,12 @@ import { useHistory } from 'react-router'
 import SplitSearch from '../../Utils/SplitSearch'
 import moment from 'moment'
 
-
 export default function Exam() {
   const { location } = useHistory()
   const history = useHistory()
   const [questions, setQuestions] = useState({})
   const [quizs, setQuizs] = useState([])
   const [search, setSearch] = useState(SplitSearch(location.search))
-
 
   const [essay, setEssay] = useState('')
 
@@ -89,7 +87,7 @@ export default function Exam() {
     var nowMinutesStart = timeStart.getMinutes()
     var nowSecondsStart = timeStart.getSeconds()
     if (nowHoursStart < 10) {
-      nowHoursStart = '0' + nowHoursStart 
+      nowHoursStart = '0' + nowHoursStart
     }
     if (nowMinutesStart < 10) {
       nowMinutesStart = '0' + nowMinutesStart
@@ -162,10 +160,10 @@ export default function Exam() {
       )
       const time = currentDate - Date.now()
 
-      if(currentDate <= Date.now()){
+      if (currentDate <= Date.now()) {
+        document.getElementById('autoClick')?.click()
         history.push('/time-out')
-      }
-      if (time <= 0) {
+      } else if (time <= 0) {
         document.getElementById('autoClick')?.click()
         clearInterval(interval.current)
       } else {
@@ -188,7 +186,6 @@ export default function Exam() {
     }, 1000)
     console.log('time: ', questions.exam_date_db)
     console.log('now: ', Date.now())
-
   }
 
   //TODO: Save content essay
@@ -255,8 +252,8 @@ export default function Exam() {
     setQuestions({ ...questions, [e.target.name]: e.target.value })
     setEssay({ ...essay, [e.target.name]: e.target.value })
     onSubmitInformationQuestion(e)
-    clearInterval(interval.current)
     document.getElementById('close').click()
+    clearInterval(interval.current)
     history.push('/congratulations')
   }
 

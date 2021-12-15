@@ -29,6 +29,7 @@ export function EnterResultFormQuestion({ changeQuestionBody }) {
         onChange={(event) => {
           genDataAndCreateQuestion(event)
         }}
+        maxLength="200"
       />
     </div>
   )

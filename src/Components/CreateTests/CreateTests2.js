@@ -124,7 +124,7 @@ export default function CreateTest2() {
     })
     console.log(submitInfor)
     if (submitInfor?.data?.success === false) {
-      alert('submitInfor.data?.message')
+      alert(submitInfor?.data?.message)
     }
     if (submitInfor.data?.jwt) {
       localStorage.setItem('idExam', submitInfor.data.question.id_exam)

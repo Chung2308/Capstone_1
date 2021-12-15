@@ -35,6 +35,9 @@ export default function Statistical() {
     for (const element of response.data.data) {
       newData.push([element._id.total_score, element.count])
     }
+    // if (response?.data?.success === false) {
+    //   console('test')
+    // }
     setData([{ data: newData }])
     setStatistical(response?.data?.data)
   }

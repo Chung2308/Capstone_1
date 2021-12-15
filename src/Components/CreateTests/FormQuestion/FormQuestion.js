@@ -143,13 +143,14 @@ export default class FormQuestion extends Component {
   }
 
   createQuestion() {
+    console.log('bug: ', this.state.alternatives)
     const { question_content, point_question, alternatives, question_type } =
       this.state
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
     if (alternatives.length == 0)
-      return alert('Please choose at least one correct answer')
+      return alert('Please choose at least one correct answer or note answer')
 
     this.state.quizs.push({
       question_content,
@@ -163,6 +164,7 @@ export default class FormQuestion extends Component {
       question_content: '',
       point_question: 0,
       question_type: QUESTION_TYPE.YES_NO,
+      alternatives: []
     })
     localStorage.setItem('Question', JSON.stringify(this.state.quizs))
   }
@@ -578,6 +580,7 @@ export default class FormQuestion extends Component {
                   name="ques"
                   placeholder="Content Question: "
                   className="content-inf"
+                  maxlength="700"
                 />
               </div>
 
@@ -691,7 +694,7 @@ export default class FormQuestion extends Component {
                     onSubmit={(event) => {
                       this.handleSubmit(event)
                     }}
-                    action="/home"
+                    // action="/home"
                   >
                     <button type="submit" className="btn btn-danger">
                       Save Exam
