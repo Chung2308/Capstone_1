@@ -4,6 +4,8 @@ import { useHistory } from 'react-router'
 import { useState, useEffect } from 'react'
 import './ExamScore.css'
 import moment from 'moment'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function ExamScore() {
   const { location } = useHistory()
@@ -13,8 +15,18 @@ export default function ExamScore() {
   async function fetchScoreExam() {
     const response = await axios.get(`/quiz/result/${location.state}`)
     setQuestions(response?.data.results)
-    console.log('ID: ', location.state)
-    console.log('response: ', response)
+    const notify = () => {
+      toast('No students have taken this quiz yet', {
+        className: 'notify',
+        draggable: true,
+        position: toast.POSITION.TOP_RIGHT
+      })
+    }
+    if (response?.data?.results?.length==0){
+      notify()
+    }
+     console.log('ID: ', location.state)
+    console.log('response: ', response?.data?.results?.length)
   }
   useEffect(() => {
     fetchScoreExam()
@@ -24,7 +36,9 @@ export default function ExamScore() {
   }
   return (
     <div className="exam-score">
+      <ToastContainer draggable={false} transition={Bounce} autoClose={7000} />
       <div className="col">
+        <h6>Total students: {questions?.length}</h6>
         <table className="table table-striped table-inverse table-hover">
           <thead className="thead-inverse">
             <tr>

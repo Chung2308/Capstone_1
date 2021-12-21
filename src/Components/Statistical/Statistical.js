@@ -3,6 +3,8 @@ import { Chart } from 'react-charts'
 import { axios } from '@/instances/axios'
 import './Statistical.css'
 import { useHistory } from 'react-router'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Statistical() {
   const [idExam, setIdExam] = useState({
@@ -35,13 +37,21 @@ export default function Statistical() {
     for (const element of response.data.data) {
       newData.push([element._id.total_score, element.count])
     }
-    // if (response?.data?.success === false) {
-    //   console('test')
-    // }
     setData([{ data: newData }])
     setStatistical(response?.data?.data)
+    console.log('response:', response)
+    const notifyFail = () => {
+      toast('Invalid exam ID or has not been taken by students', {
+        className: 'fail',
+        draggable: true,
+        position: toast.POSITION.TOP_CENTER,
+      })
+    }
+    console.log(response?.data?.data?.length)
+    if (response?.data?.data?.length == 0) {
+      notifyFail()
+    }
   }
-  console.log(data)
   const axes = React.useMemo(
     () => [
       { primary: true, type: 'linear', position: 'bottom' },
@@ -52,6 +62,7 @@ export default function Statistical() {
 
   return (
     <div className="chart-score">
+      <ToastContainer draggable={false} transition={Bounce} autoClose={5000} />
       <div className="row">
         <div className="col-xs-10 col-sm-10 col-md-10 col-lg-10">
           <div className="id-exam">

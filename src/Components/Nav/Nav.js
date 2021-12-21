@@ -14,7 +14,7 @@ export default function Nav() {
         className="navbar navbar-expand-sm navbar-light"
         style={{ backgroundColor: 'rgba(171, 210, 223, 0.829)' }}
       >
-        <img src="./img/logo-capstone.png" />
+        <img src="../img/logo-capstone.png" />
 
         <button
           className="navbar-toggler d-lg-none"

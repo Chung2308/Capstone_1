@@ -141,7 +141,6 @@ export default function Profile() {
                   Birth of year:{' '}
                 </label>
                 <label className="label-db">
-                  {/* {user.birthday.toString().slice(0, -14)} */}
                   {moment(user.birthday).format('DD/MM/YYYY')}
                 </label>
               </div>
@@ -151,12 +150,6 @@ export default function Profile() {
                 </label>
                 <label className="label-db">{user.user_type}</label>
               </div>
-              {/* <div className="inf">
-                <label htmlFor className="lable-1">
-                  Change Password:
-                </label>
-                <label className="label-db">******</label>
-              </div> */}
               <div className="edit-infor">
                 <button type="submit" onClick={editClick}>
                   Edit
@@ -248,24 +241,6 @@ export default function Profile() {
                 </label>
                 <input type="text" name="" id="" value={user.user_type}></input>
               </div>
-              {/* <div className="inf-update">
-                <label htmlFor className="lable-1">
-                  Old password:
-                </label>
-                <input type="password"></input>
-              </div>
-              <div className="inf-update">
-                <label htmlFor className="lable-1">
-                  New password:
-                </label>
-                <input type="password"></input>
-              </div>
-              <div className="inf-update">
-                <label htmlFor className="lable-1">
-                  Confirm password:
-                </label>
-                <input type="password"></input>
-              </div> */}
               <div className="edit-infor">
                 <form action="" onClick={updateInfor}>
                   <button

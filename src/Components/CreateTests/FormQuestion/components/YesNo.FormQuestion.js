@@ -69,6 +69,16 @@ export function YesNoFormQuestion({ changeQuestionBody }) {
       />{' '}
       No
       <br />
+      <br />
+      <p
+        style={{
+          fontStyle: 'italic',
+          color: 'rgb(151, 151, 151)',
+          fontSize: '80%',
+        }}
+      >
+        Note: Maximum 2 answers
+      </p>
     </div>
   )
 }

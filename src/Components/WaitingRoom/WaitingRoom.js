@@ -6,6 +6,8 @@ import moment from 'moment'
 import { useHistory } from 'react-router'
 import io from 'socket.io-client'
 import SplitSearch from '../../Utils/SplitSearch'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 let socket
 
 export default function WaitingRoom() {
@@ -22,7 +24,7 @@ export default function WaitingRoom() {
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
-  const backEndUrl = 'http://localhost:8000/'
+  const backEndUrl = 'http://chatroom-socket-capston1.herokuapp.com/'
   const [search, setSearch] = useState(SplitSearch(location.search))
 
   const [hoursSendMessage, setHoursSendMessage] = useState('')
@@ -119,6 +121,26 @@ export default function WaitingRoom() {
           questions.minuteOpenDb
         }:${questions.secondOpenDb}`
       )
+
+      const dueDate = Date.parse(
+        `${questions.exam_date_db?.split('T')[0]}T${questions.hourDueDb}:${
+          questions.minuteDueDb
+        }:${questions.secondDueDb}`
+      )
+      // const time1 = dueDate - Date.now()
+      const notify = () => {
+        toast('You have run out of time to take the test time out ☹️ ☹️ ☹️', {
+          className: 'black-background',
+          draggable: true,
+          position: toast.POSITION.TOP_CENTER,
+        })
+      }
+      if (dueDate <= Date.now()) {
+        notify()
+        history.push('/home')
+        clearInterval(interval.current)
+      }
+
       const time = currentDate - Date.now()
       if (time < 0) {
         history.push(`/exam?room=${room}`, { room, user })

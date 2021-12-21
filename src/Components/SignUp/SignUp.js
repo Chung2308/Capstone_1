@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import './SignUp.css'
 import { axios } from '@/instances/axios'
 import { Redirect } from 'react-router-dom'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default class SignUp extends Component {
   constructor(props) {
@@ -17,22 +19,8 @@ export default class SignUp extends Component {
       password2: '',
     }
   }
-  submitForm() {
-    // event.preventDefault()
-    if (this.state.password === this.state.password2) {
-      this.setState({
-        isRedirect: true,
-      })
-    } else {
-      alert("Password doesn't match")
-      this.setState({
-        isRedirect: false,
-      })
-    }
-  }
   content(event) {
     event.preventDefault()
-    // console.log(event.target.name);
     const name = event.target.name
     const value = event.target.value
     this.setState({
@@ -43,30 +31,44 @@ export default class SignUp extends Component {
   }
   async LoginForm(event) {
     event.preventDefault()
-    // this.submitForm()
-    const { fullname, phone, birthday, username, password, user_type } =
-      this.state
-    const loginData = await axios.post('/auth/register', {
-      fullname,
-      phone,
-      birthday,
-      username,
-      password,
-      user_type,
-    })
-    console.log(loginData)
-    if (loginData.data?.sucess === false) {
-      alert(loginData.data?.message)
-    } else if (this.state.password === this.state.password2) {
-      this.setState({
-        isRedirect: true,
+    const notifyPassword = () => {
+      toast(`Password doesn${"'"}t match`, {
+        className: 'message',
       })
-    } else if (this.state.password !== this.state.password2) {
-      alert("Password doesn't match")
+    }
+    if (this.state.password !== this.state.password2) {
+      notifyPassword()
       this.setState({
         isRedirect: false,
       })
-    }else{
+    } else if (this.state.password === this.state.password2) {
+      const { fullname, phone, birthday, username, password, user_type } =
+        this.state
+      const loginData = await axios.post('/auth/register', {
+        fullname,
+        phone,
+        birthday,
+        username,
+        password,
+        user_type,
+      })
+      console.log(loginData)
+      const notifySignUp = () => {
+        toast(loginData.data?.message, {
+          className: 'message'
+        })
+      }
+      if (loginData.data?.sucess === false) {
+        notifySignUp()
+        this.setState({
+          isRedirect: false,
+        })
+      } else {
+        this.setState({
+          isRedirect: true,
+        })
+      }
+    } else {
       this.setState({
         isRedirect: false,
       })
@@ -78,10 +80,15 @@ export default class SignUp extends Component {
     }
     return (
       <div>
-        <div style={{ backgroundImage: 'url(/img/login3.jpg)' }}>
+        <ToastContainer
+          draggable={false}
+          transition={Bounce}
+          autoClose={7000}
+        />
+        <div>
           <div className="sign-up">
             <form onSubmit={(event) => this.LoginForm(event)}>
-              <h1 style={{ textAlign: 'center' }}>Sign Up</h1>
+              <h1 style={{ textAlign: 'center' }}>SIGN UP</h1>
               <div className="row">
                 <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                   <div className="form-group">

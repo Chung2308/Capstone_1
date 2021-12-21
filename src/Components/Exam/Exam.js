@@ -5,6 +5,8 @@ import { axios } from '@/instances/axios'
 import { useHistory } from 'react-router'
 import SplitSearch from '../../Utils/SplitSearch'
 import moment from 'moment'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Exam() {
   const { location } = useHistory()
@@ -159,11 +161,24 @@ export default function Exam() {
         }:${questions.secondDueDb}`
       )
       const time = currentDate - Date.now()
-
-      if (currentDate <= Date.now()) {
-        document.getElementById('autoClick')?.click()
-        history.push('/time-out')
-      } else if (time <= 0) {
+      
+      // if (currentDate <= Date.now()) {
+      //   const notify = () => {
+      //     toast('Het gio', {
+      //       className: 'black-background',
+      //       draggable: true,
+      //       position: toast.POSITION.TOP_CENTER,
+      //     })
+      //   }
+      //   // document.getElementById('autoClick')?.click()
+      //   // history.push('/time-out')
+      //   history.push('/home')
+      //   notify()
+      //   clearInterval(interval.current)
+        
+      //   // alert('Het gio')
+      // } 
+      if (time <= 0) {
         document.getElementById('autoClick')?.click()
         clearInterval(interval.current)
       } else {
@@ -236,7 +251,7 @@ export default function Exam() {
       return {
         ...quiz,
         alternatives: quiz.alternatives.map((alternative, index) => {
-          const newAlternative = Object.assign({}, alternative) // Vì dính địa chỉ con trỏ đối tượng quiz nên tạo mới...
+          const newAlternative = Object.assign({}, alternative)
           delete newAlternative['answer_correct']
           return newAlternative
         }),
@@ -254,7 +269,7 @@ export default function Exam() {
     onSubmitInformationQuestion(e)
     document.getElementById('close').click()
     clearInterval(interval.current)
-    history.push('/congratulations')
+    // history.push('/congratulations')
   }
 
   //TODO: Submit Exam
@@ -275,16 +290,28 @@ export default function Exam() {
       })
       console.log('submit: ', response)
       if (response.data?.success === false) {
+        const notify = () => {
+          toast(response.data?.message, {
+            className: 'notify-exam',
+            draggable: true,
+            position: toast.POSITION.TOP_CENTER,
+          })
+        }
+        notify()
+        history.push('/home')
+        
         alert(response.data?.message)
+      } else {
+        history.push('/congratulations')
       }
     } catch (error) {
-      // alert('You are not allowed to perform this action')
       alert(error)
     }
   }
 
   return (
     <div className="exam">
+      <ToastContainer draggable={false} transition={Bounce} autoClose={7000} />
       <div className="infor-exam">
         <div className="row">
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">

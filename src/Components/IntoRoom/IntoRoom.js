@@ -2,47 +2,23 @@ import React, { useState, useEffect } from 'react'
 import './IntoRoom.css'
 import { useHistory } from 'react-router'
 import { axios } from '@/instances/axios'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function IntoRoom() {
   const history = useHistory()
   const [user, setUser] = useState({})
   const [room, setRoom] = useState()
-  const popup = () => {
-    <div className="modal" tabIndex={-1} role="dialog">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Modal title</h5>
-            <button
-              type="button"
-              className="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <p>Modal body text goes here.</p>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-primary">
-              Save changes
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
+  
   async function fetchUser() {
     const response = await axios.get(`/quiz/question/${room}`)
+    const invalidID = () => {
+      toast('Invalid Exam ID', {
+        className: 'invalid-id',
+        draggable: true,
+        position: toast.POSITION.TOP_CENTER
+      })
+    }
     console.log('user: ', user)
     if (response?.data.question != null) {
       history.push(`/waiting-room?room=${room}`, {
@@ -50,7 +26,7 @@ export default function IntoRoom() {
         user,
       })
     } else {
-      alert('Invalid ID')
+      invalidID()
     }
 
     if (response?.data?.success == false) {
@@ -72,6 +48,7 @@ export default function IntoRoom() {
 
   return (
     <div className="into-room">
+      <ToastContainer draggable={false} transition={Bounce} autoClose={7000} />
       <div className="row">
         <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 row-1">
           <div className="exam-id">

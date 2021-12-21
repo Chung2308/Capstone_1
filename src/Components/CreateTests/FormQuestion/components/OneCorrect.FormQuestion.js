@@ -64,6 +64,15 @@ export function OneCorrectFormQuestion({ changeQuestionBody }) {
           <br />
         </Fragment>
       ))}
+      <p
+        style={{
+          fontStyle: 'italic',
+          color: 'rgb(151, 151, 151)',
+          fontSize: '80%',
+        }}
+      >
+        Note: Maximum 4 answers
+      </p>
     </div>
   )
 }

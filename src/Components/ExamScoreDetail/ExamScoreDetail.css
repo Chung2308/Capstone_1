@@ -52,3 +52,10 @@
   margin-left: 10px;
   margin-bottom: -5px;
 }
+.done{
+  background-color: rgb(47, 180, 80) !important;
+  font-size: 15px;
+  border-radius: 10px 10px 10px 10px;
+  color: white !important;
+  text-align: center !important;
+}

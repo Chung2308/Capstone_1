@@ -21,6 +21,8 @@ import { SECONDOPEN } from '../secondOpen.mock'
 import { HOURDUE } from '../hourDue.mock'
 import { MINUTEDUE } from '../minuteDue.mock'
 import { SECONDDUE } from '../secondDue.mock'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default class FormQuestion extends Component {
   constructor(props) {
@@ -143,14 +145,19 @@ export default class FormQuestion extends Component {
   }
 
   createQuestion() {
+    const notifyAnswerCorrect = () => {
+      toast('Please choose at least one correct answer or note answer',{
+        className: 'notify-question'
+      })
+    }
     console.log('bug: ', this.state.alternatives)
     const { question_content, point_question, alternatives, question_type } =
       this.state
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
-    if (alternatives.length == 0)
-      return alert('Please choose at least one correct answer or note answer')
+    if (alternatives.length == 0 && question_type !== 'contentresult')
+      return notifyAnswerCorrect()
 
     this.state.quizs.push({
       question_content,
@@ -174,14 +181,24 @@ export default class FormQuestion extends Component {
     localStorage.removeItem('PointTotalUpdate')
   }
   validateQuestionBody() {
+    const notifyQuestionContent = () => {
+      toast('Please enter the content of the question first', {
+        className: 'notify-question'
+      })
+    }
+    const notifyPointQuestion = () => {
+      toast('Please enter the point of the question first', {
+        className:'notify-question'
+      })
+    }
     const { question_content, point_question } = this.state
 
     if (!question_content) {
-      alert('Please enter the content of the question first')
+      notifyQuestionContent()
       return false
     }
     if (!point_question) {
-      alert('Please enter the point of the question first')
+      notifyPointQuestion()
       return false
     }
     return true
@@ -293,7 +310,6 @@ export default class FormQuestion extends Component {
     }
     this.props.onSubmitForm(data)
     document.getElementById('close').click()
-    alert
   }
 
   deleteQuestionDetails(indexQuiz) {
@@ -321,6 +337,11 @@ export default class FormQuestion extends Component {
   render() {
     return (
       <div className="create-quiz">
+        <ToastContainer
+          draggable={false}
+          transition={Bounce}
+          autoClose={7000}
+        />
         <div className="create-test">
           <div className="infor-questions">
             <h4>Question Information</h4>
@@ -580,8 +601,18 @@ export default class FormQuestion extends Component {
                   name="ques"
                   placeholder="Content Question: "
                   className="content-inf"
-                  maxlength="700"
+                  maxlength="1000"
                 />
+                <p
+                  style={{
+                    fontStyle: 'italic',
+                    color: 'rgb(151, 151, 151)',
+                    fontSize: '80%',
+                  }}
+                >
+                  Note: The content of the question must not exceed 1000
+                  characters
+                </p>
               </div>
 
               <FormQuestionSwitch

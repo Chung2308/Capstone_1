@@ -12,6 +12,8 @@ import { HOURDUE } from '../CreateTests/hourDue.mock'
 import { MINUTEDUE } from '../CreateTests/minuteDue.mock'
 import { SECONDDUE } from '../CreateTests/secondDue.mock'
 import ReactToPrint from 'react-to-print'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function ExamBankDetail() {
   const { location } = useHistory()
@@ -52,7 +54,15 @@ export default function ExamBankDetail() {
       totalScoreDb: question.totalScoreDb,
     })
     setQuizs(response?.data?.updateQuestion.quiz)
-    console.log('update', response?.data?.updateQuestion)
+    const notifyUpdateExamSuccess = () => {
+      toast('Update Sucess 🎉🎉🎉', {
+        className: 'notify-success',
+        draggable: true,
+        position: toast.POSITION.TOP_CENTER,
+      })
+    }
+    notifyUpdateExamSuccess()
+    console.log('update', response)
   }
   const checkInformation = () => {
     if (status == true) {
@@ -566,5 +576,10 @@ export default function ExamBankDetail() {
       </div>
     )
   }
-  return <div>{checkInformation()}</div>
+  return (
+    <div>
+      <ToastContainer draggable={false} transition={Bounce} autoClose={3000} />
+      {checkInformation()}
+    </div>
+  )
 }

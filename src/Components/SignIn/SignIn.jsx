@@ -70,11 +70,12 @@ function SignIn() {
 
   return (
     <div>
-      <div style={{ backgroundImage: "url(/img/login3.jpg)" }}>
+      {/* <div style={{ backgroundImage: "url(/img/login3.jpg)" }}> */}
+      <div>
         <div className="login">
           {/* <img src="./img/logo.png" alt="" /> */}
           <form onSubmit={LoginForm}>
-            <h1 style={{ textAlign: "center" }}>Sign In</h1>
+            <h1 style={{ textAlign: "center", marginBottom: '6%' }}>SIGN IN</h1>
             <div className="form-group">
               <label htmlFor="exampleInputEmail1">Username</label>
               <input
@@ -98,7 +99,7 @@ function SignIn() {
                 onChange={changAccount}
               />
             </div>
-            <div className="form-check">
+            {/* <div className="form-check">
               <input
                 type="checkbox"
                 className="form-check-input"
@@ -107,7 +108,7 @@ function SignIn() {
               <label className="form-check-label" htmlFor="exampleCheck1">
                 Remember password
               </label>
-            </div>
+            </div> */}
             <label
               className="form-check-label"
               htmlFor="exampleCheck1"
@@ -116,13 +117,13 @@ function SignIn() {
             <button
               type="submit"
               className="btn btn-primary"
-              style={{ backgroundColor: "rgba(21, 133, 141, 0.829)" }}
+              style={{ backgroundColor: "rgba(21, 133, 141, 0.829)", marginBottom: '8%' }}
             >
               Submit
             </button>
-            <p style={{ textAlign: "center", paddingTop: "1%" }}>
+            {/* <p style={{ textAlign: "center", paddingTop: "1%" }}>
               <a href="">Forgot your password?</a>
-            </p>
+            </p> */}
             <p
               style={{
                 textAlign: "center",
@@ -137,10 +138,10 @@ function SignIn() {
             </p>
           </form>
         </div>
-        <StyledFirebaseAuth
+        {/* <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
-        />
+        /> */}
       </div>
     </div>
   );

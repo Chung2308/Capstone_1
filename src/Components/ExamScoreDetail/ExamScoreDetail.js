@@ -2,6 +2,8 @@ import { axios } from '@/instances/axios'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import './ExamScoreDetail.css'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function ExamScoreDetail() {
   const { location } = useHistory()
@@ -33,7 +35,17 @@ export default function ExamScoreDetail() {
     } catch (error) {
       alert(error)
     }
-    alert('You have successfully updated')
+    const updateSuccess = () => {
+      // custom toast is the title
+      toast('Update Success', {
+        className: 'done',
+        draggable: true,
+        position: toast.POSITION.TOP_CENTER,
+      })
+    }
+    // alert('You have successfully updated')
+    updateSuccess()
+    
   }
   const onChangeEssayScore = (e, index) => {
     const newQuiz = result.quiz
@@ -47,6 +59,7 @@ export default function ExamScoreDetail() {
   }
   return (
     <div className="exam-score-detail">
+      <ToastContainer draggable={false} transition={Bounce} autoClose={7000} />
       {quizs?.map((question, indexQuestion) => {
         return (
           <div key={indexQuestion} className="total-question">

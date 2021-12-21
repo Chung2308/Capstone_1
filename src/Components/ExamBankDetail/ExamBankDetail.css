@@ -65,3 +65,10 @@
 .exam-details .edit-topic{
   width: 75%;
 }
+.notify-success{
+  background-color: rgb(47, 180, 80) !important;
+  font-size: 15px;
+  border-radius: 10px 10px 10px 10px;
+  color: white !important;
+  text-align: center !important;
+}
