@@ -106,13 +106,13 @@ export default class SignUp extends Component {
                       className="form-control"
                       id=""
                       aria-describedby=""
-                      placeholder="Fullname"
+                      placeholder="Enter full name"
                     />
                   </div>
                   <div className="input-group form-group">
                     <div className="input-group-prepend">
                       <span className="input-group-text">
-                        <i class="fas fa-user"></i>
+                        <i className="fas fa-key" />
                       </span>
                     </div>
                     <input
@@ -122,7 +122,7 @@ export default class SignUp extends Component {
                       className="form-control"
                       id=""
                       aria-describedby="emailHelp"
-                      placeholder="Username"
+                      placeholder="Enter username"
                     />
                   </div>
                   <div className="input-group form-group">
@@ -137,7 +137,7 @@ export default class SignUp extends Component {
                       name="password"
                       className="form-control"
                       id="exampleInputPassword1"
-                      placeholder="Password"
+                      placeholder="Enter password"
                     />
                   </div>
                   <div className="input-group form-group">
@@ -158,7 +158,7 @@ export default class SignUp extends Component {
                   <div className="input-group form-group">
                     <div className="input-group-prepend">
                       <span className="input-group-text">
-                        <i class="fas fa-phone"></i>
+                        <i className="fas fa-key" />
                       </span>
                     </div>
                     <input
@@ -167,13 +167,13 @@ export default class SignUp extends Component {
                       onChange={(event) => this.content(event)}
                       className="form-control"
                       id
-                      placeholder="Phone number"
+                      placeholder="Enter phone number"
                     />
                   </div>
                   <div className="input-group form-group">
                     <div className="input-group-prepend">
                       <span className="input-group-text">
-                        <i class="fas fa-calendar-alt"></i>
+                        <i className="fas fa-key" />
                       </span>
                     </div>
                     <input
@@ -182,13 +182,13 @@ export default class SignUp extends Component {
                       onChange={(event) => this.content(event)}
                       className="form-control"
                       id
-                      placeholder="Birthday"
+                      placeholder="Enter birth of year"
                     />
                   </div>
                   <div className="input-group form-group">
                     <div className="input-group-prepend">
                       <span className="input-group-text">
-                        <i class="fas fa-user-tag"></i>
+                        <i className="fas fa-key" />
                       </span>
                     </div>
                     <select
@@ -196,7 +196,7 @@ export default class SignUp extends Component {
                       onChange={(event) => this.content(event)}
                       name="user_type"
                     >
-                      <option>Role</option>
+                      <option>---</option>
                       <option name="user_type" value="Teacher">
                         Teacher
                       </option>

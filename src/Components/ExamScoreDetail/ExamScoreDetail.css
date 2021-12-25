@@ -59,3 +59,10 @@
   color: white !important;
   text-align: center !important;
 }
+.not-done{
+  background-color: rgb(182, 0, 0) !important;
+  font-size: 15px;
+  border-radius: 10px 10px 10px 10px;
+  color: white !important;
+  text-align: center !important;
+}

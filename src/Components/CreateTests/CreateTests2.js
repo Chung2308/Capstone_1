@@ -44,34 +44,30 @@ export default function CreateTest2() {
       totalScoreDb,
       quiz,
     })
-    // const notify = () => toast('Wow so easy!')
-    const notify = () => {
+    const notifyQuestionQuiz = () => {
       toast(submitInfor?.data?.message, {
-        className: 'black-background',
+        className: 'create-question',
         draggable: true,
         position: toast.POSITION.TOP_CENTER,
       })
     }
-    const submitSuccess = () => {
+    const submitCreateQuestionSuccess = () => {
       toast('You have successfully created the exam', {
-        className: 'done',
+        className: 'done-create-question',
         draggable: true,
         position: toast.POSITION.TOP_CENTER,
       })
     }
     console.log(submitInfor)
     if (submitInfor?.data?.success === false) {
-      notify()
+      notifyQuestionQuiz()
     } else {
-      submitSuccess()
+      submitCreateQuestionSuccess()
     }
-    // if (submitInfor.data?.jwt) {
-    //   localStorage.setItem('idExam', submitInfor.data.question.id_exam)
-    // }
   }
   return (
     <div>
-      <ToastContainer draggable={false} transition={Bounce} autoClose={7000} />
+      <ToastContainer draggable={false} transition={Bounce} autoClose={4000} />
       <FormQuestion onSubmitForm={submitQuestion}></FormQuestion>
     </div>
   )

@@ -156,7 +156,7 @@ export default class FormQuestion extends Component {
     const valid = this.validateQuestionBody()
     if (valid === false) return
 
-    if (alternatives.length == 0 && question_type !== 'contentresult')
+    if (alternatives.length == 0)
       return notifyAnswerCorrect()
 
     this.state.quizs.push({
@@ -340,7 +340,7 @@ export default class FormQuestion extends Component {
         <ToastContainer
           draggable={false}
           transition={Bounce}
-          autoClose={7000}
+          autoClose={4000}
         />
         <div className="create-test">
           <div className="infor-questions">
@@ -543,6 +543,7 @@ export default class FormQuestion extends Component {
             </div>
           </div>
         </div>
+        {/* <a href='#' style={{float: 'right', marginBottom: '-20px'}}>Xem chi tiet</a> */}
         <div className="content-questions">
           <h5>Content Questions</h5>
           <div className="row" id="rowclone">

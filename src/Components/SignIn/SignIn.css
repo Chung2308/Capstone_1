@@ -1,4 +1,4 @@
-.login form{
+/* .login form{
     margin: 5% 32%;
     text-align: center;
 }
@@ -20,7 +20,92 @@
     margin-top: 6%;
     width: 100%;
     background-color: rgba(21, 133, 141, 0.829);
+} */
+
+
+
+
+/* Made with love by Mutiullah Samim*/
+
+/* @import url('https://fonts.googleapis.com/css?family=Numans'); */
+
+body{
+background-image: url('https://www.netpremacy.com/wp-content/uploads/2018/09/Background-website-01.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+height: 100%;
+width: 100%;
+font-family: 'Numans', sans-serif;
 }
 
+.container{
+    margin-top: 4%;
+    margin-bottom: 5%;
+height: 100%;
+align-content: center;
+}
 
-    
+.container .card-body{
+    margin-top: 7%;
+}
+
+.container .card{
+height: 400px;
+margin-top: auto;
+margin-bottom: auto;
+width: 500px;
+background-color: rgba(0,0,0,0.5) !important;
+}
+
+.container .social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.container .social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.container .card-header h3{
+color: white;
+}
+
+.container .social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.container .input-group-prepend span{
+width: 50px;
+background-color: #FFC312;
+color: black;
+border:0 !important;
+}
+
+.container input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.container .login_btn{
+color: black;
+background-color: #FFC312;
+width: 100px;
+}
+
+.container .login_btn:hover{
+color: black;
+background-color: white;
+}
+
+.container .links{
+color: white;
+}
+
+.container .links a{
+margin-left: 4px;
+}

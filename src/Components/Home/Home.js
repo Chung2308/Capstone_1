@@ -73,7 +73,7 @@ export default class Home extends Component {
                     />
                     <div className="text">
                       <Link to="/question-bank">
-                        <h3>QUESTION BANKS</h3>
+                        <h3>QUESTIONS BANK</h3>
                       </Link>
                       <hr />
                       <p>

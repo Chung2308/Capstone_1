@@ -32,19 +32,29 @@ export default function ExamScoreDetail() {
       )
       setResult(response?.data) 
       console.log('patch: ', response)
+      const updateSuccess = () => {
+        toast('Update Success', {
+          className: 'done',
+          draggable: true,
+          position: toast.POSITION.TOP_CENTER,
+        })
+      }
+      const updateNotSuccess = () => {
+        toast(response.data.message, {
+          className: 'not-done',
+          draggable: true,
+          position: toast.POSITION.TOP_CENTER,
+        })
+      }
+      // alert('You have successfully updated')
+      if (response.data.success == true) {
+        updateSuccess()
+      } else{
+        updateNotSuccess()
+      }
     } catch (error) {
       alert(error)
     }
-    const updateSuccess = () => {
-      // custom toast is the title
-      toast('Update Success', {
-        className: 'done',
-        draggable: true,
-        position: toast.POSITION.TOP_CENTER,
-      })
-    }
-    // alert('You have successfully updated')
-    updateSuccess()
     
   }
   const onChangeEssayScore = (e, index) => {
