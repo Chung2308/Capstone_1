@@ -24,7 +24,7 @@ export default function WaitingRoom() {
   const [users, setUsers] = useState([])
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState([])
-  const backEndUrl = 'http://chatroom-socket-capston1.herokuapp.com/'
+  const backEndUrl = 'http://localhost:8000'
   const [search, setSearch] = useState(SplitSearch(location.search))
 
   const [hoursSendMessage, setHoursSendMessage] = useState('')

@@ -1,4 +1,5 @@
 import axios from 'axios'
+// import { Redirect } from 'react-router-dom'
 
 const axiosInstance = axios.create({
   baseURL: 'https://trung-api-capstone1.herokuapp.com',
@@ -9,6 +10,7 @@ axiosInstance.interceptors.request.use((config) => {
 
   if (!token) {
     alert('You need to login again')
+    // <Redirect to="/" />
     return config
   }
 

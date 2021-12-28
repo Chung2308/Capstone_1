@@ -270,6 +270,8 @@ export default function Exam() {
     document.getElementById('close').click()
     clearInterval(interval.current)
     // history.push('/congratulations')
+    localStorage.removeItem('AnswerChoosen');
+    localStorage.removeItem('Messages')
   }
 
   //TODO: Submit Exam

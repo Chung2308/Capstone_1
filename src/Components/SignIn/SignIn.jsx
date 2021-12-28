@@ -1,21 +1,21 @@
-import firebase from 'firebase'
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import './SignIn.css'
 import { axios } from '@/instances/axios'
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { ToastContainer, toast, Bounce } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import { Redirect } from 'react-router-dom'
 // import background from '../';
 SignIn.prototype = {}
 // Configure FirebaseUI.
-const uiConfig = {
-  // Popup signin flow rather than redirect flow.
-  signInFlow: 'redirect',
-  signInSuccessUrl: '/home',
-  // We will display Google and Facebook as auth providers.
-  signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-}
+// const uiConfig = {
+//   // Popup signin flow rather than redirect flow.
+//   signInFlow: 'redirect',
+//   signInSuccessUrl: '/home',
+//   // We will display Google and Facebook as auth providers.
+//   signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+// }
 function SignIn() {
   const [account, setAcount] = useState({
     username: '',
@@ -40,12 +40,19 @@ function SignIn() {
       password,
     })
     console.log(loginData)
+    const notifySignIn = () => {
+      toast(loginData.data?.message, {
+        className: 'notify-sign-in',
+        draggable: true,
+        position: toast.POSITION.TOP_CENTER,
+      })
+    }
     if (loginData.data?.jwt) {
       localStorage.setItem('id', loginData.data.user.id)
       localStorage.setItem('token', loginData.data.jwt)
     }
     if (loginData.data?.sucess === false) {
-      alert(loginData.data?.message)
+      notifySignIn()
     } else {
       setIsRedirect(true)
     }
@@ -55,21 +62,11 @@ function SignIn() {
 
   return (
     <div className="container">
+      <ToastContainer draggable={false} transition={Bounce} autoClose={4000} />
       <div className="d-flex justify-content-center h-100">
         <div className="card">
           <div className="card-header">
             <h3>Sign In</h3>
-            {/* <div className="d-flex justify-content-end social_icon">
-              <span>
-                <i className="fab fa-facebook-square" />
-              </span>
-              <span>
-                <i className="fab fa-google-plus-square" />
-              </span>
-              <span>
-                <i className="fab fa-twitter-square" />
-              </span>
-            </div> */}
           </div>
           <div className="card-body">
             <form onSubmit={LoginForm}>
@@ -100,7 +97,8 @@ function SignIn() {
                   name="password"
                   onChange={changAccount}
                 />
-              </div><br />
+              </div>
+              <br />
               <div className="form-group">
                 <input
                   type="submit"
